@@ -12,7 +12,7 @@ public class DbCon {
     private String url = "jdbc:mysql://localhost:3306/smemanagement";
     private String user = "root";
     private String password = "1234";
-    private String driver = "com.mysql.jdbc.Driver";
+    private String driver = "com.mysql.cj.jdbc.Driver";
 
     public Connection getCon() {
 

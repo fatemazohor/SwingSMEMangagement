@@ -16,13 +16,16 @@ public class SMEMaintenance {
     public static void main(String[] args) {
         
         DbCon db = new DbCon();
-        String sql = "Insert into demoTable(name,age) values(?,?)";
+        String sql = "Insert into demo_table(name,age) values(?,?)";
         
         try {
-            PreparedStatement ps = null;
+            PreparedStatement ps = db.getCon().prepareStatement(sql);
+            
             ps.setString(1, "Rakib");
             ps.setInt(2, 25);
+            ps.executeUpdate();
             ps.close();
+            db.getCon().close();
         } catch (SQLException ex) {
             Logger.getLogger(SMEMaintenance.class.getName()).log(Level.SEVERE, null, ex);
         }
