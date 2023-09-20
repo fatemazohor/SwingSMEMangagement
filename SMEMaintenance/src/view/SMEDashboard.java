@@ -1035,7 +1035,6 @@ public class SMEDashboard extends javax.swing.JFrame {
     private void txtbillTotalPriceMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtbillTotalPriceMouseClicked
         // TODO add your handling code here:
         float toatPrice = getbillTotalPrice();
-        System.out.println(toatPrice);
         txtbillTotalPrice.setText(toatPrice + "");
 
     }//GEN-LAST:event_txtbillTotalPriceMouseClicked
