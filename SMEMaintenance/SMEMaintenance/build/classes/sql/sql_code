@@ -49,3 +49,12 @@ CREATE TABLE `smemanagement`.`sales` (
 
 ALTER TABLE `smemanagement`.`sales` 
 ADD COLUMN `sales_date` DATE NULL AFTER `discount`;
+
+CREATE TABLE `smemanagement`.`purchases` (
+  `idpurchases` INT NOT NULL AUTO_INCREMENT,
+  `produnt_name` VARCHAR(45) NULL,
+  `quentity` INT NULL,
+  `unit_price` FLOAT NULL,
+  `total_price` FLOAT NULL,
+  `purchase_date` DATE NULL,
+  PRIMARY KEY (`idpurchases`));
