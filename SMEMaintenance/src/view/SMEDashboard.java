@@ -39,10 +39,11 @@ public class SMEDashboard extends javax.swing.JFrame {
 
     private void init() {
         getAllProducts();
-        setProductnametoPurchaseCombo();
+        setProductnametoPurchaseCombo(comboPurchaseProductName);
+        
         getAllPurchaseProduct();
     }
-
+//show products table from database
     private void getAllProducts() {
 
         String[] columnNames = {"ProduntId", "Name", "Quentity", "Unit_price", "Buy_price", "Entry_date"};
@@ -75,7 +76,7 @@ public class SMEDashboard extends javax.swing.JFrame {
         }
 
     }
-
+//show purchases table data
     public void getAllPurchaseProduct() {
         String[] columnNames = {"PurchaseId", "Name", "Quentity", "Unit_price", "Total Price", "Purchase_date"};
 //        String[][] data=new String[1][columnNames.length];
@@ -111,11 +112,11 @@ public class SMEDashboard extends javax.swing.JFrame {
         }
 
     }
+//set combo product name in product and purchase
+    public void setProductnametoPurchaseCombo(javax.swing.JComboBox<String> comboBox) {
 
-    public void setProductnametoPurchaseCombo() {
-
-        comboPurchaseProductName.removeAllItems();
-        comboPurchaseProductName.addItem("--Select Product Name--");
+        comboBox.removeAllItems();
+        comboBox.addItem("--Select Product Name--");
 
         sql = "select name from products";
 
@@ -125,7 +126,7 @@ public class SMEDashboard extends javax.swing.JFrame {
 
             while (rs.next()) {
                 String productName = rs.getString("name");
-                comboPurchaseProductName.addItem(productName);
+                comboBox.addItem(productName);
             }
             rs.close();
             ps.close();
@@ -136,7 +137,7 @@ public class SMEDashboard extends javax.swing.JFrame {
         }
 
     }
-
+//stock table data update
     public void addProductToStock() {
         sql = "insert into product_stock(product_name,quantity)values(?,?)";
         try {
@@ -155,8 +156,6 @@ public class SMEDashboard extends javax.swing.JFrame {
     public void updateProductToStock() {
         
         float quantity = Float.parseFloat(spanProductPurchaseQuentity.getValue().toString());
-        System.out.println(quantity);
-//        sql="update stock set quantity=quantity+? where pName= ?";
         sql="update product_stock set quantity=quantity+? where product_name=?";
         try {
             ps = dbCon.getCon().prepareStatement(sql);
@@ -172,7 +171,18 @@ public class SMEDashboard extends javax.swing.JFrame {
     
 
     public void subtractProductFromStock() {
-
+        float quantity = Float.parseFloat(spanbillquentity.getValue().toString());
+        sql="update product_stock set quantity=quantity-? where product_name=?";
+        try {
+            ps = dbCon.getCon().prepareStatement(sql);
+            ps.setFloat(1, quantity);
+            ps.setString(2, txtbillProductName.getText());
+            ps.executeUpdate();
+            ps.close();
+            dbCon.getCon().close();
+        } catch (SQLException ex) {
+            Logger.getLogger(SMEDashboard.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 //    date format method
     //conver utill date to sql date
@@ -235,9 +245,10 @@ public class SMEDashboard extends javax.swing.JFrame {
     }
 
     private void setbtnillInfoReset() {
-        txtbillProName.setText(null);
+        
+        txtbillProductName.setText(null);
         txtbillunitPrice.setText(null);
-        txtbillquentity.setValue(0);
+        spanbillquentity.setValue(0);
         txtbillTotalPrice.setText(null);
         txtbillDiscount.setText(null);
         txtbillFinalPrice.setText(null);
@@ -255,7 +266,7 @@ public class SMEDashboard extends javax.swing.JFrame {
 
     private float getbillTotalPrice() {
         float unitPrice = Float.parseFloat(txtbillunitPrice.getText().trim().toString());
-        float quentity = Float.parseFloat(txtbillquentity.getValue().toString());
+        float quentity = Float.parseFloat(spanbillquentity.getValue().toString());
 
         float totalPrice = (unitPrice * quentity);
 
@@ -270,6 +281,7 @@ public class SMEDashboard extends javax.swing.JFrame {
 
         return actualPrice;
     }
+    //Report table data set
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -280,6 +292,7 @@ public class SMEDashboard extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroupReport = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         btndashborad = new javax.swing.JButton();
@@ -356,7 +369,6 @@ public class SMEDashboard extends javax.swing.JFrame {
         jPanel9 = new javax.swing.JPanel();
         jLabel15 = new javax.swing.JLabel();
         jLabel21 = new javax.swing.JLabel();
-        txtbillProName = new javax.swing.JTextField();
         jLabel22 = new javax.swing.JLabel();
         txtbillunitPrice = new javax.swing.JTextField();
         jLabel23 = new javax.swing.JLabel();
@@ -372,14 +384,30 @@ public class SMEDashboard extends javax.swing.JFrame {
         jTable2 = new javax.swing.JTable();
         jLabel27 = new javax.swing.JLabel();
         jLabel28 = new javax.swing.JLabel();
-        jButton2 = new javax.swing.JButton();
-        jButton7 = new javax.swing.JButton();
+        btnBillPayment = new javax.swing.JButton();
+        btnbillDelete = new javax.swing.JButton();
         btnillInfoReset = new javax.swing.JButton();
-        jButton9 = new javax.swing.JButton();
-        txtbillquentity = new javax.swing.JSpinner();
+        btnBillSave = new javax.swing.JButton();
+        spanbillquentity = new javax.swing.JSpinner();
+        txtbillProductName = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
+        jDatebillSalesDate = new com.toedter.calendar.JDateChooser();
         tpPayment = new javax.swing.JTabbedPane();
         jPanel10 = new javax.swing.JPanel();
         jLabel16 = new javax.swing.JLabel();
+        salesReport = new javax.swing.JTabbedPane();
+        jPanel11 = new javax.swing.JPanel();
+        jLabel32 = new javax.swing.JLabel();
+        jLabel33 = new javax.swing.JLabel();
+        jLabel34 = new javax.swing.JLabel();
+        jDateReportFromDate = new com.toedter.calendar.JDateChooser();
+        jDateReportToDate = new com.toedter.calendar.JDateChooser();
+        radioReportPurchase = new javax.swing.JRadioButton();
+        radioReportSales = new javax.swing.JRadioButton();
+        radioReportstock = new javax.swing.JRadioButton();
+        jButton1 = new javax.swing.JButton();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
         tpLast = new javax.swing.JTabbedPane();
         jPanel5 = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
@@ -448,6 +476,11 @@ public class SMEDashboard extends javax.swing.JFrame {
         jButton4.setText("Customer List");
 
         jButton5.setText("Sales Report");
+        jButton5.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton5MouseClicked(evt);
+            }
+        });
 
         jButton6.setText("jButton1");
 
@@ -530,7 +563,7 @@ public class SMEDashboard extends javax.swing.JFrame {
             }
         });
 
-        btnInventoryUpdate.setText("Update Product");
+        btnInventoryUpdate.setText("Add/Update Product");
         btnInventoryUpdate.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnInventoryUpdateMouseClicked(evt);
@@ -543,10 +576,10 @@ public class SMEDashboard extends javax.swing.JFrame {
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addGap(108, 108, 108)
-                .addComponent(btnInventoryPurchase, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(107, 107, 107)
-                .addComponent(btnInventoryUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(337, Short.MAX_VALUE))
+                .addComponent(btnInventoryPurchase, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 168, Short.MAX_VALUE)
+                .addComponent(btnInventoryUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(180, 180, 180))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -647,23 +680,22 @@ public class SMEDashboard extends javax.swing.JFrame {
                             .addComponent(txtProductPurchaseUnitPrice)
                             .addComponent(spanProductPurchaseQuentity)
                             .addComponent(txtProductTotalPrice)
-                            .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(txtProductPurchaseProductId)
-                                .addComponent(comboPurchaseProductName, 0, 231, Short.MAX_VALUE))
+                            .addComponent(txtProductPurchaseProductId)
+                            .addComponent(comboPurchaseProductName, 0, 233, Short.MAX_VALUE)
                             .addComponent(jdatePurchaseProduct, javax.swing.GroupLayout.DEFAULT_SIZE, 233, Short.MAX_VALUE))
                         .addGap(44, 44, 44)
                         .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 326, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGap(205, 205, 205)
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 279, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(27, Short.MAX_VALUE))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addGap(30, 30, 30)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtProductPurchaseProductId, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -699,7 +731,7 @@ public class SMEDashboard extends javax.swing.JFrame {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(btnInvPurchaseProductAdd, javax.swing.GroupLayout.DEFAULT_SIZE, 39, Short.MAX_VALUE)
                     .addComponent(btnInvPurchaseProductReset, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(16, Short.MAX_VALUE))
+                .addContainerGap(18, Short.MAX_VALUE))
         );
 
         tpInvPurchaseProduct.addTab("tab1", jPanel4);
@@ -996,6 +1028,9 @@ public class SMEDashboard extends javax.swing.JFrame {
 
         menu.addTab("tab6", tpOrder);
 
+        tpBillingInfo.setMinimumSize(new java.awt.Dimension(805, 552));
+        tpBillingInfo.setPreferredSize(new java.awt.Dimension(805, 552));
+
         jPanel9.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel15.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
@@ -1006,12 +1041,9 @@ public class SMEDashboard extends javax.swing.JFrame {
         jLabel21.setText("Product Name");
         jPanel9.add(jLabel21, new org.netbeans.lib.awtextra.AbsoluteConstraints(39, 99, 92, 29));
 
-        txtbillProName.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jPanel9.add(txtbillProName, new org.netbeans.lib.awtextra.AbsoluteConstraints(149, 99, 161, 29));
-
         jLabel22.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel22.setText("Unit Price");
-        jPanel9.add(jLabel22, new org.netbeans.lib.awtextra.AbsoluteConstraints(39, 154, 92, 29));
+        jPanel9.add(jLabel22, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 140, 92, 29));
 
         txtbillunitPrice.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         txtbillunitPrice.addFocusListener(new java.awt.event.FocusAdapter() {
@@ -1019,15 +1051,15 @@ public class SMEDashboard extends javax.swing.JFrame {
                 txtbillunitPriceFocusLost(evt);
             }
         });
-        jPanel9.add(txtbillunitPrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(149, 154, 161, 29));
+        jPanel9.add(txtbillunitPrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 140, 161, 29));
 
         jLabel23.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel23.setText("Quentity");
-        jPanel9.add(jLabel23, new org.netbeans.lib.awtextra.AbsoluteConstraints(39, 209, 92, 29));
+        jPanel9.add(jLabel23, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 180, 92, 29));
 
         jLabel24.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel24.setText("Total Price");
-        jPanel9.add(jLabel24, new org.netbeans.lib.awtextra.AbsoluteConstraints(39, 264, 92, 29));
+        jPanel9.add(jLabel24, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 220, 92, 29));
 
         txtbillTotalPrice.setEditable(false);
         txtbillTotalPrice.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
@@ -1036,7 +1068,7 @@ public class SMEDashboard extends javax.swing.JFrame {
                 txtbillTotalPriceMouseClicked(evt);
             }
         });
-        jPanel9.add(txtbillTotalPrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(149, 264, 161, 29));
+        jPanel9.add(txtbillTotalPrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 220, 161, 29));
 
         txtbillDiscount.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         txtbillDiscount.addFocusListener(new java.awt.event.FocusAdapter() {
@@ -1044,19 +1076,19 @@ public class SMEDashboard extends javax.swing.JFrame {
                 txtbillDiscountFocusLost(evt);
             }
         });
-        jPanel9.add(txtbillDiscount, new org.netbeans.lib.awtextra.AbsoluteConstraints(149, 319, 161, 29));
+        jPanel9.add(txtbillDiscount, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 260, 161, 29));
 
         jLabel25.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel25.setText("Discount");
-        jPanel9.add(jLabel25, new org.netbeans.lib.awtextra.AbsoluteConstraints(39, 319, 92, 29));
+        jPanel9.add(jLabel25, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 260, 92, 29));
 
         jLabel26.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel26.setText("Final Price");
-        jPanel9.add(jLabel26, new org.netbeans.lib.awtextra.AbsoluteConstraints(39, 374, 92, 29));
+        jPanel9.add(jLabel26, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 300, 92, 29));
 
         txtbillFinalPrice.setEditable(false);
         txtbillFinalPrice.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jPanel9.add(txtbillFinalPrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(149, 374, 161, 29));
+        jPanel9.add(txtbillFinalPrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 300, 161, 29));
 
         tableBillInfoProductDetails.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -1094,11 +1126,11 @@ public class SMEDashboard extends javax.swing.JFrame {
         jLabel28.setText("Product List");
         jPanel9.add(jLabel28, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 107, 196, -1));
 
-        jButton2.setText("Payment");
-        jPanel9.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(634, 424, 150, 34));
+        btnBillPayment.setText("Payment");
+        jPanel9.add(btnBillPayment, new org.netbeans.lib.awtextra.AbsoluteConstraints(634, 424, 150, 34));
 
-        jButton7.setText("Delete");
-        jPanel9.add(jButton7, new org.netbeans.lib.awtextra.AbsoluteConstraints(477, 424, 97, 34));
+        btnbillDelete.setText("Delete");
+        jPanel9.add(btnbillDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(477, 424, 97, 34));
 
         btnillInfoReset.setText("Reset");
         btnillInfoReset.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -1108,20 +1140,26 @@ public class SMEDashboard extends javax.swing.JFrame {
         });
         jPanel9.add(btnillInfoReset, new org.netbeans.lib.awtextra.AbsoluteConstraints(312, 424, 91, 34));
 
-        jButton9.setText("Save");
-        jButton9.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton9ActionPerformed(evt);
-            }
-        });
-        jPanel9.add(jButton9, new org.netbeans.lib.awtextra.AbsoluteConstraints(149, 421, 95, 34));
-
-        txtbillquentity.addMouseListener(new java.awt.event.MouseAdapter() {
+        btnBillSave.setText("Save");
+        btnBillSave.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                txtbillquentityMouseClicked(evt);
+                btnBillSaveMouseClicked(evt);
             }
         });
-        jPanel9.add(txtbillquentity, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 210, 160, 30));
+        jPanel9.add(btnBillSave, new org.netbeans.lib.awtextra.AbsoluteConstraints(149, 421, 95, 34));
+
+        spanbillquentity.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                spanbillquentityMouseClicked(evt);
+            }
+        });
+        jPanel9.add(spanbillquentity, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 180, 160, 30));
+        jPanel9.add(txtbillProductName, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 100, 160, 30));
+
+        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel6.setText("Sales Date");
+        jPanel9.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 350, 80, 30));
+        jPanel9.add(jDatebillSalesDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 350, 160, 30));
 
         tpBillingInfo.addTab("tab1", jPanel9);
 
@@ -1150,6 +1188,117 @@ public class SMEDashboard extends javax.swing.JFrame {
         tpPayment.addTab("tab1", jPanel10);
 
         menu.addTab("tab8", tpPayment);
+
+        salesReport.setMinimumSize(new java.awt.Dimension(805, 552));
+        salesReport.setPreferredSize(new java.awt.Dimension(805, 552));
+
+        jLabel32.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        jLabel32.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel32.setText("Report");
+
+        jLabel33.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel33.setText("From");
+
+        jLabel34.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel34.setText("To");
+
+        buttonGroupReport.add(radioReportPurchase);
+        radioReportPurchase.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        radioReportPurchase.setText("Purchase ");
+
+        buttonGroupReport.add(radioReportSales);
+        radioReportSales.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        radioReportSales.setText("Sales Report");
+
+        buttonGroupReport.add(radioReportstock);
+        radioReportstock.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        radioReportstock.setText("Stock");
+
+        jButton1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jButton1.setText("View");
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane6.setViewportView(jTable1);
+
+        javax.swing.GroupLayout jPanel11Layout = new javax.swing.GroupLayout(jPanel11);
+        jPanel11.setLayout(jPanel11Layout);
+        jPanel11Layout.setHorizontalGroup(
+            jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel11Layout.createSequentialGroup()
+                .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel11Layout.createSequentialGroup()
+                        .addGap(19, 19, 19)
+                        .addComponent(jLabel32, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel11Layout.createSequentialGroup()
+                        .addGap(32, 32, 32)
+                        .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel11Layout.createSequentialGroup()
+                                .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 743, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 15, Short.MAX_VALUE))
+                            .addGroup(jPanel11Layout.createSequentialGroup()
+                                .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addGroup(jPanel11Layout.createSequentialGroup()
+                                        .addComponent(radioReportPurchase)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(radioReportSales))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel11Layout.createSequentialGroup()
+                                        .addComponent(jLabel33, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jDateReportFromDate, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel11Layout.createSequentialGroup()
+                                        .addGap(49, 49, 49)
+                                        .addComponent(jLabel34, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(38, 38, 38)
+                                        .addComponent(jDateReportToDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addGap(273, 273, 273))
+                                    .addGroup(jPanel11Layout.createSequentialGroup()
+                                        .addGap(37, 37, 37)
+                                        .addComponent(radioReportstock)
+                                        .addGap(61, 61, 61)
+                                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(0, 0, Short.MAX_VALUE)))))))
+                .addContainerGap())
+        );
+        jPanel11Layout.setVerticalGroup(
+            jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel11Layout.createSequentialGroup()
+                .addGap(59, 59, 59)
+                .addComponent(jLabel32, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel33, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jDateReportFromDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel34, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jDateReportToDate, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel11Layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(radioReportPurchase)
+                            .addComponent(radioReportSales)
+                            .addComponent(radioReportstock)))
+                    .addGroup(jPanel11Layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 271, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(29, Short.MAX_VALUE))
+        );
+
+        salesReport.addTab("tab1", jPanel11);
+
+        menu.addTab("tab9", salesReport);
 
         jLabel7.setText("Last page");
 
@@ -1246,9 +1395,11 @@ public class SMEDashboard extends javax.swing.JFrame {
             ps.close();
             dbCon.getCon().close();
             JOptionPane.showMessageDialog(rootPane, "Data saved in purchases table");
-            setProductnametoPurchaseCombo();
-            getAllPurchaseProduct();            
             updateProductToStock();
+            setProductnametoPurchaseCombo(comboPurchaseProductName);
+            
+            getAllPurchaseProduct();            
+            
         } catch (SQLException ex) {
             Logger.getLogger(SMEDashboard.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -1260,10 +1411,6 @@ public class SMEDashboard extends javax.swing.JFrame {
         // TODO add your handling code here:
         menu.setSelectedIndex(5);
     }//GEN-LAST:event_btnCustomerNextMouseClicked
-
-    private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton9ActionPerformed
 
     private void btndashboradMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btndashboradMouseEntered
         // TODO add your handling code here:
@@ -1324,7 +1471,7 @@ public class SMEDashboard extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_txtbillunitPriceFocusLost
 
-    private void txtbillquentityMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtbillquentityMouseClicked
+    private void spanbillquentityMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_spanbillquentityMouseClicked
         // TODO add your handling code here:
 //        int jsQuentity = Integer.parseInt(txtbillquentity.getValue().toString());
 //        try {
@@ -1342,7 +1489,7 @@ public class SMEDashboard extends javax.swing.JFrame {
 //            );
 //        }
 
-    }//GEN-LAST:event_txtbillquentityMouseClicked
+    }//GEN-LAST:event_spanbillquentityMouseClicked
 
     private void txtbillDiscountFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtbillDiscountFocusLost
         // TODO add your handling code here:
@@ -1455,7 +1602,7 @@ public class SMEDashboard extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(rootPane, "Data saved in smemanagement.products table");
                 getAllProducts();
                 addProductToStock();
-                setProductnametoPurchaseCombo();
+                setProductnametoPurchaseCombo(comboPurchaseProductName);
             } catch (SQLException ex) {
                 Logger.getLogger(SMEDashboard.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -1465,6 +1612,43 @@ public class SMEDashboard extends javax.swing.JFrame {
 
 
     }//GEN-LAST:event_btnInvUpdateAddMouseClicked
+
+    private void btnBillSaveMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnBillSaveMouseClicked
+        // TODO add your handling code here:
+        String sellProductName = txtbillProductName.getText();
+        float sellQuentity = Float.parseFloat(spanbillquentity.getValue().toString());
+        float actualPrice = Float.parseFloat(txtbillFinalPrice.getText());
+        float discount = Float.parseFloat(txtbillDiscount.getText());
+//        Date salesDate = convertutilltosql(jDatebillSalesDate.getDate());
+        Date salesDate = convertutilltosql(jDatebillSalesDate.getDate());
+        sql="insert into sales(product_name,purchase_quentity, actual_price, discount,sales_date)"
+                    + " values(?,?,?,?,?)";
+            
+        try {
+            ps=dbCon.getCon().prepareStatement(sql);
+            ps.setString(1, sellProductName);
+            ps.setFloat(2, sellQuentity);
+            ps.setFloat(3, actualPrice);
+            ps.setFloat(4, discount);
+            ps.setDate(5, salesDate);
+            
+            ps.executeUpdate();
+            ps.close();
+            dbCon.getCon().close();
+            subtractProductFromStock();
+            JOptionPane.showMessageDialog(rootPane, "Data saved in smemanagement.sales table");
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(SMEDashboard.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        
+    }//GEN-LAST:event_btnBillSaveMouseClicked
+
+    private void jButton5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton5MouseClicked
+        // TODO add your handling code here:
+        menu.setSelectedIndex(7);
+    }//GEN-LAST:event_jButton5MouseClicked
 
     /**
      * @param args the command line arguments
@@ -1502,6 +1686,8 @@ public class SMEDashboard extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnBillPayment;
+    private javax.swing.JButton btnBillSave;
     private javax.swing.JButton btnCustomerNext;
     private javax.swing.JButton btnCustomerReset;
     private javax.swing.JButton btnInvPurchaseProductAdd;
@@ -1513,20 +1699,23 @@ public class SMEDashboard extends javax.swing.JFrame {
     private javax.swing.JButton btnInventory;
     private javax.swing.JButton btnInventoryPurchase;
     private javax.swing.JButton btnInventoryUpdate;
+    private javax.swing.JButton btnbillDelete;
     private javax.swing.JButton btndashborad;
     private javax.swing.JButton btnhome;
     private javax.swing.JButton btnillInfoReset;
     private javax.swing.JButton btnorderSales;
+    private javax.swing.ButtonGroup buttonGroupReport;
     private javax.swing.JComboBox<String> comboCustomerDistrict;
     private javax.swing.JComboBox<String> comboPurchaseProductName;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
-    private javax.swing.JButton jButton9;
     private com.toedter.calendar.JDateChooser jDateCustomerInfo;
+    private com.toedter.calendar.JDateChooser jDateReportFromDate;
+    private com.toedter.calendar.JDateChooser jDateReportToDate;
+    private com.toedter.calendar.JDateChooser jDatebillSalesDate;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -1552,13 +1741,18 @@ public class SMEDashboard extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel30;
     private javax.swing.JLabel jLabel31;
+    private javax.swing.JLabel jLabel32;
+    private javax.swing.JLabel jLabel33;
+    private javax.swing.JLabel jLabel34;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
+    private javax.swing.JPanel jPanel11;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
@@ -1572,12 +1766,19 @@ public class SMEDashboard extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane6;
+    private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable2;
     private javax.swing.JTable jTablePurchaseProduct;
     private com.toedter.calendar.JDateChooser jdatePurchaseProduct;
     private com.toedter.calendar.JDateChooser jdateinvUpdateCreateDate;
     private javax.swing.JTabbedPane menu;
+    private javax.swing.JRadioButton radioReportPurchase;
+    private javax.swing.JRadioButton radioReportSales;
+    private javax.swing.JRadioButton radioReportstock;
+    private javax.swing.JTabbedPane salesReport;
     private javax.swing.JSpinner spanProductPurchaseQuentity;
+    private javax.swing.JSpinner spanbillquentity;
     private javax.swing.JTable tableBillInfoProductDetails;
     private javax.swing.JTable tableInvUpdateProdunt;
     private javax.swing.JTabbedPane tpBillingInfo;
@@ -1597,9 +1798,8 @@ public class SMEDashboard extends javax.swing.JFrame {
     private javax.swing.JTextField txtProductTotalPrice;
     private javax.swing.JTextField txtbillDiscount;
     private javax.swing.JTextField txtbillFinalPrice;
-    private javax.swing.JTextField txtbillProName;
+    private javax.swing.JTextField txtbillProductName;
     private javax.swing.JTextField txtbillTotalPrice;
-    private javax.swing.JSpinner txtbillquentity;
     private javax.swing.JTextField txtbillunitPrice;
     private javax.swing.JTextField txtinvUpdateProId;
     private javax.swing.JTextField txtinvUpdateProName;
