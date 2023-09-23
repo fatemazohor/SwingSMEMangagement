@@ -11,6 +11,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -282,6 +284,72 @@ public class SMEDashboard extends javax.swing.JFrame {
         return actualPrice;
     }
     //Report table data set
+    public void getPurchaseReport(java.util.Date fromDate, java.util.Date toDate){
+        String[] purchaseColumns = {"Product Name","Product Quantity","Final Price"};
+        DefaultTableModel purchaseModel = new DefaultTableModel();
+        purchaseModel.setColumnIdentifiers(purchaseColumns);
+        
+        jTableReport.setModel(purchaseModel);
+        
+        sql="select * from purchases where purchase_date between ? and ?";
+        
+        try {
+            ps= dbCon.getCon().prepareStatement(sql);
+            ps.setDate(1, convertutilltosql(fromDate));
+            ps.setDate(2, convertutilltosql(toDate));
+            rs= ps.executeQuery();
+            while (rs.next()) {                
+                String pname = rs.getString("product_name");
+                float quentity = rs.getFloat("quentity");
+                float actualPrice= rs.getFloat("total_price");
+                purchaseModel.addRow(new Object[]{pname,quentity,actualPrice});
+            }
+            
+            
+            
+            rs.close();
+            ps.close();
+            dbCon.getCon().close();
+//                JOptionPane.showMessageDialog(rootPane, "");
+        } catch (SQLException ex) {
+            Logger.getLogger(SMEDashboard.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    
+    }
+    
+    public void getSalesReport(java.util.Date fromDate, java.util.Date toDate){
+        String[] salesColumns = {"Product Name","Product Quantity","Final Price"};
+        DefaultTableModel salesModel = new DefaultTableModel();
+        salesModel.setColumnIdentifiers(salesColumns);
+        jTableReport.setModel(salesModel);
+        sql="select * from sales where sales_date between ? and ?";
+        
+        try {
+            ps= dbCon.getCon().prepareStatement(sql);
+            ps.setDate(1, convertutilltosql(fromDate));
+            ps.setDate(2, convertutilltosql(toDate));
+            rs= ps.executeQuery();
+            while (rs.next()) {                
+                String pname = rs.getString("product_name");
+                float quentity = rs.getFloat("purchase_quentity");
+                float actualPrice= rs.getFloat("actual_price");
+                salesModel.addRow(new Object[]{pname,quentity,actualPrice});
+            }
+            
+            
+            
+            rs.close();
+            ps.close();
+            dbCon.getCon().close();
+//                JOptionPane.showMessageDialog(rootPane, "");
+        } catch (SQLException ex) {
+            Logger.getLogger(SMEDashboard.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    
+    
+    
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -381,7 +449,7 @@ public class SMEDashboard extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         tableBillInfoProductDetails = new javax.swing.JTable();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        jTableCart = new javax.swing.JTable();
         jLabel27 = new javax.swing.JLabel();
         jLabel28 = new javax.swing.JLabel();
         btnBillPayment = new javax.swing.JButton();
@@ -392,6 +460,7 @@ public class SMEDashboard extends javax.swing.JFrame {
         txtbillProductName = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         jDatebillSalesDate = new com.toedter.calendar.JDateChooser();
+        btnbillinfoAddToCart = new javax.swing.JButton();
         tpPayment = new javax.swing.JTabbedPane();
         jPanel10 = new javax.swing.JPanel();
         jLabel16 = new javax.swing.JLabel();
@@ -407,7 +476,7 @@ public class SMEDashboard extends javax.swing.JFrame {
         radioReportstock = new javax.swing.JRadioButton();
         jButton1 = new javax.swing.JButton();
         jScrollPane6 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jTableReport = new javax.swing.JTable();
         tpLast = new javax.swing.JTabbedPane();
         jPanel5 = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
@@ -1105,7 +1174,7 @@ public class SMEDashboard extends javax.swing.JFrame {
 
         jPanel9.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 151, 384, 88));
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        jTableCart.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -1116,9 +1185,9 @@ public class SMEDashboard extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane3.setViewportView(jTable2);
+        jScrollPane3.setViewportView(jTableCart);
 
-        jPanel9.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 306, 384, 86));
+        jPanel9.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 300, 384, 86));
 
         jLabel27.setText("Cart");
         jPanel9.add(jLabel27, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 257, 205, 31));
@@ -1127,26 +1196,28 @@ public class SMEDashboard extends javax.swing.JFrame {
         jPanel9.add(jLabel28, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 107, 196, -1));
 
         btnBillPayment.setText("Payment");
-        jPanel9.add(btnBillPayment, new org.netbeans.lib.awtextra.AbsoluteConstraints(634, 424, 150, 34));
+        jPanel9.add(btnBillPayment, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 420, 110, 34));
 
         btnbillDelete.setText("Delete");
-        jPanel9.add(btnbillDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(477, 424, 97, 34));
+        jPanel9.add(btnbillDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 420, 97, 34));
 
+        btnillInfoReset.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnillInfoReset.setText("Reset");
         btnillInfoReset.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnillInfoResetMouseClicked(evt);
             }
         });
-        jPanel9.add(btnillInfoReset, new org.netbeans.lib.awtextra.AbsoluteConstraints(312, 424, 91, 34));
+        jPanel9.add(btnillInfoReset, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 420, 91, 34));
 
+        btnBillSave.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnBillSave.setText("Save");
         btnBillSave.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnBillSaveMouseClicked(evt);
             }
         });
-        jPanel9.add(btnBillSave, new org.netbeans.lib.awtextra.AbsoluteConstraints(149, 421, 95, 34));
+        jPanel9.add(btnBillSave, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 420, 95, 34));
 
         spanbillquentity.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -1158,8 +1229,17 @@ public class SMEDashboard extends javax.swing.JFrame {
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel6.setText("Sales Date");
-        jPanel9.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 350, 80, 30));
-        jPanel9.add(jDatebillSalesDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 350, 160, 30));
+        jPanel9.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 340, 80, 30));
+        jPanel9.add(jDatebillSalesDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 340, 160, 30));
+
+        btnbillinfoAddToCart.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnbillinfoAddToCart.setText("Add to Cart");
+        btnbillinfoAddToCart.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnbillinfoAddToCartMouseClicked(evt);
+            }
+        });
+        jPanel9.add(btnbillinfoAddToCart, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 420, -1, 30));
 
         tpBillingInfo.addTab("tab1", jPanel9);
 
@@ -1216,8 +1296,13 @@ public class SMEDashboard extends javax.swing.JFrame {
 
         jButton1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jButton1.setText("View");
+        jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton1MouseClicked(evt);
+            }
+        });
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jTableReport.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -1228,7 +1313,7 @@ public class SMEDashboard extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane6.setViewportView(jTable1);
+        jScrollPane6.setViewportView(jTableReport);
 
         javax.swing.GroupLayout jPanel11Layout = new javax.swing.GroupLayout(jPanel11);
         jPanel11.setLayout(jPanel11Layout);
@@ -1616,13 +1701,13 @@ public class SMEDashboard extends javax.swing.JFrame {
     private void btnBillSaveMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnBillSaveMouseClicked
         // TODO add your handling code here:
         String sellProductName = txtbillProductName.getText();
+        float unitPrice = Float.parseFloat(txtbillunitPrice.getText());
         float sellQuentity = Float.parseFloat(spanbillquentity.getValue().toString());
         float actualPrice = Float.parseFloat(txtbillFinalPrice.getText());
         float discount = Float.parseFloat(txtbillDiscount.getText());
-//        Date salesDate = convertutilltosql(jDatebillSalesDate.getDate());
         Date salesDate = convertutilltosql(jDatebillSalesDate.getDate());
-        sql="insert into sales(product_name,purchase_quentity, actual_price, discount,sales_date)"
-                    + " values(?,?,?,?,?)";
+        sql="insert into sales(product_name,purchase_quentity, actual_price, discount,sales_date,unit_price)"
+                    + " values(?,?,?,?,?,?)";
             
         try {
             ps=dbCon.getCon().prepareStatement(sql);
@@ -1631,6 +1716,7 @@ public class SMEDashboard extends javax.swing.JFrame {
             ps.setFloat(3, actualPrice);
             ps.setFloat(4, discount);
             ps.setDate(5, salesDate);
+            ps.setFloat(6, unitPrice);
             
             ps.executeUpdate();
             ps.close();
@@ -1649,6 +1735,52 @@ public class SMEDashboard extends javax.swing.JFrame {
         // TODO add your handling code here:
         menu.setSelectedIndex(7);
     }//GEN-LAST:event_jButton5MouseClicked
+
+    private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
+        // TODO add your handling code here:
+        java.util.Date fromDate = jDateReportFromDate.getDate();
+        java.util.Date toDate = jDateReportToDate.getDate();
+        if (radioReportPurchase.isSelected()) {
+            getPurchaseReport(fromDate, toDate);
+        } else if(radioReportSales.isSelected()){
+            getSalesReport(fromDate, toDate);
+        } else if(radioReportstock.isSelected()){
+//            getStock
+        } else {
+            JOptionPane.showMessageDialog(rootPane, "Select Purchase/Sales/Stock to see report");
+        }
+    }//GEN-LAST:event_jButton1MouseClicked
+
+    private void btnbillinfoAddToCartMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnbillinfoAddToCartMouseClicked
+        // TODO add your handling code here:
+        String[] columns = {"Product Name","Unit Price","Quantity","Discount","Total"};
+        DefaultTableModel cartdtm = new DefaultTableModel();
+        cartdtm.setColumnIdentifiers(columns);
+        jTableCart.setModel(cartdtm);
+//        cartdtm.insertRow(ERROR, columns);
+        String productName = txtbillProductName.getText();
+        float unitPrice = Float.parseFloat(txtbillunitPrice.getText());
+        float quantity = Float.parseFloat(spanbillquentity.getValue().toString());
+        float discount = Float.parseFloat(txtbillDiscount.getText());
+        float actualPrice = Float.parseFloat(txtbillFinalPrice.getText());
+        
+        List<Object> productList = new ArrayList<>();
+        
+        productList.add(new Object[]{productName,unitPrice,quantity,discount,actualPrice});
+         
+        
+        
+        for(Object i: productList){
+            cartdtm.addRow((Object[]) i);
+        }
+//        int row=cartdtm.getRowCount();
+//        cartdtm.insertRow(row+1, columns);
+        
+        
+        
+        
+        
+    }//GEN-LAST:event_btnbillinfoAddToCartMouseClicked
 
     /**
      * @param args the command line arguments
@@ -1700,6 +1832,7 @@ public class SMEDashboard extends javax.swing.JFrame {
     private javax.swing.JButton btnInventoryPurchase;
     private javax.swing.JButton btnInventoryUpdate;
     private javax.swing.JButton btnbillDelete;
+    private javax.swing.JButton btnbillinfoAddToCart;
     private javax.swing.JButton btndashborad;
     private javax.swing.JButton btnhome;
     private javax.swing.JButton btnillInfoReset;
@@ -1767,9 +1900,9 @@ public class SMEDashboard extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
+    private javax.swing.JTable jTableCart;
     private javax.swing.JTable jTablePurchaseProduct;
+    private javax.swing.JTable jTableReport;
     private com.toedter.calendar.JDateChooser jdatePurchaseProduct;
     private com.toedter.calendar.JDateChooser jdateinvUpdateCreateDate;
     private javax.swing.JTabbedPane menu;
