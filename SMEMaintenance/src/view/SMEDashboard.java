@@ -42,10 +42,11 @@ public class SMEDashboard extends javax.swing.JFrame {
     private void init() {
         getAllProducts();
         setProductnametoPurchaseCombo(comboPurchaseProductName);
-        
+
         getAllPurchaseProduct();
     }
 //show products table from database
+
     private void getAllProducts() {
 
         String[] columnNames = {"ProduntId", "Name", "Quentity", "Unit_price", "Buy_price", "Entry_date"};
@@ -79,12 +80,13 @@ public class SMEDashboard extends javax.swing.JFrame {
 
     }
 //show purchases table data
+
     public void getAllPurchaseProduct() {
         String[] columnNames = {"PurchaseId", "Name", "Quentity", "Unit_price", "Total Price", "Purchase_date"};
 //        String[][] data=new String[1][columnNames.length];
 //        data[0][1]=ts
 //        DefaultTableModel model= new DefaultTableModel(data, columnNames);
-        
+
         DefaultTableModel purchasetableModel = new DefaultTableModel();
         purchasetableModel.setColumnIdentifiers(columnNames);
 
@@ -115,6 +117,7 @@ public class SMEDashboard extends javax.swing.JFrame {
 
     }
 //set combo product name in product and purchase
+
     public void setProductnametoPurchaseCombo(javax.swing.JComboBox<String> comboBox) {
 
         comboBox.removeAllItems();
@@ -140,6 +143,7 @@ public class SMEDashboard extends javax.swing.JFrame {
 
     }
 //stock table data update
+
     public void addProductToStock() {
         sql = "insert into product_stock(product_name,quantity)values(?,?)";
         try {
@@ -156,9 +160,9 @@ public class SMEDashboard extends javax.swing.JFrame {
     }
 
     public void updateProductToStock() {
-        
+
         float quantity = Float.parseFloat(spanProductPurchaseQuentity.getValue().toString());
-        sql="update product_stock set quantity=quantity+? where product_name=?";
+        sql = "update product_stock set quantity=quantity+? where product_name=?";
         try {
             ps = dbCon.getCon().prepareStatement(sql);
             ps.setFloat(1, quantity);
@@ -170,11 +174,10 @@ public class SMEDashboard extends javax.swing.JFrame {
             Logger.getLogger(SMEDashboard.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
 
     public void subtractProductFromStock() {
         float quantity = Float.parseFloat(spanbillquentity.getValue().toString());
-        sql="update product_stock set quantity=quantity-? where product_name=?";
+        sql = "update product_stock set quantity=quantity-? where product_name=?";
         try {
             ps = dbCon.getCon().prepareStatement(sql);
             ps.setFloat(1, quantity);
@@ -247,7 +250,7 @@ public class SMEDashboard extends javax.swing.JFrame {
     }
 
     private void setbtnillInfoReset() {
-        
+
         txtbillProductName.setText(null);
         txtbillunitPrice.setText(null);
         spanbillquentity.setValue(0);
@@ -283,30 +286,29 @@ public class SMEDashboard extends javax.swing.JFrame {
 
         return actualPrice;
     }
+
     //Report table data set
-    public void getPurchaseReport(java.util.Date fromDate, java.util.Date toDate){
-        String[] purchaseColumns = {"Product Name","Product Quantity","Final Price"};
+    public void getPurchaseReport(java.util.Date fromDate, java.util.Date toDate) {
+        String[] purchaseColumns = {"Product Name", "Product Quantity", "Final Price"};
         DefaultTableModel purchaseModel = new DefaultTableModel();
         purchaseModel.setColumnIdentifiers(purchaseColumns);
-        
+
         jTableReport.setModel(purchaseModel);
-        
-        sql="select * from purchases where purchase_date between ? and ?";
-        
+
+        sql = "select * from purchases where purchase_date between ? and ?";
+
         try {
-            ps= dbCon.getCon().prepareStatement(sql);
+            ps = dbCon.getCon().prepareStatement(sql);
             ps.setDate(1, convertutilltosql(fromDate));
             ps.setDate(2, convertutilltosql(toDate));
-            rs= ps.executeQuery();
-            while (rs.next()) {                
+            rs = ps.executeQuery();
+            while (rs.next()) {
                 String pname = rs.getString("product_name");
                 float quentity = rs.getFloat("quentity");
-                float actualPrice= rs.getFloat("total_price");
-                purchaseModel.addRow(new Object[]{pname,quentity,actualPrice});
+                float actualPrice = rs.getFloat("total_price");
+                purchaseModel.addRow(new Object[]{pname, quentity, actualPrice});
             }
-            
-            
-            
+
             rs.close();
             ps.close();
             dbCon.getCon().close();
@@ -314,31 +316,28 @@ public class SMEDashboard extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(SMEDashboard.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-    
+
     }
-    
-    public void getSalesReport(java.util.Date fromDate, java.util.Date toDate){
-        String[] salesColumns = {"Product Name","Product Quantity","Final Price"};
+
+    public void getSalesReport(java.util.Date fromDate, java.util.Date toDate) {
+        String[] salesColumns = {"Product Name", "Product Quantity", "Final Price"};
         DefaultTableModel salesModel = new DefaultTableModel();
         salesModel.setColumnIdentifiers(salesColumns);
         jTableReport.setModel(salesModel);
-        sql="select * from sales where sales_date between ? and ?";
-        
+        sql = "select * from sales where sales_date between ? and ?";
+
         try {
-            ps= dbCon.getCon().prepareStatement(sql);
+            ps = dbCon.getCon().prepareStatement(sql);
             ps.setDate(1, convertutilltosql(fromDate));
             ps.setDate(2, convertutilltosql(toDate));
-            rs= ps.executeQuery();
-            while (rs.next()) {                
+            rs = ps.executeQuery();
+            while (rs.next()) {
                 String pname = rs.getString("product_name");
                 float quentity = rs.getFloat("purchase_quentity");
-                float actualPrice= rs.getFloat("actual_price");
-                salesModel.addRow(new Object[]{pname,quentity,actualPrice});
+                float actualPrice = rs.getFloat("actual_price");
+                salesModel.addRow(new Object[]{pname, quentity, actualPrice});
             }
-            
-            
-            
+
             rs.close();
             ps.close();
             dbCon.getCon().close();
@@ -346,9 +345,7 @@ public class SMEDashboard extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(SMEDashboard.class.getName()).log(Level.SEVERE, null, ex);
         }
-    
-    
-    
+
     }
 
     /**
@@ -1482,9 +1479,9 @@ public class SMEDashboard extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(rootPane, "Data saved in purchases table");
             updateProductToStock();
             setProductnametoPurchaseCombo(comboPurchaseProductName);
-            
-            getAllPurchaseProduct();            
-            
+
+            getAllPurchaseProduct();
+
         } catch (SQLException ex) {
             Logger.getLogger(SMEDashboard.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -1585,7 +1582,7 @@ public class SMEDashboard extends javax.swing.JFrame {
     private void txtbillTotalPriceMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtbillTotalPriceMouseClicked
         // TODO add your handling code here:
         float toatPrice = getbillTotalPrice();
-        System.out.println(toatPrice);
+
         txtbillTotalPrice.setText(toatPrice + "");
 
     }//GEN-LAST:event_txtbillTotalPriceMouseClicked
@@ -1706,29 +1703,29 @@ public class SMEDashboard extends javax.swing.JFrame {
         float actualPrice = Float.parseFloat(txtbillFinalPrice.getText());
         float discount = Float.parseFloat(txtbillDiscount.getText());
         Date salesDate = convertutilltosql(jDatebillSalesDate.getDate());
-        sql="insert into sales(product_name,purchase_quentity, actual_price, discount,sales_date,unit_price)"
-                    + " values(?,?,?,?,?,?)";
-            
+        sql = "insert into sales(product_name,purchase_quentity, actual_price, discount,sales_date,unit_price)"
+                + " values(?,?,?,?,?,?)";
+
         try {
-            ps=dbCon.getCon().prepareStatement(sql);
+            ps = dbCon.getCon().prepareStatement(sql);
             ps.setString(1, sellProductName);
             ps.setFloat(2, sellQuentity);
             ps.setFloat(3, actualPrice);
             ps.setFloat(4, discount);
             ps.setDate(5, salesDate);
             ps.setFloat(6, unitPrice);
-            
+
             ps.executeUpdate();
             ps.close();
             dbCon.getCon().close();
             subtractProductFromStock();
             JOptionPane.showMessageDialog(rootPane, "Data saved in smemanagement.sales table");
-            
+
         } catch (SQLException ex) {
             Logger.getLogger(SMEDashboard.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        
+
     }//GEN-LAST:event_btnBillSaveMouseClicked
 
     private void jButton5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton5MouseClicked
@@ -1742,9 +1739,9 @@ public class SMEDashboard extends javax.swing.JFrame {
         java.util.Date toDate = jDateReportToDate.getDate();
         if (radioReportPurchase.isSelected()) {
             getPurchaseReport(fromDate, toDate);
-        } else if(radioReportSales.isSelected()){
+        } else if (radioReportSales.isSelected()) {
             getSalesReport(fromDate, toDate);
-        } else if(radioReportstock.isSelected()){
+        } else if (radioReportstock.isSelected()) {
 //            getStock
         } else {
             JOptionPane.showMessageDialog(rootPane, "Select Purchase/Sales/Stock to see report");
@@ -1753,33 +1750,40 @@ public class SMEDashboard extends javax.swing.JFrame {
 
     private void btnbillinfoAddToCartMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnbillinfoAddToCartMouseClicked
         // TODO add your handling code here:
-        String[] columns = {"Product Name","Unit Price","Quantity","Discount","Total"};
+        String[] columns = {"Product Name", "Unit Price", "Quantity", "Discount", "Total"};
         DefaultTableModel cartdtm = new DefaultTableModel();
         cartdtm.setColumnIdentifiers(columns);
         jTableCart.setModel(cartdtm);
-//        cartdtm.insertRow(ERROR, columns);
+//        cartdtm.;
         String productName = txtbillProductName.getText();
         float unitPrice = Float.parseFloat(txtbillunitPrice.getText());
         float quantity = Float.parseFloat(spanbillquentity.getValue().toString());
         float discount = Float.parseFloat(txtbillDiscount.getText());
         float actualPrice = Float.parseFloat(txtbillFinalPrice.getText());
-        
+
         List<Object> productList = new ArrayList<>();
-        
-        productList.add(new Object[]{productName,unitPrice,quantity,discount,actualPrice});
-         
-        
-        
-        for(Object i: productList){
-            cartdtm.addRow((Object[]) i);
+
+        productList.add(new Object[]{productName, unitPrice, quantity, discount, actualPrice});
+
+        int row = cartdtm.getRowCount();
+        System.out.println("row"+row);
+        if (row == 0) {
+            for (Object i : productList) {
+//            cartdtm.addRow((Object[]) i);
+                cartdtm.insertRow(row, (Object[]) i);
+            }
+        } else {
+            row++;
+            for (Object i : productList) {
+//            cartdtm.addRow((Object[]) i);
+                cartdtm.insertRow(row, (Object[]) i);
+                System.out.println("row"+row);
+            }
         }
+
 //        int row=cartdtm.getRowCount();
 //        cartdtm.insertRow(row+1, columns);
-        
-        
-        
-        
-        
+
     }//GEN-LAST:event_btnbillinfoAddToCartMouseClicked
 
     /**
