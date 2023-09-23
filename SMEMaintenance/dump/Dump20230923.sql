@@ -83,7 +83,7 @@ CREATE TABLE `demo_table` (
   `age` int DEFAULT NULL,
   `batch_id` int DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -92,7 +92,7 @@ CREATE TABLE `demo_table` (
 
 LOCK TABLES `demo_table` WRITE;
 /*!40000 ALTER TABLE `demo_table` DISABLE KEYS */;
-INSERT INTO `demo_table` VALUES (1,'Rakib',25,NULL),(2,'Akib',25,NULL),(3,'Rakib',25,NULL);
+INSERT INTO `demo_table` VALUES (1,'Rakib',25,NULL),(2,'Akib',25,NULL),(3,'Rakib',25,NULL),(4,'Rakib',25,NULL);
 /*!40000 ALTER TABLE `demo_table` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -133,7 +133,7 @@ CREATE TABLE `product_stock` (
   `quantity` float DEFAULT NULL,
   `product_id` int DEFAULT NULL,
   PRIMARY KEY (`idproduct_stock`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -142,7 +142,7 @@ CREATE TABLE `product_stock` (
 
 LOCK TABLES `product_stock` WRITE;
 /*!40000 ALTER TABLE `product_stock` DISABLE KEYS */;
-INSERT INTO `product_stock` VALUES (1,'stock3',0,NULL),(2,'stock101',0,NULL);
+INSERT INTO `product_stock` VALUES (1,'demo1',0,NULL),(2,'demo2',2,NULL),(3,'demo3',5,NULL),(4,'funcopop1',10,NULL);
 /*!40000 ALTER TABLE `product_stock` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -184,7 +184,7 @@ CREATE TABLE `products` (
   `purchase_price` float DEFAULT NULL,
   `entry_date` date DEFAULT NULL,
   PRIMARY KEY (`idproducts`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -193,7 +193,7 @@ CREATE TABLE `products` (
 
 LOCK TABLES `products` WRITE;
 /*!40000 ALTER TABLE `products` DISABLE KEYS */;
-INSERT INTO `products` VALUES (1,'demoproduct',100,120,5,'2023-09-20'),(3,'demopro3',200,100,5,'2023-09-20'),(4,'demo4',2,46,10,'2023-09-20'),(6,'demo5',NULL,82,12,'2023-09-21'),(7,'demo5',NULL,12,2,NULL),(8,'stockup',NULL,20,10,'2023-09-21'),(9,'stock2',NULL,50,10,'2023-09-20'),(10,'stock3',NULL,2,1,'2023-09-21'),(11,'stock101',NULL,200,50,'2023-09-21');
+INSERT INTO `products` VALUES (1,'demo1',NULL,10,5,'2023-09-23'),(2,'demo2',NULL,10,3,'2023-09-23'),(3,'demo3',NULL,20,2,'2023-09-23'),(4,'funcopop1',NULL,120,50,'2023-09-23');
 /*!40000 ALTER TABLE `products` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -212,7 +212,7 @@ CREATE TABLE `purchases` (
   `total_price` float DEFAULT NULL,
   `purchase_date` date DEFAULT NULL,
   PRIMARY KEY (`idpurchases`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -221,7 +221,7 @@ CREATE TABLE `purchases` (
 
 LOCK TABLES `purchases` WRITE;
 /*!40000 ALTER TABLE `purchases` DISABLE KEYS */;
-INSERT INTO `purchases` VALUES (1,'demopro3',2,20,40,'2023-09-21'),(2,'demo4',2,50,100,'2023-09-22'),(3,'stock3',4,50,200,'2023-09-21'),(4,'stock3',4,50,200,'2023-09-21'),(5,'stock3',1,500,500,'2023-09-21'),(6,'stock101',3,50,150,'2023-09-21'),(7,'stock101',4,50,200,'2023-09-21'),(8,'stock3',2,50,100,'2023-09-21'),(9,'stock101',6,5,30,'2023-09-21'),(10,'stock101',2,5,10,'2023-09-21'),(11,'stock3',1,5,5,'2023-09-21');
+INSERT INTO `purchases` VALUES (1,'demo1',2,10,20,'2023-09-23'),(2,'demo2',3,10,30,'2023-09-23'),(3,'demo3',5,10,50,'2023-09-23'),(4,'funcopop1',10,120,1200,'2023-09-23');
 /*!40000 ALTER TABLE `purchases` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -233,14 +233,15 @@ DROP TABLE IF EXISTS `sales`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `sales` (
-  `idsales` int NOT NULL,
+  `idsales` int NOT NULL AUTO_INCREMENT,
   `product_name` varchar(45) DEFAULT NULL,
-  `purchase_quentity` int DEFAULT NULL,
+  `purchase_quentity` float DEFAULT NULL,
   `actual_price` float DEFAULT NULL,
   `discount` float DEFAULT NULL,
   `sales_date` date DEFAULT NULL,
+  `unit_price` float DEFAULT NULL,
   PRIMARY KEY (`idsales`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -249,6 +250,7 @@ CREATE TABLE `sales` (
 
 LOCK TABLES `sales` WRITE;
 /*!40000 ALTER TABLE `sales` DISABLE KEYS */;
+INSERT INTO `sales` VALUES (1,'demo1',1,20,0,'2023-09-23',NULL),(2,'demo1',1,10,0,'2023-09-23',10),(3,'demo2',1,10,0,'2023-09-23',10);
 /*!40000 ALTER TABLE `sales` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -287,4 +289,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-09-21 13:30:28
+-- Dump completed on 2023-09-23 13:11:28
