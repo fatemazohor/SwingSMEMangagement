@@ -11,6 +11,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -30,6 +32,8 @@ public class SMEDashboard extends javax.swing.JFrame {
     String sql;
     PreparedStatement ps;
     ResultSet rs;
+    LocalDate today = LocalDate.now();
+    java.sql.Date sqltoday = java.sql.Date.valueOf(today);
 
     /**
      * Creates new form SMEDashboard
@@ -44,6 +48,12 @@ public class SMEDashboard extends javax.swing.JFrame {
         setProductnametoPurchaseCombo(comboPurchaseProductName);
 
         getAllPurchaseProduct();
+        getTodaySales();
+        getTotalSales();
+        getMonthlySales();
+        getTodayPurchase();
+        getTotalPurchase();
+        getMonthlyPurchase();
     }
 //show products table from database
 
@@ -348,6 +358,116 @@ public class SMEDashboard extends javax.swing.JFrame {
 
     }
 
+    //Dashboard data method
+    public void getTodaySales() {
+        sql = "select sum(actual_price) from sales where sales_date=?";
+        try {
+            ps = dbCon.getCon().prepareStatement(sql);
+            ps.setDate(1, sqltoday);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                float todayTotal = rs.getFloat("sum(actual_price)");
+                txtTodaySalesDigit.setText(todayTotal + "");
+            }
+            rs.close();
+            ps.close();
+            dbCon.getCon().close();
+        } catch (SQLException ex) {
+            Logger.getLogger(SMEDashboard.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void getMonthlySales() {
+        sql = "select sum(actual_price) from sales where sales_date Like?";
+        try {
+            ps = dbCon.getCon().prepareStatement(sql);
+            ps.setString(1, sqltoday.toString().substring(0, 8) + "%");
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                float todayTotal = rs.getFloat("sum(actual_price)");
+                txtMonthlySalesDigit.setText(todayTotal + "");
+            }
+            rs.close();
+            ps.close();
+            dbCon.getCon().close();
+        } catch (SQLException ex) {
+            Logger.getLogger(SMEDashboard.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void getTotalSales() {
+        sql = "select sum(actual_price) from sales";
+
+        try {
+            ps = dbCon.getCon().prepareStatement(sql);
+
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                float todayTotal = rs.getFloat("sum(actual_price)");
+                txtTotalSalesDigit.setText(todayTotal + "");
+            }
+            rs.close();
+            ps.close();
+            dbCon.getCon().close();
+        } catch (SQLException ex) {
+            Logger.getLogger(SMEDashboard.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void getTodayPurchase() {
+        sql = "select sum(total_price) from purchases where purchase_date=?";
+        try {
+            ps = dbCon.getCon().prepareStatement(sql);
+            ps.setDate(1, sqltoday);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                float todayTotal = rs.getFloat("sum(total_price)");
+                txtTodayPurchaseDigit.setText(todayTotal + "");
+            }
+            rs.close();
+            ps.close();
+            dbCon.getCon().close();
+        } catch (SQLException ex) {
+            Logger.getLogger(SMEDashboard.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void getMonthlyPurchase() {
+        sql = "select sum(total_price) from purchases where purchase_date Like?";
+        try {
+            ps = dbCon.getCon().prepareStatement(sql);
+            ps.setString(1, sqltoday.toString().substring(0, 8) + "%");
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                float todayTotal = rs.getFloat("sum(total_price)");
+                txtMonthlyPurchaseDigit.setText(todayTotal + "");
+            }
+            rs.close();
+            ps.close();
+            dbCon.getCon().close();
+        } catch (SQLException ex) {
+            Logger.getLogger(SMEDashboard.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void getTotalPurchase() {
+        sql = "select sum(total_price) from purchases";
+        try {
+            ps = dbCon.getCon().prepareStatement(sql);
+
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                float todayTotal = rs.getFloat("sum(total_price)");
+                txtTotalPurchaseDigit.setText(todayTotal + "");
+            }
+            rs.close();
+            ps.close();
+            dbCon.getCon().close();
+        } catch (SQLException ex) {
+            Logger.getLogger(SMEDashboard.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -370,8 +490,25 @@ public class SMEDashboard extends javax.swing.JFrame {
         menu = new javax.swing.JTabbedPane();
         tpdashboard = new javax.swing.JTabbedPane();
         jPanel3 = new javax.swing.JPanel();
-        txtName = new javax.swing.JTextField();
-        btnhome = new javax.swing.JButton();
+        jPanelTodaySales = new javax.swing.JPanel();
+        txtTodaySalesDigit = new javax.swing.JTextField();
+        txtTodaySales = new javax.swing.JTextField();
+        jPanelTodayPurchase = new javax.swing.JPanel();
+        txtTodayPurchaseDigit = new javax.swing.JTextField();
+        txtTodayPurchase = new javax.swing.JTextField();
+        jPanelTotalPurchase = new javax.swing.JPanel();
+        txtTotalPurchaseDigit = new javax.swing.JTextField();
+        txtTotalPurchase = new javax.swing.JTextField();
+        jPanelMonthlyPurchase = new javax.swing.JPanel();
+        txtMonthlyPurchaseDigit = new javax.swing.JTextField();
+        txtMonthlyPurchase = new javax.swing.JTextField();
+        jPanelMonthlySales = new javax.swing.JPanel();
+        txtMonthlySalesDigit = new javax.swing.JTextField();
+        txtTotalSales1 = new javax.swing.JTextField();
+        jPanelTotalSales = new javax.swing.JPanel();
+        txtTotalSalesDigit = new javax.swing.JTextField();
+        txtTotalSales = new javax.swing.JTextField();
+        lvlDashboard = new javax.swing.JLabel();
         tpInventory = new javax.swing.JTabbedPane();
         jPanel6 = new javax.swing.JPanel();
         btnInventoryPurchase = new javax.swing.JButton();
@@ -588,34 +725,202 @@ public class SMEDashboard extends javax.swing.JFrame {
 
         getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 90, 160, 490));
 
-        txtName.setText("name");
+        txtTodaySalesDigit.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        txtTodaySalesDigit.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtTodaySalesDigit.setText("0.00");
 
-        btnhome.setText("jButton1");
-        btnhome.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnhomeMouseClicked(evt);
-            }
-        });
+        txtTodaySales.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        txtTodaySales.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtTodaySales.setText("Today Sales");
+
+        javax.swing.GroupLayout jPanelTodaySalesLayout = new javax.swing.GroupLayout(jPanelTodaySales);
+        jPanelTodaySales.setLayout(jPanelTodaySalesLayout);
+        jPanelTodaySalesLayout.setHorizontalGroup(
+            jPanelTodaySalesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelTodaySalesLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addGroup(jPanelTodaySalesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(txtTodaySalesDigit, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(txtTodaySales, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 233, Short.MAX_VALUE)))
+        );
+        jPanelTodaySalesLayout.setVerticalGroup(
+            jPanelTodaySalesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelTodaySalesLayout.createSequentialGroup()
+                .addComponent(txtTodaySales, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(txtTodaySalesDigit, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+
+        txtTodayPurchaseDigit.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        txtTodayPurchaseDigit.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtTodayPurchaseDigit.setText("0.00");
+
+        txtTodayPurchase.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        txtTodayPurchase.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtTodayPurchase.setText("Today Purchase");
+
+        javax.swing.GroupLayout jPanelTodayPurchaseLayout = new javax.swing.GroupLayout(jPanelTodayPurchase);
+        jPanelTodayPurchase.setLayout(jPanelTodayPurchaseLayout);
+        jPanelTodayPurchaseLayout.setHorizontalGroup(
+            jPanelTodayPurchaseLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelTodayPurchaseLayout.createSequentialGroup()
+                .addGap(0, 1, Short.MAX_VALUE)
+                .addGroup(jPanelTodayPurchaseLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(txtTodayPurchaseDigit, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(txtTodayPurchase, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 232, Short.MAX_VALUE)))
+        );
+        jPanelTodayPurchaseLayout.setVerticalGroup(
+            jPanelTodayPurchaseLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelTodayPurchaseLayout.createSequentialGroup()
+                .addComponent(txtTodayPurchase, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(txtTodayPurchaseDigit, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+
+        txtTotalPurchaseDigit.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        txtTotalPurchaseDigit.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtTotalPurchaseDigit.setText("0.00");
+
+        txtTotalPurchase.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        txtTotalPurchase.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtTotalPurchase.setText("Total Purchase");
+
+        javax.swing.GroupLayout jPanelTotalPurchaseLayout = new javax.swing.GroupLayout(jPanelTotalPurchase);
+        jPanelTotalPurchase.setLayout(jPanelTotalPurchaseLayout);
+        jPanelTotalPurchaseLayout.setHorizontalGroup(
+            jPanelTotalPurchaseLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(txtTotalPurchaseDigit)
+            .addComponent(txtTotalPurchase, javax.swing.GroupLayout.DEFAULT_SIZE, 213, Short.MAX_VALUE)
+        );
+        jPanelTotalPurchaseLayout.setVerticalGroup(
+            jPanelTotalPurchaseLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelTotalPurchaseLayout.createSequentialGroup()
+                .addComponent(txtTotalPurchase, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(txtTotalPurchaseDigit, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+
+        txtMonthlyPurchaseDigit.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        txtMonthlyPurchaseDigit.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtMonthlyPurchaseDigit.setText("0.00");
+
+        txtMonthlyPurchase.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        txtMonthlyPurchase.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtMonthlyPurchase.setText("Monthly Purchase");
+
+        javax.swing.GroupLayout jPanelMonthlyPurchaseLayout = new javax.swing.GroupLayout(jPanelMonthlyPurchase);
+        jPanelMonthlyPurchase.setLayout(jPanelMonthlyPurchaseLayout);
+        jPanelMonthlyPurchaseLayout.setHorizontalGroup(
+            jPanelMonthlyPurchaseLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(txtMonthlyPurchaseDigit)
+            .addComponent(txtMonthlyPurchase, javax.swing.GroupLayout.DEFAULT_SIZE, 233, Short.MAX_VALUE)
+        );
+        jPanelMonthlyPurchaseLayout.setVerticalGroup(
+            jPanelMonthlyPurchaseLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelMonthlyPurchaseLayout.createSequentialGroup()
+                .addComponent(txtMonthlyPurchase, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(txtMonthlyPurchaseDigit, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+
+        txtMonthlySalesDigit.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        txtMonthlySalesDigit.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtMonthlySalesDigit.setText("0.00");
+
+        txtTotalSales1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        txtTotalSales1.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtTotalSales1.setText("Monthly Sales");
+
+        javax.swing.GroupLayout jPanelMonthlySalesLayout = new javax.swing.GroupLayout(jPanelMonthlySales);
+        jPanelMonthlySales.setLayout(jPanelMonthlySalesLayout);
+        jPanelMonthlySalesLayout.setHorizontalGroup(
+            jPanelMonthlySalesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(txtMonthlySalesDigit)
+            .addComponent(txtTotalSales1, javax.swing.GroupLayout.DEFAULT_SIZE, 233, Short.MAX_VALUE)
+        );
+        jPanelMonthlySalesLayout.setVerticalGroup(
+            jPanelMonthlySalesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelMonthlySalesLayout.createSequentialGroup()
+                .addComponent(txtTotalSales1, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(txtMonthlySalesDigit, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+
+        txtTotalSalesDigit.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        txtTotalSalesDigit.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtTotalSalesDigit.setText("0.00");
+
+        txtTotalSales.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        txtTotalSales.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtTotalSales.setText("Total Sales");
+
+        javax.swing.GroupLayout jPanelTotalSalesLayout = new javax.swing.GroupLayout(jPanelTotalSales);
+        jPanelTotalSales.setLayout(jPanelTotalSalesLayout);
+        jPanelTotalSalesLayout.setHorizontalGroup(
+            jPanelTotalSalesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelTotalSalesLayout.createSequentialGroup()
+                .addGroup(jPanelTotalSalesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(txtTotalSalesDigit, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtTotalSales, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 218, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+        jPanelTotalSalesLayout.setVerticalGroup(
+            jPanelTotalSalesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelTotalSalesLayout.createSequentialGroup()
+                .addComponent(txtTotalSales, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(txtTotalSalesDigit, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+
+        lvlDashboard.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        lvlDashboard.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lvlDashboard.setText("DashBoard");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(47, 47, 47)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnhome)
-                    .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, 342, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(411, Short.MAX_VALUE))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(30, 30, 30)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanelTodayPurchase, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jPanelTodaySales, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(27, 27, 27)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addComponent(jPanelMonthlySales, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
+                                .addComponent(jPanelTotalSales, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addComponent(jPanelMonthlyPurchase, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jPanelTotalPurchase, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lvlDashboard, javax.swing.GroupLayout.PREFERRED_SIZE, 311, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(243, 243, 243)))
+                .addGap(23, 23, 23))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(48, 48, 48)
-                .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(73, 73, 73)
-                .addComponent(btnhome)
-                .addContainerGap(336, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addContainerGap(72, Short.MAX_VALUE)
+                .addComponent(lvlDashboard, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(42, 42, 42)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanelTodaySales, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jPanelMonthlySales, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(48, 48, 48)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanelTodayPurchase, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jPanelMonthlyPurchase, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jPanelTotalPurchase, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jPanelTotalSales, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(55, 55, 55))
         );
 
         tpdashboard.addTab("tab1", jPanel3);
@@ -1410,14 +1715,6 @@ public class SMEDashboard extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnhomeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnhomeMouseClicked
-        // TODO add your handling code here:
-        txtName.getText();
-
-        txtProductPurchaseProductId.setText(txtName.getText());
-
-    }//GEN-LAST:event_btnhomeMouseClicked
-
     private void btndashboradMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btndashboradMouseClicked
         // TODO add your handling code here:
         menu.setSelectedIndex(0);
@@ -1479,8 +1776,10 @@ public class SMEDashboard extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(rootPane, "Data saved in purchases table");
             updateProductToStock();
             setProductnametoPurchaseCombo(comboPurchaseProductName);
-
             getAllPurchaseProduct();
+            getTodayPurchase();
+            getTotalPurchase();
+            getMonthlyPurchase();
 
         } catch (SQLException ex) {
             Logger.getLogger(SMEDashboard.class.getName()).log(Level.SEVERE, null, ex);
@@ -1720,7 +2019,9 @@ public class SMEDashboard extends javax.swing.JFrame {
             dbCon.getCon().close();
             subtractProductFromStock();
             JOptionPane.showMessageDialog(rootPane, "Data saved in smemanagement.sales table");
-
+            getTodaySales();
+            getTotalSales();
+            getMonthlySales();
         } catch (SQLException ex) {
             Logger.getLogger(SMEDashboard.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -1766,23 +2067,24 @@ public class SMEDashboard extends javax.swing.JFrame {
         productList.add(new Object[]{productName, unitPrice, quantity, discount, actualPrice});
 
         int row = cartdtm.getRowCount();
-        System.out.println("row"+row);
-        if (row == 0) {
-            for (Object i : productList) {
+        for (Object i : productList) {
 //            cartdtm.addRow((Object[]) i);
-                cartdtm.insertRow(row, (Object[]) i);
-            }
-        } else {
-            row++;
-            for (Object i : productList) {
-//            cartdtm.addRow((Object[]) i);
-                cartdtm.insertRow(row, (Object[]) i);
-                System.out.println("row"+row);
-            }
+            cartdtm.insertRow(row, (Object[]) i);
         }
 
-//        int row=cartdtm.getRowCount();
-//        cartdtm.insertRow(row+1, columns);
+//        if (row == 0) {
+//            for (Object i : productList) {
+//            cartdtm.addRow((Object[]) i);
+//                cartdtm.insertRow(row, (Object[]) i);
+//            }
+//        } else {
+//            row++;
+//            for (Object i : productList) {
+//            cartdtm.addRow((Object[]) i);
+//                cartdtm.insertRow(row, (Object[]) i);
+//                System.out.println("row"+row);
+//            }
+//        }
 
     }//GEN-LAST:event_btnbillinfoAddToCartMouseClicked
 
@@ -1838,7 +2140,6 @@ public class SMEDashboard extends javax.swing.JFrame {
     private javax.swing.JButton btnbillDelete;
     private javax.swing.JButton btnbillinfoAddToCart;
     private javax.swing.JButton btndashborad;
-    private javax.swing.JButton btnhome;
     private javax.swing.JButton btnillInfoReset;
     private javax.swing.JButton btnorderSales;
     private javax.swing.ButtonGroup buttonGroupReport;
@@ -1898,6 +2199,12 @@ public class SMEDashboard extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
+    private javax.swing.JPanel jPanelMonthlyPurchase;
+    private javax.swing.JPanel jPanelMonthlySales;
+    private javax.swing.JPanel jPanelTodayPurchase;
+    private javax.swing.JPanel jPanelTodaySales;
+    private javax.swing.JPanel jPanelTotalPurchase;
+    private javax.swing.JPanel jPanelTotalSales;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
@@ -1909,6 +2216,7 @@ public class SMEDashboard extends javax.swing.JFrame {
     private javax.swing.JTable jTableReport;
     private com.toedter.calendar.JDateChooser jdatePurchaseProduct;
     private com.toedter.calendar.JDateChooser jdateinvUpdateCreateDate;
+    private javax.swing.JLabel lvlDashboard;
     private javax.swing.JTabbedPane menu;
     private javax.swing.JRadioButton radioReportPurchase;
     private javax.swing.JRadioButton radioReportSales;
@@ -1929,10 +2237,21 @@ public class SMEDashboard extends javax.swing.JFrame {
     private javax.swing.JTextArea txtCustomerInfoAddress;
     private javax.swing.JTextField txtCustomerInfoCell;
     private javax.swing.JTextField txtCustomerInfoName;
-    private javax.swing.JTextField txtName;
+    private javax.swing.JTextField txtMonthlyPurchase;
+    private javax.swing.JTextField txtMonthlyPurchaseDigit;
+    private javax.swing.JTextField txtMonthlySalesDigit;
     private javax.swing.JTextField txtProductPurchaseProductId;
     private javax.swing.JTextField txtProductPurchaseUnitPrice;
     private javax.swing.JTextField txtProductTotalPrice;
+    private javax.swing.JTextField txtTodayPurchase;
+    private javax.swing.JTextField txtTodayPurchaseDigit;
+    private javax.swing.JTextField txtTodaySales;
+    private javax.swing.JTextField txtTodaySalesDigit;
+    private javax.swing.JTextField txtTotalPurchase;
+    private javax.swing.JTextField txtTotalPurchaseDigit;
+    private javax.swing.JTextField txtTotalSales;
+    private javax.swing.JTextField txtTotalSales1;
+    private javax.swing.JTextField txtTotalSalesDigit;
     private javax.swing.JTextField txtbillDiscount;
     private javax.swing.JTextField txtbillFinalPrice;
     private javax.swing.JTextField txtbillProductName;
