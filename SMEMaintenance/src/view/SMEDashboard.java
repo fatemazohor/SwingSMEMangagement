@@ -21,10 +21,7 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import util.DbCon;
 
-/**
- *
- * @author user
- */
+
 public class SMEDashboard extends javax.swing.JFrame {
 
     //database variable
