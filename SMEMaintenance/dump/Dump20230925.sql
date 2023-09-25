@@ -58,7 +58,7 @@ CREATE TABLE `customers` (
   `address` varchar(45) DEFAULT NULL,
   `created_date` date DEFAULT NULL,
   PRIMARY KEY (`idcustomers`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -67,7 +67,35 @@ CREATE TABLE `customers` (
 
 LOCK TABLES `customers` WRITE;
 /*!40000 ALTER TABLE `customers` DISABLE KEYS */;
+INSERT INTO `customers` VALUES (1,'Ahmed','012536','Dhaka','Kakrail','2023-09-25');
 /*!40000 ALTER TABLE `customers` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `data_entry1`
+--
+
+DROP TABLE IF EXISTS `data_entry1`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `data_entry1` (
+  `iddata_entry1` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) DEFAULT NULL,
+  `location` varchar(45) DEFAULT NULL,
+  `subject` varchar(45) DEFAULT NULL,
+  `gender` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`iddata_entry1`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `data_entry1`
+--
+
+LOCK TABLES `data_entry1` WRITE;
+/*!40000 ALTER TABLE `data_entry1` DISABLE KEYS */;
+INSERT INTO `data_entry1` VALUES (5,'Yamin','Dhanmondi','Java','Male'),(6,'Opera','Banani','Mysql','Female');
+/*!40000 ALTER TABLE `data_entry1` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -142,7 +170,7 @@ CREATE TABLE `product_stock` (
 
 LOCK TABLES `product_stock` WRITE;
 /*!40000 ALTER TABLE `product_stock` DISABLE KEYS */;
-INSERT INTO `product_stock` VALUES (1,'demo1',0,NULL),(2,'demo2',2,NULL),(3,'demo3',5,NULL),(4,'funcopop1',10,NULL);
+INSERT INTO `product_stock` VALUES (1,'demo1',5,NULL),(2,'demo2',51,NULL),(3,'demo3',5,NULL),(4,'funcopop1',9,NULL);
 /*!40000 ALTER TABLE `product_stock` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -212,7 +240,7 @@ CREATE TABLE `purchases` (
   `total_price` float DEFAULT NULL,
   `purchase_date` date DEFAULT NULL,
   PRIMARY KEY (`idpurchases`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -221,7 +249,7 @@ CREATE TABLE `purchases` (
 
 LOCK TABLES `purchases` WRITE;
 /*!40000 ALTER TABLE `purchases` DISABLE KEYS */;
-INSERT INTO `purchases` VALUES (1,'demo1',2,10,20,'2023-09-23'),(2,'demo2',3,10,30,'2023-09-23'),(3,'demo3',5,10,50,'2023-09-23'),(4,'funcopop1',10,120,1200,'2023-09-23');
+INSERT INTO `purchases` VALUES (1,'demo1',2,10,20,'2023-09-23'),(2,'demo2',3,10,30,'2023-09-23'),(3,'demo3',5,10,50,'2023-09-23'),(4,'funcopop1',10,120,1200,'2023-09-23'),(5,'demo2',50,10,500,'2023-09-24'),(6,'demo2',1,10,10,'2023-09-24'),(7,'funcopop1',2,120,240,'2023-09-25'),(8,'demo1',5,10,50,'2023-09-25');
 /*!40000 ALTER TABLE `purchases` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -241,7 +269,7 @@ CREATE TABLE `sales` (
   `sales_date` date DEFAULT NULL,
   `unit_price` float DEFAULT NULL,
   PRIMARY KEY (`idsales`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -250,7 +278,7 @@ CREATE TABLE `sales` (
 
 LOCK TABLES `sales` WRITE;
 /*!40000 ALTER TABLE `sales` DISABLE KEYS */;
-INSERT INTO `sales` VALUES (1,'demo1',1,20,0,'2023-09-23',NULL),(2,'demo1',1,10,0,'2023-09-23',10),(3,'demo2',1,10,0,'2023-09-23',10);
+INSERT INTO `sales` VALUES (1,'demo1',1,20,0,'2023-09-23',NULL),(2,'demo1',1,10,0,'2023-09-23',10),(3,'demo2',1,10,0,'2023-09-23',10),(4,'demo2',2,20,0,'2023-09-24',10),(5,'funcopop1',1,120,0,'2023-09-25',120),(6,'funcopop1',2,240,0,'2023-09-25',120);
 /*!40000 ALTER TABLE `sales` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -289,4 +317,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-09-23 13:11:28
+-- Dump completed on 2023-09-25 13:11:31
