@@ -10,9 +10,9 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -54,32 +54,31 @@ public class SMEDashboard extends javax.swing.JFrame {
         getMonthlyPurchase();
     }
 //show products table from database
-    private void getAllProductsForSell(){
-        String [] columna = {"Product Name","Quantity","Price"};
+
+    private void getAllProductsForSell() {
+        String[] columna = {"Product Name", "Quantity", "Price"};
         DefaultTableModel model = new DefaultTableModel();
         model.setColumnIdentifiers(columna);
         tableBillInfoProductDetails.setModel(model);
-        sql="SELECT p.name, s.quantity, p.unit_price  FROM smemanagement.product_stock s inner join smemanagement.products p on s.idproduct_stock= p.idproducts;";
+        sql = "SELECT p.name, s.quantity, p.unit_price  FROM smemanagement.product_stock s inner join smemanagement.products p on s.idproduct_stock= p.idproducts;";
         try {
-            ps=dbCon.getCon().prepareStatement(sql);
-            rs=ps.executeQuery();
-            while (rs.next()) {                
+            ps = dbCon.getCon().prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
                 String name = rs.getString("p.name");
                 float quentity = rs.getFloat("s.quantity");
                 float unitPrice = rs.getFloat("p.unit_price");
-                
-               model.addRow(new Object[]{name,quentity,unitPrice});
+
+                model.addRow(new Object[]{name, quentity, unitPrice});
             }
-            
+
             rs.close();
             ps.close();
             dbCon.getCon().close();
         } catch (SQLException ex) {
             Logger.getLogger(SMEDashboard.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        
-    
+
     }
 
     private void getAllProducts() {
@@ -102,7 +101,9 @@ public class SMEDashboard extends javax.swing.JFrame {
                 float unitprice = rs.getFloat("unit_price");
                 float purchasePrice = rs.getFloat("purchase_price");
                 Date entryDate = rs.getDate("entry_date");
-
+                //format sql date to string date , so can update date. 
+//                String date = formatSqlDate(entryDate);
+                   
                 producttableModel.addRow(new Object[]{produntId, name, quentity, unitprice, purchasePrice, entryDate});
 
             }
@@ -257,13 +258,28 @@ public class SMEDashboard extends javax.swing.JFrame {
 
     }
 
-    //date format for utill date
+    //date format for utill date, util to String date
     public static String formatUtilDate(java.util.Date date) {
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy");
         String formattedDate = dateFormat.format(date);
         return formattedDate;
 
+    }
+
+    //date format for utill date, String date to utill date
+    public static java.util.Date formatStringdateToUtilDate(String dateString) {
+        SimpleDateFormat dateformat = new SimpleDateFormat("dd-MM-yyyy");
+    
+        try {
+            return dateformat.parse(dateString);
+        } catch (ParseException ex) {
+            System.out.println("Date format wrong");
+            Logger.getLogger(SMEDashboard.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+    
+        
     }
 
     private void setInvPurchaeProductReset() {
@@ -2000,11 +2016,14 @@ public class SMEDashboard extends javax.swing.JFrame {
 //        String produntQuentity = tableInvUpdateProdunt.getModel().getValueAt(rowIndex,2).toString();
         String produntUnitPrice = tableInvUpdateProdunt.getModel().getValueAt(rowIndex, 3).toString();
         String produntbuyPrice = tableInvUpdateProdunt.getModel().getValueAt(rowIndex, 4).toString();
-
+        String createDate = tableInvUpdateProdunt.getModel().getValueAt(rowIndex, 5).toString();
+        
+//        System.out.println(createDate);
         txtinvUpdateProId.setText(produntId);
         txtinvUpdateProName.setText(produntname);
         txtinvUpdateUnitPrice.setText(produntUnitPrice);
         txtinvUpdatebuyPrice.setText(produntbuyPrice);
+        jdateinvUpdateCreateDate.setDate(formatStringdateToUtilDate(createDate));
     }//GEN-LAST:event_tableInvUpdateProduntMouseClicked
 
     private void btnInvUpdateMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnInvUpdateMouseClicked
@@ -2229,7 +2248,7 @@ public class SMEDashboard extends javax.swing.JFrame {
     private void tableBillInfoProductDetailsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableBillInfoProductDetailsMouseClicked
         // TODO add your handling code here:
         int rowIndex = tableBillInfoProductDetails.getSelectedRow();
-        
+
         txtbillProductName.setText(tableBillInfoProductDetails.getModel().getValueAt(rowIndex, 0).toString());
         txtbillunitPrice.setText(tableBillInfoProductDetails.getModel().getValueAt(rowIndex, 2).toString());
     }//GEN-LAST:event_tableBillInfoProductDetailsMouseClicked
