@@ -269,7 +269,7 @@ public class SMEDashboard extends javax.swing.JFrame {
 
     //date format for utill date, String date to utill date
     public static java.util.Date formatStringdateToUtilDate(String dateString) {
-        SimpleDateFormat dateformat = new SimpleDateFormat("dd-MM-yyyy");
+        SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd");
     
         try {
             return dateformat.parse(dateString);
