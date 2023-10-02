@@ -52,6 +52,7 @@ public class SMEDashboard extends javax.swing.JFrame {
         getTodayPurchase();
         getTotalPurchase();
         getMonthlyPurchase();
+        getCartTable();
     }
 //show products table from database
 
@@ -261,7 +262,7 @@ public class SMEDashboard extends javax.swing.JFrame {
     //date format for utill date, util to String date
     public static String formatUtilDate(java.util.Date date) {
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String formattedDate = dateFormat.format(date);
         return formattedDate;
 
@@ -508,6 +509,13 @@ public class SMEDashboard extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(SMEDashboard.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    public void getCartTable(){
+    String[] columns = {"Product Name", "Unit Price", "Quantity", "Discount", "Total","Date"};
+        DefaultTableModel cartdtm = new DefaultTableModel();
+        cartdtm.setColumnIdentifiers(columns);
+        jTableCart.setModel(cartdtm);
+    
     }
 
     /**
@@ -2115,35 +2123,80 @@ public class SMEDashboard extends javax.swing.JFrame {
 
     private void btnBillSaveMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnBillSaveMouseClicked
         // TODO add your handling code here:
-        String sellProductName = txtbillProductName.getText();
-        float unitPrice = Float.parseFloat(txtbillunitPrice.getText());
-        float sellQuentity = Float.parseFloat(spanbillquentity.getValue().toString());
-        float actualPrice = Float.parseFloat(txtbillFinalPrice.getText());
-        float discount = Float.parseFloat(txtbillDiscount.getText());
-        Date salesDate = convertutilltosql(jDatebillSalesDate.getDate());
-        sql = "insert into sales(product_name,purchase_quentity, actual_price, discount,sales_date,unit_price)"
+        int rowCount = jTableCart.getRowCount();
+        System.out.println(rowCount);
+        for (int i = 0; i < rowCount; i++) {
+            String productN = jTableCart.getModel().getValueAt(i, 0).toString();
+            float unitp= Float.parseFloat(jTableCart.getModel().getValueAt(i, 1).toString());
+            float sellQ= Float.parseFloat(jTableCart.getModel().getValueAt(i, 2).toString());
+            float actualP= Float.parseFloat(jTableCart.getModel().getValueAt(i, 3).toString());
+            float discount1= Float.parseFloat(jTableCart.getModel().getValueAt(i, 4).toString());
+            String dateSt =jTableCart.getModel().getValueAt(i, 5).toString();
+            java.util.Date utilsalesDate = formatStringdateToUtilDate(dateSt);
+            
+            jDatebillSalesDate.setDate(formatStringdateToUtilDate(dateSt));
+            Date salesDate = convertutilltosql(utilsalesDate);
+            System.out.println("pN "+productN +" uP "+unitp +" sQ "+sellQ +" aP "+actualP+" dis "+discount1+" date "+dateSt);
+            System.out.println(utilsalesDate);
+            System.out.println(salesDate);
+            sql = "insert into sales(product_name,purchase_quentity, actual_price, discount,sales_date,unit_price)"
                 + " values(?,?,?,?,?,?)";
 
         try {
             ps = dbCon.getCon().prepareStatement(sql);
-            ps.setString(1, sellProductName);
-            ps.setFloat(2, sellQuentity);
-            ps.setFloat(3, actualPrice);
-            ps.setFloat(4, discount);
+            ps.setString(1, productN);
+            ps.setFloat(2, sellQ);
+            ps.setFloat(3, actualP);
+            ps.setFloat(4, discount1);
             ps.setDate(5, salesDate);
-            ps.setFloat(6, unitPrice);
+            ps.setFloat(6, unitp);
 
             ps.executeUpdate();
             ps.close();
             dbCon.getCon().close();
             subtractProductFromStock();
-            JOptionPane.showMessageDialog(rootPane, "Data saved in smemanagement.sales table");
+            
             getTodaySales();
             getTotalSales();
             getMonthlySales();
         } catch (SQLException ex) {
             Logger.getLogger(SMEDashboard.class.getName()).log(Level.SEVERE, null, ex);
         }
+        }
+        JOptionPane.showMessageDialog(rootPane, "Data saved in smemanagement.sales table");
+        DefaultTableModel tableModel = (DefaultTableModel)jTableCart.getModel();
+        while (tableModel.getRowCount()>0) {            
+            tableModel.removeRow(0);
+        }
+//        String sellProductName = txtbillProductName.getText();
+//        float unitPrice = Float.parseFloat(txtbillunitPrice.getText());
+//        float sellQuentity = Float.parseFloat(spanbillquentity.getValue().toString());
+//        float actualPrice = Float.parseFloat(txtbillFinalPrice.getText());
+//        float discount = Float.parseFloat(txtbillDiscount.getText());
+//        Date salesDate = convertutilltosql(jDatebillSalesDate.getDate());
+//        sql = "insert into sales(product_name,purchase_quentity, actual_price, discount,sales_date,unit_price)"
+//                + " values(?,?,?,?,?,?)";
+//
+//        try {
+//            ps = dbCon.getCon().prepareStatement(sql);
+//            ps.setString(1, sellProductName);
+//            ps.setFloat(2, sellQuentity);
+//            ps.setFloat(3, actualPrice);
+//            ps.setFloat(4, discount);
+//            ps.setDate(5, salesDate);
+//            ps.setFloat(6, unitPrice);
+//
+//            ps.executeUpdate();
+//            ps.close();
+//            dbCon.getCon().close();
+//            subtractProductFromStock();
+//            JOptionPane.showMessageDialog(rootPane, "Data saved in smemanagement.sales table");
+//            getTodaySales();
+//            getTotalSales();
+//            getMonthlySales();
+//        } catch (SQLException ex) {
+//            Logger.getLogger(SMEDashboard.class.getName()).log(Level.SEVERE, null, ex);
+//        }
 
 
     }//GEN-LAST:event_btnBillSaveMouseClicked
@@ -2170,25 +2223,27 @@ public class SMEDashboard extends javax.swing.JFrame {
 
     private void btnbillinfoAddToCartMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnbillinfoAddToCartMouseClicked
         // TODO add your handling code here:
-        String[] columns = {"Product Name", "Unit Price", "Quantity", "Discount", "Total"};
-        DefaultTableModel cartdtm = new DefaultTableModel();
-        cartdtm.setColumnIdentifiers(columns);
-        jTableCart.setModel(cartdtm);
+//        String[] columns = {"Product Name", "Unit Price", "Quantity", "Discount", "Total"};
+//        DefaultTableModel cartdtm = new DefaultTableModel();
+//        cartdtm.setColumnIdentifiers(columns);
+//        jTableCart.setModel(cartdtm);
 //        cartdtm.;
+        DefaultTableModel model= (DefaultTableModel)jTableCart.getModel();
         String productName = txtbillProductName.getText();
         float unitPrice = Float.parseFloat(txtbillunitPrice.getText());
         float quantity = Float.parseFloat(spanbillquentity.getValue().toString());
         float discount = Float.parseFloat(txtbillDiscount.getText());
         float actualPrice = Float.parseFloat(txtbillFinalPrice.getText());
-
+        Date date =convertutilltosql(jDatebillSalesDate.getDate());
         List<Object> productList = new ArrayList<>();
 
-        productList.add(new Object[]{productName, unitPrice, quantity, discount, actualPrice});
-
-        int row = cartdtm.getRowCount();
+        productList.add(new Object[]{productName, unitPrice, quantity, discount, actualPrice,date});
+        
+        int row = model.getRowCount();
         for (Object i : productList) {
-//            cartdtm.addRow((Object[]) i);
-            cartdtm.insertRow(row, (Object[]) i);
+            //both method works.
+            model.addRow((Object[]) i);
+//            model.insertRow(row, (Object[]) i);
         }
 
 //        if (row == 0) {
