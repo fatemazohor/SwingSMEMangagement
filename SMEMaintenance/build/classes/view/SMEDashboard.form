@@ -1983,50 +1983,76 @@
               <Layout>
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" attributes="0">
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" attributes="0">
-                                  <EmptySpace min="28" pref="28" max="-2" attributes="0"/>
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace min="28" pref="28" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="1" attributes="0">
+                              <Component id="jLabel16" min="-2" pref="281" max="-2" attributes="0"/>
+                              <Group type="102" alignment="1" attributes="0">
                                   <Group type="103" groupAlignment="1" attributes="0">
-                                      <Component id="jLabel16" min="-2" pref="281" max="-2" attributes="0"/>
-                                      <Group type="102" alignment="1" attributes="0">
+                                      <Component id="btnpaymentDeliveySet" min="-2" pref="150" max="-2" attributes="0"/>
+                                      <Group type="102" attributes="0">
                                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                              <Component id="jLabel39" alignment="0" min="-2" pref="61" max="-2" attributes="0"/>
                                               <Component id="jLabel41" alignment="0" max="32767" attributes="0"/>
                                               <Component id="jLabel42" alignment="0" max="32767" attributes="0"/>
                                               <Component id="jLabel43" alignment="0" max="32767" attributes="0"/>
                                               <Component id="jLabel40" alignment="0" max="32767" attributes="0"/>
                                               <Component id="jLabel44" alignment="0" max="32767" attributes="0"/>
-                                              <Component id="jLabel45" alignment="0" max="32767" attributes="0"/>
-                                              <Component id="jLabel46" alignment="0" max="32767" attributes="0"/>
-                                              <Component id="jLabel47" alignment="0" max="32767" attributes="0"/>
-                                              <Component id="jLabel38" alignment="0" min="-2" pref="76" max="-2" attributes="0"/>
                                           </Group>
                                           <EmptySpace type="separate" max="-2" attributes="0"/>
-                                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                              <Component id="jComboBox1" pref="183" max="32767" attributes="0"/>
-                                              <Component id="txtpaymentPayment" max="32767" attributes="0"/>
+                                          <Group type="103" groupAlignment="0" attributes="0">
                                               <Component id="txtpaymentdeliveyCode" max="32767" attributes="0"/>
-                                              <Component id="jTextField3" max="32767" attributes="0"/>
                                               <Component id="txtpaymentDeliveryCharge" max="32767" attributes="0"/>
-                                              <Component id="txtpaymentTotal" max="32767" attributes="0"/>
-                                              <Component id="txtpaymentPaid" max="32767" attributes="0"/>
-                                              <Component id="txtpaymentDue" max="32767" attributes="0"/>
-                                              <Component id="jDatepaymentdeliveyDate" max="32767" attributes="0"/>
+                                              <Component id="jDatepaymentdeliveyDate" pref="183" max="32767" attributes="0"/>
                                               <Component id="combopaymentDeliverycompany" max="32767" attributes="0"/>
+                                              <Group type="102" attributes="0">
+                                                  <Component id="jScrollPane9" pref="176" max="32767" attributes="0"/>
+                                                  <EmptySpace min="-2" pref="7" max="-2" attributes="0"/>
+                                              </Group>
                                           </Group>
-                                          <EmptySpace min="-2" pref="17" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
-                              </Group>
-                              <Group type="102" alignment="0" attributes="0">
-                                  <EmptySpace min="-2" pref="83" max="-2" attributes="0"/>
-                                  <Component id="btnpaymentSave" min="-2" pref="95" max="-2" attributes="0"/>
-                                  <EmptySpace min="-2" pref="72" max="-2" attributes="0"/>
-                                  <Component id="btnillInfoReset1" min="-2" pref="91" max="-2" attributes="0"/>
+                                  <EmptySpace min="-2" pref="17" max="-2" attributes="0"/>
                               </Group>
                           </Group>
-                          <EmptySpace pref="459" max="32767" attributes="0"/>
+                          <EmptySpace min="-2" pref="87" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="102" attributes="0">
+                                  <Group type="103" groupAlignment="1" attributes="0">
+                                      <Component id="jLabel45" alignment="1" pref="82" max="32767" attributes="0"/>
+                                      <Group type="102" alignment="1" attributes="0">
+                                          <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
+                                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                              <Component id="jLabel39" alignment="0" min="-2" pref="61" max="-2" attributes="0"/>
+                                              <Component id="jLabel38" alignment="0" min="-2" max="-2" attributes="0"/>
+                                          </Group>
+                                      </Group>
+                                  </Group>
+                                  <EmptySpace type="separate" pref="23" max="32767" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                      <Component id="jComboBox1" max="32767" attributes="0"/>
+                                      <Component id="txtpaymentPayment" max="32767" attributes="0"/>
+                                      <Component id="txtpaymentTotal" min="-2" pref="183" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace min="-2" pref="92" max="-2" attributes="0"/>
+                              </Group>
+                              <Group type="102" attributes="0">
+                                  <Component id="jLabel46" min="-2" pref="87" max="-2" attributes="0"/>
+                                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                                  <Component id="txtpaymentPaid" min="-2" pref="183" max="-2" attributes="0"/>
+                                  <EmptySpace max="32767" attributes="0"/>
+                              </Group>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Group type="103" groupAlignment="1" attributes="0">
+                                      <Component id="btnpaymentSave" min="-2" pref="95" max="-2" attributes="0"/>
+                                      <Group type="102" attributes="0">
+                                          <Component id="jLabel47" min="-2" pref="87" max="-2" attributes="0"/>
+                                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                                          <Component id="txtpaymentDue" min="-2" pref="183" max="-2" attributes="0"/>
+                                      </Group>
+                                  </Group>
+                                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                              </Group>
+                          </Group>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -2035,62 +2061,72 @@
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" pref="48" max="-2" attributes="0"/>
                           <Component id="jLabel16" min="-2" pref="46" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="jLabel38" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
-                              <Component id="jComboBox1" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="jLabel39" alignment="3" min="-2" pref="22" max="-2" attributes="0"/>
-                              <Component id="txtpaymentPayment" alignment="3" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="jLabel40" alignment="3" min="-2" pref="22" max="-2" attributes="0"/>
-                              <Component id="txtpaymentdeliveyCode" alignment="3" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="jLabel41" alignment="3" min="-2" pref="22" max="-2" attributes="0"/>
-                              <Component id="jTextField3" alignment="3" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="56" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="jLabel42" min="-2" pref="22" max="-2" attributes="0"/>
-                              <Component id="jDatepaymentdeliveyDate" min="-2" max="-2" attributes="0"/>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Group type="103" groupAlignment="3" attributes="0">
+                                      <Component id="jLabel38" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
+                                      <Component id="jComboBox1" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="3" attributes="0">
+                                      <Component id="jLabel39" alignment="3" min="-2" pref="22" max="-2" attributes="0"/>
+                                      <Component id="txtpaymentPayment" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace min="-2" pref="13" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="3" attributes="0">
+                                      <Component id="jLabel45" alignment="3" min="-2" pref="22" max="-2" attributes="0"/>
+                                      <Component id="txtpaymentTotal" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                              </Group>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Group type="103" groupAlignment="3" attributes="0">
+                                      <Component id="jLabel40" alignment="3" min="-2" pref="22" max="-2" attributes="0"/>
+                                      <Component id="txtpaymentdeliveyCode" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="jLabel41" min="-2" pref="22" max="-2" attributes="0"/>
+                                      <Component id="jScrollPane9" min="-2" pref="59" max="-2" attributes="0"/>
+                                  </Group>
+                              </Group>
                           </Group>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="jLabel43" alignment="3" min="-2" pref="22" max="-2" attributes="0"/>
-                              <Component id="combopaymentDeliverycompany" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="jLabel42" min="-2" pref="22" max="-2" attributes="0"/>
+                                      <Component id="jDatepaymentdeliveyDate" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="3" attributes="0">
+                                      <Component id="jLabel43" alignment="3" min="-2" pref="22" max="-2" attributes="0"/>
+                                      <Component id="combopaymentDeliverycompany" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="3" attributes="0">
+                                      <Component id="jLabel44" alignment="3" min="-2" pref="22" max="-2" attributes="0"/>
+                                      <Component id="txtpaymentDeliveryCharge" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace min="-2" pref="37" max="-2" attributes="0"/>
+                                  <Component id="btnpaymentDeliveySet" min="-2" pref="34" max="-2" attributes="0"/>
+                                  <EmptySpace max="32767" attributes="0"/>
+                              </Group>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Group type="103" groupAlignment="3" attributes="0">
+                                      <Component id="jLabel46" alignment="3" min="-2" pref="22" max="-2" attributes="0"/>
+                                      <Component id="txtpaymentPaid" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="jLabel47" min="-2" pref="22" max="-2" attributes="0"/>
+                                      <Component id="txtpaymentDue" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace min="-2" pref="45" max="-2" attributes="0"/>
+                                  <Component id="btnpaymentSave" min="-2" pref="34" max="-2" attributes="0"/>
+                                  <EmptySpace min="70" pref="131" max="32767" attributes="0"/>
+                              </Group>
                           </Group>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="jLabel44" alignment="3" min="-2" pref="22" max="-2" attributes="0"/>
-                              <Component id="txtpaymentDeliveryCharge" alignment="3" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="jLabel45" alignment="3" min="-2" pref="22" max="-2" attributes="0"/>
-                              <Component id="txtpaymentTotal" alignment="3" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="jLabel46" alignment="3" min="-2" pref="22" max="-2" attributes="0"/>
-                              <Component id="txtpaymentPaid" alignment="3" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="jLabel47" alignment="3" min="-2" pref="22" max="-2" attributes="0"/>
-                              <Component id="txtpaymentDue" alignment="3" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace min="-2" pref="36" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="btnillInfoReset1" alignment="3" min="-2" pref="34" max="-2" attributes="0"/>
-                              <Component id="btnpaymentSave" alignment="3" min="-2" pref="34" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace pref="51" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -2140,12 +2176,7 @@
                 </Component>
                 <Component class="javax.swing.JTextField" name="txtpaymentdeliveyCode">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Total Amount"/>
-                  </Properties>
-                </Component>
-                <Component class="javax.swing.JTextField" name="jTextField3">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="Total Amount"/>
+                    <Property name="editable" type="boolean" value="false"/>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JLabel" name="jLabel41">
@@ -2231,17 +2262,32 @@
                     <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="btnpaymentSaveMouseClicked"/>
                   </Events>
                 </Component>
-                <Component class="javax.swing.JButton" name="btnillInfoReset1">
+                <Component class="javax.swing.JButton" name="btnpaymentDeliveySet">
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Tahoma" size="12" style="1"/>
                     </Property>
-                    <Property name="text" type="java.lang.String" value="Reset"/>
+                    <Property name="text" type="java.lang.String" value="Save Delivery"/>
                   </Properties>
                   <Events>
-                    <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="btnillInfoReset1MouseClicked"/>
+                    <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="btnpaymentDeliveySetMouseClicked"/>
                   </Events>
                 </Component>
+                <Container class="javax.swing.JScrollPane" name="jScrollPane9">
+                  <AuxValues>
+                    <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
+                  </AuxValues>
+
+                  <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+                  <SubComponents>
+                    <Component class="javax.swing.JTextArea" name="txtpaymentDeliveryAddress">
+                      <Properties>
+                        <Property name="columns" type="int" value="20"/>
+                        <Property name="rows" type="int" value="5"/>
+                      </Properties>
+                    </Component>
+                  </SubComponents>
+                </Container>
               </SubComponents>
             </Container>
           </SubComponents>

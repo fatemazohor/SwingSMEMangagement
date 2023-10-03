@@ -55,7 +55,28 @@ public class SMEDashboard extends javax.swing.JFrame {
         getCartTable();
         getAllcustomers();
     }
+    
+    private void setpaymentIdOnSalesTable(){
+    
+    
+    
+    }
 
+    private void setDeliveryCode(){
+    
+        String deliverycode = txtbillDeliveryId.getText();
+        sql="insert into delivery_charge(delivery_code) values(?)";
+        try {
+            ps=dbCon.getCon().prepareStatement(sql);
+            ps.setString(1, deliverycode);
+            ps.executeUpdate();
+            ps.close();
+            dbCon.getCon().close();
+        } catch (SQLException ex) {
+            Logger.getLogger(SMEDashboard.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    
+    }
     //show all customer data
     private void getAllcustomers() {
         String[] columna = {"idcustomers", "name", "cell", "district", "address", "created_date"};
@@ -546,6 +567,7 @@ public class SMEDashboard extends javax.swing.JFrame {
         jTableCart.setModel(cartdtm);
 
     }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -698,7 +720,6 @@ public class SMEDashboard extends javax.swing.JFrame {
         txtpaymentPayment = new javax.swing.JTextField();
         jLabel40 = new javax.swing.JLabel();
         txtpaymentdeliveyCode = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
         jLabel41 = new javax.swing.JLabel();
         jLabel42 = new javax.swing.JLabel();
         jLabel43 = new javax.swing.JLabel();
@@ -713,7 +734,9 @@ public class SMEDashboard extends javax.swing.JFrame {
         jDatepaymentdeliveyDate = new com.toedter.calendar.JDateChooser();
         combopaymentDeliverycompany = new javax.swing.JComboBox<>();
         btnpaymentSave = new javax.swing.JButton();
-        btnillInfoReset1 = new javax.swing.JButton();
+        btnpaymentDeliveySet = new javax.swing.JButton();
+        jScrollPane9 = new javax.swing.JScrollPane();
+        txtpaymentDeliveryAddress = new javax.swing.JTextArea();
         salesReport = new javax.swing.JTabbedPane();
         jPanel11 = new javax.swing.JPanel();
         jLabel32 = new javax.swing.JLabel();
@@ -1779,9 +1802,7 @@ public class SMEDashboard extends javax.swing.JFrame {
 
         jLabel40.setText("Delivery code");
 
-        txtpaymentdeliveyCode.setText("Total Amount");
-
-        jTextField3.setText("Total Amount");
+        txtpaymentdeliveyCode.setEditable(false);
 
         jLabel41.setText("Delivey Address");
 
@@ -1821,106 +1842,131 @@ public class SMEDashboard extends javax.swing.JFrame {
             }
         });
 
-        btnillInfoReset1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        btnillInfoReset1.setText("Reset");
-        btnillInfoReset1.addMouseListener(new java.awt.event.MouseAdapter() {
+        btnpaymentDeliveySet.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnpaymentDeliveySet.setText("Save Delivery");
+        btnpaymentDeliveySet.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnillInfoReset1MouseClicked(evt);
+                btnpaymentDeliveySetMouseClicked(evt);
             }
         });
+
+        txtpaymentDeliveryAddress.setColumns(20);
+        txtpaymentDeliveryAddress.setRows(5);
+        jScrollPane9.setViewportView(txtpaymentDeliveryAddress);
 
         javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
         jPanel10.setLayout(jPanel10Layout);
         jPanel10Layout.setHorizontalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel10Layout.createSequentialGroup()
-                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(28, 28, 28)
+                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel10Layout.createSequentialGroup()
-                        .addGap(28, 28, 28)
                         .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnpaymentDeliveySet, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel10Layout.createSequentialGroup()
                                 .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jLabel39, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel41, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(jLabel42, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(jLabel43, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(jLabel40, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel44, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel45, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel46, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel47, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel38, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(jLabel44, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addGap(18, 18, 18)
-                                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jComboBox1, 0, 183, Short.MAX_VALUE)
-                                    .addComponent(txtpaymentPayment)
+                                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(txtpaymentdeliveyCode)
-                                    .addComponent(jTextField3)
                                     .addComponent(txtpaymentDeliveryCharge)
-                                    .addComponent(txtpaymentTotal)
-                                    .addComponent(txtpaymentPaid)
-                                    .addComponent(txtpaymentDue)
-                                    .addComponent(jDatepaymentdeliveyDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(combopaymentDeliverycompany, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addGap(17, 17, 17))))
+                                    .addComponent(jDatepaymentdeliveyDate, javax.swing.GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE)
+                                    .addComponent(combopaymentDeliverycompany, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addGroup(jPanel10Layout.createSequentialGroup()
+                                        .addComponent(jScrollPane9, javax.swing.GroupLayout.DEFAULT_SIZE, 176, Short.MAX_VALUE)
+                                        .addGap(7, 7, 7)))))
+                        .addGap(17, 17, 17)))
+                .addGap(87, 87, 87)
+                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel10Layout.createSequentialGroup()
-                        .addGap(83, 83, 83)
-                        .addComponent(btnpaymentSave, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(72, 72, 72)
-                        .addComponent(btnillInfoReset1, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(459, Short.MAX_VALUE))
+                        .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel45, javax.swing.GroupLayout.DEFAULT_SIZE, 82, Short.MAX_VALUE)
+                            .addGroup(jPanel10Layout.createSequentialGroup()
+                                .addGap(1, 1, 1)
+                                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jLabel39, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel38))))
+                        .addGap(18, 23, Short.MAX_VALUE)
+                        .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(txtpaymentPayment)
+                            .addComponent(txtpaymentTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(92, 92, 92))
+                    .addGroup(jPanel10Layout.createSequentialGroup()
+                        .addComponent(jLabel46, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(txtpaymentPaid, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel10Layout.createSequentialGroup()
+                        .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(btnpaymentSave, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel10Layout.createSequentialGroup()
+                                .addComponent(jLabel47, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(txtpaymentDue, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         jPanel10Layout.setVerticalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel10Layout.createSequentialGroup()
                 .addGap(48, 48, 48)
                 .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(32, 32, 32)
-                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel38, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel39, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtpaymentPayment, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel40, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtpaymentdeliveyCode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel41, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(56, 56, 56)
                 .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel42, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jDatepaymentdeliveyDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel43, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(combopaymentDeliverycompany, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel44, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtpaymentDeliveryCharge, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel45, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtpaymentTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel46, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtpaymentPaid, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel47, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtpaymentDue, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(36, 36, 36)
-                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnillInfoReset1, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnpaymentSave, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(51, Short.MAX_VALUE))
+                    .addGroup(jPanel10Layout.createSequentialGroup()
+                        .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel38, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel39, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtpaymentPayment, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(13, 13, 13)
+                        .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel45, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtpaymentTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel10Layout.createSequentialGroup()
+                        .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel40, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtpaymentdeliveyCode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel41, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jScrollPane9, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(14, 14, 14)
+                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel10Layout.createSequentialGroup()
+                        .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel42, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jDatepaymentdeliveyDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel43, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(combopaymentDeliverycompany, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel44, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtpaymentDeliveryCharge, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(37, 37, 37)
+                        .addComponent(btnpaymentDeliveySet, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel10Layout.createSequentialGroup()
+                        .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel46, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtpaymentPaid, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel47, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtpaymentDue, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(45, 45, 45)
+                        .addComponent(btnpaymentSave, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(70, 131, Short.MAX_VALUE))))
         );
 
         tpPayment.addTab("tab1", jPanel10);
@@ -2423,6 +2469,7 @@ public class SMEDashboard extends javax.swing.JFrame {
             }
         }
         JOptionPane.showMessageDialog(rootPane, "Data saved in smemanagement.sales table");
+        setDeliveryCode();
         DefaultTableModel tableModel = (DefaultTableModel) jTableCart.getModel();
         while (tableModel.getRowCount() > 0) {
             tableModel.removeRow(0);
@@ -2602,37 +2649,11 @@ float totalPriceNext = 0.00f;
             txtpaymentDue.setText(due+"");
         }
     }//GEN-LAST:event_txtpaymentDueMouseClicked
-    public void updateDelivery(){
-        String customerid = txtbillCustomerId.getText();
-        String deliverycode = txtpaymentdeliveyCode.getText();
-        float deliveyC = Float.parseFloat(txtpaymentDeliveryCharge.getText());
-        Date orderD = sqltoday;
-        Date deliveryD = convertutilltosql(jDatepaymentdeliveyDate.getDate());
-        String deliveryCompany = combopaymentDeliverycompany.getSelectedItem().toString();
-        
-        sql="update delivery_charge set customer_id=?,"
-                + "delivery_chargecol=?,order_date=?,delivery_date=?,delivery_company=?"
-                + " where delivery_code=?";
-        try {
-            ps=dbCon.getCon().prepareStatement(sql);
-            ps.setString(1, customerid);
-            
-            ps.setFloat(2, deliveyC);
-            ps.setDate(3, orderD);
-            ps.setDate(4, deliveryD);
-            ps.setString(5, deliveryCompany);
-            ps.setString(6, deliverycode);
-            ps.executeUpdate();
-            ps.close();
-            dbCon.getCon().close();
-            
-        } catch (SQLException ex) {
-            Logger.getLogger(SMEDashboard.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    
-    }
+   
     private void btnpaymentSaveMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnpaymentSaveMouseClicked
         // TODO add your handling code here:
+        if (flag==1) {
+        
         float total = Float.parseFloat(txtpaymentTotal.getText());
         float paid = Float.parseFloat(txtpaymentPaid.getText());
         float due = Float.parseFloat(txtpaymentDue.getText());
@@ -2647,16 +2668,51 @@ float totalPriceNext = 0.00f;
             ps.close();
             dbCon.getCon().close();
             JOptionPane.showMessageDialog(rootPane, "Order complete");
-            updateDelivery();
+            
         } catch (SQLException ex) {
             Logger.getLogger(SMEDashboard.class.getName()).log(Level.SEVERE, null, ex);
         }
+            
+        } else {
+            JOptionPane.showMessageDialog(rootPane, "Select Delivery info ");
+        }
         
     }//GEN-LAST:event_btnpaymentSaveMouseClicked
-
-    private void btnillInfoReset1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnillInfoReset1MouseClicked
+int flag=0;
+    private void btnpaymentDeliveySetMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnpaymentDeliveySetMouseClicked
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnillInfoReset1MouseClicked
+        
+         String customerid = txtbillCustomerId.getText();
+        String deliverycode = txtpaymentdeliveyCode.getText();
+        float deliveyC = Float.parseFloat(txtpaymentDeliveryCharge.getText());
+        
+        Date orderD = sqltoday;
+        Date deliveryD = convertutilltosql(jDatepaymentdeliveyDate.getDate());
+        String deliveryAddress = txtpaymentDeliveryAddress.getText().trim();
+        String deliveryCompany = combopaymentDeliverycompany.getSelectedItem().toString();
+        
+        sql="update delivery_charge set customer_id=?,"
+                + "delivery_chargecol=?,order_date=?,delivery_date=?,delivery_address=?,delivery_company=?"
+                + " where delivery_code=?";
+        try {
+            ps=dbCon.getCon().prepareStatement(sql);
+            ps.setString(1, customerid);
+            
+            ps.setFloat(2, deliveyC);
+            ps.setDate(3, orderD);
+            ps.setDate(4, deliveryD);
+            ps.setString(5, deliveryAddress);
+            ps.setString(6, deliveryCompany);
+            ps.setString(7, deliverycode);
+            ps.executeUpdate();
+            ps.close();
+            dbCon.getCon().close();
+            JOptionPane.showMessageDialog(rootPane, "Delivery info save");
+            flag++;
+        } catch (SQLException ex) {
+            Logger.getLogger(SMEDashboard.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnpaymentDeliveySetMouseClicked
 
     /**
      * @param args the command line arguments
@@ -2714,8 +2770,8 @@ float totalPriceNext = 0.00f;
     private javax.swing.JButton btncustomerSearch;
     private javax.swing.JButton btndashborad;
     private javax.swing.JButton btnillInfoReset;
-    private javax.swing.JButton btnillInfoReset1;
     private javax.swing.JButton btnorderSales;
+    private javax.swing.JButton btnpaymentDeliveySet;
     private javax.swing.JButton btnpaymentSave;
     private javax.swing.ButtonGroup buttonGroupReport;
     private javax.swing.JComboBox<String> comboCustomerDistrict;
@@ -2805,10 +2861,10 @@ float totalPriceNext = 0.00f;
     private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JScrollPane jScrollPane8;
+    private javax.swing.JScrollPane jScrollPane9;
     private javax.swing.JTable jTableCart;
     private javax.swing.JTable jTablePurchaseProduct;
     private javax.swing.JTable jTableReport;
-    private javax.swing.JTextField jTextField3;
     private javax.swing.JTree jTree1;
     private com.toedter.calendar.JDateChooser jdatePurchaseProduct;
     private com.toedter.calendar.JDateChooser jdateinvUpdateCreateDate;
@@ -2862,6 +2918,7 @@ float totalPriceNext = 0.00f;
     private javax.swing.JTextField txtinvUpdateProName;
     private javax.swing.JTextField txtinvUpdateUnitPrice;
     private javax.swing.JTextField txtinvUpdatebuyPrice;
+    private javax.swing.JTextArea txtpaymentDeliveryAddress;
     private javax.swing.JTextField txtpaymentDeliveryCharge;
     private javax.swing.JTextField txtpaymentDue;
     private javax.swing.JTextField txtpaymentPaid;
