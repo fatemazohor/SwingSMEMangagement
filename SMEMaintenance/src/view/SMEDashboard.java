@@ -1162,6 +1162,7 @@ public class SMEDashboard extends javax.swing.JFrame {
         });
 
         btnInvPurchaseProductReset.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnInvPurchaseProductReset.setIcon(new javax.swing.ImageIcon(getClass().getResource("/SemiCON/undo.png"))); // NOI18N
         btnInvPurchaseProductReset.setText("Reset");
         btnInvPurchaseProductReset.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -1341,6 +1342,7 @@ public class SMEDashboard extends javax.swing.JFrame {
         });
 
         btnInvUpdateReset.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnInvUpdateReset.setIcon(new javax.swing.ImageIcon(getClass().getResource("/SemiCON/undo.png"))); // NOI18N
         btnInvUpdateReset.setText("Reset");
         btnInvUpdateReset.setMaximumSize(new java.awt.Dimension(77, 23));
         btnInvUpdateReset.setMinimumSize(new java.awt.Dimension(77, 23));
@@ -1494,6 +1496,7 @@ public class SMEDashboard extends javax.swing.JFrame {
         jLabel30.setText("Created_date");
 
         btnCustomerReset.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnCustomerReset.setIcon(new javax.swing.ImageIcon(getClass().getResource("/SemiCON/undo.png"))); // NOI18N
         btnCustomerReset.setText("Reset");
         btnCustomerReset.setMaximumSize(new java.awt.Dimension(61, 23));
         btnCustomerReset.setMinimumSize(new java.awt.Dimension(61, 23));
@@ -1621,9 +1624,8 @@ public class SMEDashboard extends javax.swing.JFrame {
                             .addGroup(jPanel8Layout.createSequentialGroup()
                                 .addGap(41, 41, 41)
                                 .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jLabel20, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel20, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel8Layout.createSequentialGroup()
                         .addComponent(txtCustomerInfoId, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1783,6 +1785,7 @@ public class SMEDashboard extends javax.swing.JFrame {
         jPanel9.add(btnbillDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 460, 100, 40));
 
         btnillInfoReset.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnillInfoReset.setIcon(new javax.swing.ImageIcon(getClass().getResource("/SemiCON/undo.png"))); // NOI18N
         btnillInfoReset.setText("Reset");
         btnillInfoReset.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -2214,7 +2217,7 @@ public class SMEDashboard extends javax.swing.JFrame {
                     .addGroup(jPanel12Layout.createSequentialGroup()
                         .addGap(32, 32, 32)
                         .addComponent(jScrollPane10, javax.swing.GroupLayout.PREFERRED_SIZE, 743, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 25, Short.MAX_VALUE))
+                        .addGap(0, 15, Short.MAX_VALUE))
                     .addGroup(jPanel12Layout.createSequentialGroup()
                         .addGap(40, 40, 40)
                         .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
@@ -2231,8 +2234,7 @@ public class SMEDashboard extends javax.swing.JFrame {
                             .addGroup(jPanel12Layout.createSequentialGroup()
                                 .addComponent(jLabel51, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(38, 38, 38)
-                                .addComponent(jDateReportToDate1, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(jDateReportToDate1, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel12Layout.createSequentialGroup()
                                 .addComponent(comboCustomerProduct, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -2292,6 +2294,7 @@ public class SMEDashboard extends javax.swing.JFrame {
         getContentPane().add(menu, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 0, 810, 580));
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btndashboradMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btndashboradMouseClicked
@@ -3007,6 +3010,7 @@ public class SMEDashboard extends javax.swing.JFrame {
 
     private void radioCustomerReportMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_radioCustomerReportMouseClicked
         // TODO add your handling code here:
+        comboCustomerProduct.removeAllItems();
         if (radioCustomerReport.isSelected()) {
             comboCustomerProduct.addItem("---Select One--");
             comboCustomerProduct.addItem("Repeat Customer");
@@ -3021,6 +3025,7 @@ public class SMEDashboard extends javax.swing.JFrame {
 
     private void radioProductReportMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_radioProductReportMouseClicked
         // TODO add your handling code here:
+        comboCustomerProduct.removeAllItems();
         if (radioProductReport.isSelected()) {
             comboCustomerProduct.addItem("---Select One--");
             comboCustomerProduct.addItem("Most Frequent sold products");
