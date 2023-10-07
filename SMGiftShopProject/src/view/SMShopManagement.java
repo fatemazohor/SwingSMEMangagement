@@ -29,6 +29,7 @@ public class SMShopManagement extends javax.swing.JFrame {
     public SMShopManagement() {
         initComponents();
         setUIImage();
+        init();
     }
 
     public void setUIImage() {
@@ -79,6 +80,12 @@ public class SMShopManagement extends javax.swing.JFrame {
         lblTodayDelivery.setIcon(todayDImage);
         lblTodayDelivery.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
 
+    }
+    public void init(){
+        getAllProducts();
+        setAllProductTag(comboinvUpdateCategory);
+        setProductnametoPurchaseCombo(comboPurchaseProductName);
+        getAllPurchaseProduct(jTablePurchaseProduct);
     }
     
     // date format method
@@ -143,6 +150,7 @@ public class SMShopManagement extends javax.swing.JFrame {
         comboPurchaseProductName.setSelectedIndex(0);
         txtProductPurchaseUnitPrice.setText(null);
         spanProductPurchaseQuentity.setValue(0);
+        txtProductTotalPrice.setText(null);
         jdatePurchaseProduct.setDate(null);
 
     }
@@ -152,7 +160,7 @@ public class SMShopManagement extends javax.swing.JFrame {
         txtinvUpdateProName.setText(null);
         txtinvUpdateUnitPrice.setText(null);
         jdateinvUpdateCreateDate.setDate(null);
-        txtinvUpdatebuyPrice.setText(null);
+        comboinvUpdateCategory.setSelectedIndex(0);
 
     }
 
@@ -177,15 +185,65 @@ public class SMShopManagement extends javax.swing.JFrame {
 
     }
     
+    //set combo product name in product and purchase
+
+    public void setProductnametoPurchaseCombo(javax.swing.JComboBox<String> comboBox) {
+
+        comboBox.removeAllItems();
+        comboBox.addItem("--Select Product Name--");
+
+        sql = "select name from products";
+
+        try {
+            ps = dbCon.getCon().prepareStatement(sql);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                String productName = rs.getString("name");
+                comboBox.addItem(productName);
+            }
+            rs.close();
+            ps.close();
+            dbCon.getCon().close();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(SMShopManagement.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+    public void setAllProductTag(javax.swing.JComboBox<String> comboBox){
+        
+        comboBox.removeAllItems();
+        comboBox.addItem("--Select category--");
+
+        sql = "select product_tag from product_tag";
+
+        try {
+            ps = dbCon.getCon().prepareStatement(sql);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                String category = rs.getString("product_tag");
+                comboBox.addItem(category);
+            }
+            rs.close();
+            ps.close();
+            dbCon.getCon().close();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(SMShopManagement.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     //get table
     private void getAllProducts() {
 
-        String[] columnNames = {"ProduntId", "Name", "Quentity", "Unit_price", "Buy_price", "Entry_date"};
-        sql = "select * from smemanagement.products";
+        String[] columnNames = {"ProduntId", "Name", "Quentity", "Unit_price", "Category", "Entry_date"};
+        sql = "select * from products";
 
         DefaultTableModel producttableModel = new DefaultTableModel();
         producttableModel.setColumnIdentifiers(columnNames);
-        tableInvUpdateProdunt.setModel(producttableModel);
+        tableInvUpdateProduct.setModel(producttableModel);
 
         try {
             ps = dbCon.getCon().prepareStatement(sql);
@@ -196,12 +254,12 @@ public class SMShopManagement extends javax.swing.JFrame {
                 String name = rs.getString("name");
                 int quentity = rs.getInt("quentity");
                 float unitprice = rs.getFloat("unit_price");
-                float purchasePrice = rs.getFloat("purchase_price");
+                String producttag = rs.getString("product_tag");
                 Date entryDate = rs.getDate("entry_date");
                 //format sql date to string date , so can update date. 
 //                String date = formatSqlDate(entryDate);
 
-                producttableModel.addRow(new Object[]{produntId, name, quentity, unitprice, purchasePrice, entryDate});
+                producttableModel.addRow(new Object[]{produntId, name, quentity, unitprice, producttag, entryDate});
 
             }
             rs.close();
@@ -212,6 +270,108 @@ public class SMShopManagement extends javax.swing.JFrame {
         }
 
     }
+    //show purchases table data
+
+    public void getAllPurchaseProduct(javax.swing.JTable tableName) {
+        String[] columnNames = {"PurchaseId", "Name", "Quentity", "Unit_price", "Total Price", "Purchase_date"};
+        
+
+        DefaultTableModel purchasetableModel = new DefaultTableModel();
+        purchasetableModel.setColumnIdentifiers(columnNames);
+
+        tableName.setModel(purchasetableModel);
+
+        sql = "select * from purchases";
+        try {
+            ps = dbCon.getCon().prepareStatement(sql);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                int id = rs.getInt("idpurchases");
+                String name = rs.getString("product_name");
+                int quentity = rs.getInt("quentity");
+                float unitPrice = rs.getFloat("unit_price");
+                float totalPrice = rs.getFloat("total_price");
+                Date purchaseDate = rs.getDate("purchase_date");
+
+                purchasetableModel.addRow(new Object[]{id, name, quentity, unitPrice, totalPrice, purchaseDate});
+            }
+            rs.close();
+            ps.close();
+            dbCon.getCon().close();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(SMShopManagement.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+    
+    //stock table data update
+
+    public void addProductToStock() {
+        sql = "insert into products(name,quentity)values(?,?)";
+        try {
+            ps = dbCon.getCon().prepareStatement(sql);
+            ps.setString(1, txtinvUpdateProName.getText());
+            ps.setFloat(2, Float.parseFloat(spanProductPurchaseQuentity.getValue().toString()));
+            ps.executeUpdate();
+            ps.close();
+            dbCon.getCon().close();
+        } catch (SQLException ex) {
+            Logger.getLogger(SMShopManagement.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    public void updateProductToStock() {
+
+        float quentity = Float.parseFloat(spanProductPurchaseQuentity.getValue().toString());
+        sql = "update products set quentity=quentity+? where name=?";
+        try {
+            ps = dbCon.getCon().prepareStatement(sql);
+            ps.setFloat(1, quentity);
+            ps.setString(2, comboPurchaseProductName.getSelectedItem().toString());
+            ps.executeUpdate();
+            ps.close();
+            dbCon.getCon().close();
+//            System.out.println(quentity);
+        } catch (SQLException ex) {
+            Logger.getLogger(SMShopManagement.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+//    public void subtractProductFromStock() {
+//        float quantity = Float.parseFloat(spanbillquentity.getValue().toString());
+//        sql = "update product_stock set quantity=quantity-? where product_name=?";
+//        try {
+//            ps = dbCon.getCon().prepareStatement(sql);
+//            ps.setFloat(1, quantity);
+//            ps.setString(2, txtbillProductName.getText());
+//            ps.executeUpdate();
+//            ps.close();
+//            dbCon.getCon().close();
+//        } catch (SQLException ex) {
+//            Logger.getLogger(SMShopManagement.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//    }
+    //bill calculation
+     private float getbillTotalPrice(javax.swing.JTextField unitPrice, javax.swing.JSpinner qty) {
+        float unitP = Float.parseFloat(unitPrice.getText().trim().toString());
+        float quentity = Float.parseFloat(qty.getValue().toString());
+
+        float totalPrice = (unitP * quentity);
+
+        return totalPrice;
+    }
+
+//    private float getbillAutualPrice() {
+//        float discount = Float.parseFloat(txtbillDiscount.getText().trim());
+//        float totalPrice = getbillTotalPrice();
+//
+//        float actualPrice = (totalPrice - (totalPrice * discount / 100));
+//
+//        return actualPrice;
+//    }
     
     
     /**
@@ -306,16 +466,16 @@ public class SMShopManagement extends javax.swing.JFrame {
         jLabel27 = new javax.swing.JLabel();
         jLabel28 = new javax.swing.JLabel();
         txtinvUpdateUnitPrice = new javax.swing.JTextField();
-        txtinvUpdatebuyPrice = new javax.swing.JTextField();
         jLabel29 = new javax.swing.JLabel();
         jLabel31 = new javax.swing.JLabel();
         jdateinvUpdateCreateDate = new com.toedter.calendar.JDateChooser();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tableInvUpdateProdunt = new javax.swing.JTable();
+        tableInvUpdateProduct = new javax.swing.JTable();
         btnInvUpdateAdd = new javax.swing.JButton();
         btnInvUpdateReset = new javax.swing.JButton();
         btnInvUpdate = new javax.swing.JButton();
         btnInvUpdateDelete = new javax.swing.JButton();
+        comboinvUpdateCategory = new javax.swing.JComboBox<>();
         purchaseProduct = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
@@ -334,7 +494,7 @@ public class SMShopManagement extends javax.swing.JFrame {
         btnInvPurchaseProductAdd = new javax.swing.JButton();
         btnInvPurchaseProductReset = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        jTablePurchaseProduct = new javax.swing.JTable();
         order = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
@@ -687,9 +847,9 @@ public class SMShopManagement extends javax.swing.JFrame {
                         .addGap(0, 0, 0)
                         .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnbillinfoAddToCart, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnillInfoReset, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnillInfoReset, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnbillinfoAddToCart, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(29, 29, 29)
                 .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -953,20 +1113,13 @@ public class SMShopManagement extends javax.swing.JFrame {
 
         txtinvUpdateUnitPrice.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
 
-        txtinvUpdatebuyPrice.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        txtinvUpdatebuyPrice.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtinvUpdatebuyPriceActionPerformed(evt);
-            }
-        });
-
         jLabel29.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel29.setText("Buying Price");
+        jLabel29.setText("Category");
 
         jLabel31.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel31.setText("Created Date");
 
-        tableInvUpdateProdunt.setModel(new javax.swing.table.DefaultTableModel(
+        tableInvUpdateProduct.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -977,7 +1130,12 @@ public class SMShopManagement extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(tableInvUpdateProdunt);
+        tableInvUpdateProduct.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tableInvUpdateProductMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tableInvUpdateProduct);
 
         btnInvUpdateAdd.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnInvUpdateAdd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/SM/icon/save.png"))); // NOI18N
@@ -1021,6 +1179,8 @@ public class SMShopManagement extends javax.swing.JFrame {
             }
         });
 
+        comboinvUpdateCategory.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -1030,17 +1190,13 @@ public class SMShopManagement extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(jPanel2Layout.createSequentialGroup()
-                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jLabel31, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel29, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGap(41, 41, 41)
-                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(txtinvUpdatebuyPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jdateinvUpdateCreateDate, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGroup(jPanel2Layout.createSequentialGroup()
                             .addComponent(jLabel28, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGap(36, 36, 36)
-                            .addComponent(txtinvUpdateUnitPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(txtinvUpdateUnitPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel2Layout.createSequentialGroup()
+                            .addComponent(jLabel31, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(41, 41, 41)
+                            .addComponent(jdateinvUpdateCreateDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel27, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(36, 36, 36)
@@ -1048,7 +1204,11 @@ public class SMShopManagement extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel26, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(36, 36, 36)
-                        .addComponent(txtinvUpdateProId, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(txtinvUpdateProId, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel29, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(comboinvUpdateCategory, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 193, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(176, 176, 176))
@@ -1084,13 +1244,13 @@ public class SMShopManagement extends javax.swing.JFrame {
                             .addComponent(jLabel27, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(txtinvUpdateProName, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel29, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(comboinvUpdateCategory, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jLabel28, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(txtinvUpdateUnitPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel29, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtinvUpdatebuyPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jdateinvUpdateCreateDate, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1113,7 +1273,7 @@ public class SMShopManagement extends javax.swing.JFrame {
         );
         addProductLayout.setVerticalGroup(
             addProductLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 642, Short.MAX_VALUE)
         );
 
         mainMenu.addTab("tab2", addProduct);
@@ -1129,6 +1289,12 @@ public class SMShopManagement extends javax.swing.JFrame {
 
         jLabel32.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel32.setText("Total Price");
+
+        txtProductTotalPrice.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                txtProductTotalPriceMouseClicked(evt);
+            }
+        });
 
         jLabel33.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel33.setText("Quentity");
@@ -1163,7 +1329,7 @@ public class SMShopManagement extends javax.swing.JFrame {
             }
         });
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        jTablePurchaseProduct.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -1174,7 +1340,7 @@ public class SMShopManagement extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane2.setViewportView(jTable2);
+        jScrollPane2.setViewportView(jTablePurchaseProduct);
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -1436,12 +1602,13 @@ public class SMShopManagement extends javax.swing.JFrame {
                                 .addComponent(txtCustomerInfoCell, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(txtCustomerInfoName, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel6Layout.createSequentialGroup()
-                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel42, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(comboCustomerDistrict, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(jLabel40, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jDateCustomerInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(jDateCustomerInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jLabel42, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(comboCustomerDistrict, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel41, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1877,7 +2044,7 @@ public class SMShopManagement extends javax.swing.JFrame {
         txtunitp1.setText("Customer Id");
 
         jLabel76.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel76.setText("Qty");
+        jLabel76.setText("Item/Category");
 
         txtqty1.setText("Customer Id");
 
@@ -2340,32 +2507,29 @@ public class SMShopManagement extends javax.swing.JFrame {
         mainMenu.setSelectedIndex(3);
     }//GEN-LAST:event_btnAddUpdate1MouseClicked
 
-    private void txtinvUpdatebuyPriceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtinvUpdatebuyPriceActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtinvUpdatebuyPriceActionPerformed
-
     private void btnInvUpdateAddMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnInvUpdateAddMouseClicked
         // TODO add your handling code here:
         String proId = txtinvUpdateProId.getText().trim();
         String pname = txtinvUpdateProName.getText().trim();
         String unitPrice = txtinvUpdateUnitPrice.getText().trim();
-        String buyPrice = txtinvUpdatebuyPrice.getText().trim();
+        String producttag = comboinvUpdateCategory.getSelectedItem().toString();
         Date createDate = convertutilltosql(jdateinvUpdateCreateDate.getDate());
 
         if (proId.matches("Auto generated")) {
-            sql = "insert into products(name,unit_price, purchase_price, entry_date)"
+            sql = "insert into products(name,unit_price,product_tag, entry_date)"
             + " values(?,?,?,?)";
 
             try {
                 ps = dbCon.getCon().prepareStatement(sql);
                 ps.setString(1, pname);
-                ps.setString(2, unitPrice);
-                ps.setString(3, buyPrice);
+                ps.setFloat(2, Float.parseFloat(unitPrice));
+                ps.setString(3, producttag);
                 ps.setDate(4, createDate);
+                
                 ps.executeUpdate();
                 ps.close();
                 dbCon.getCon().close();
-                JOptionPane.showMessageDialog(rootPane, "Data saved in smemanagement.products table");
+                JOptionPane.showMessageDialog(rootPane, "Data saved in products table");
                 getAllProducts();
 //                addProductToStock();
 //                setProductnametoPurchaseCombo(comboPurchaseProductName);
@@ -2389,18 +2553,18 @@ public class SMShopManagement extends javax.swing.JFrame {
         if (proId.matches("Auto generated")) {
             JOptionPane.showMessageDialog(rootPane, "Only save operation is allowed for new produnt");
         } else {
-            sql = "update products set name=?,unit_price=?,purchase_price = ? where idproducts = ?";
+            sql = "update products set name=?,unit_price=?,product_tag= ? where idproducts = ?";
             try {
                 ps = dbCon.getCon().prepareStatement(sql);
                 ps.setString(1, txtinvUpdateProName.getText().trim());
                 ps.setFloat(2, Float.parseFloat(txtinvUpdateUnitPrice.getText().trim()));
-                ps.setFloat(3, Float.parseFloat(txtinvUpdatebuyPrice.getText().trim()));
+                ps.setString(3, comboinvUpdateCategory.getSelectedItem().toString());
                 ps.setInt(4, Integer.parseInt(txtinvUpdateProId.getText().trim()));
 
                 ps.executeUpdate();
                 ps.close();
                 dbCon.getCon().close();
-                JOptionPane.showMessageDialog(rootPane, "produt update in products table");
+                JOptionPane.showMessageDialog(rootPane, "product updated in products table");
                 setbtnInvUpdateReset();
                 getAllProducts();
             } catch (SQLException ex) {
@@ -2433,9 +2597,9 @@ public class SMShopManagement extends javax.swing.JFrame {
         // TODO add your handling code here:
 
         String pname = comboPurchaseProductName.getSelectedItem().toString();
-        String unitPrice = txtProductPurchaseUnitPrice.getText().trim();
-        String quentity = spanProductPurchaseQuentity.getValue().toString();
-        String totalPrice = txtProductTotalPrice.getText();
+        float unitPrice = Float.parseFloat(txtProductPurchaseUnitPrice.getText().trim());
+        float quentity = Float.parseFloat(spanProductPurchaseQuentity.getValue().toString());
+        float totalPrice = Float.parseFloat(txtProductTotalPrice.getText());
         Date purchaseDate = convertutilltosql(jdatePurchaseProduct.getDate());
 
         sql = "insert into purchases(product_name,quentity,unit_price,total_price, purchase_date)"
@@ -2444,18 +2608,18 @@ public class SMShopManagement extends javax.swing.JFrame {
         try {
             ps = dbCon.getCon().prepareStatement(sql);
             ps.setString(1, pname);
-            ps.setString(2, quentity);
-            ps.setString(3, unitPrice);
-            ps.setString(3, unitPrice);
-            ps.setString(4, totalPrice);
+            ps.setFloat(2, quentity);
+            ps.setFloat(3, unitPrice);
+            
+            ps.setFloat(4, totalPrice);
             ps.setDate(5, purchaseDate);
             ps.executeUpdate();
             ps.close();
             dbCon.getCon().close();
             JOptionPane.showMessageDialog(rootPane, "Data saved in purchases table");
-//            updateProductToStock();
-//            setProductnametoPurchaseCombo(comboPurchaseProductName);
-//            getAllPurchaseProduct(jTablePurchaseProduct);
+            updateProductToStock();
+            setProductnametoPurchaseCombo(comboPurchaseProductName);
+            getAllPurchaseProduct(jTablePurchaseProduct);
 //            getTodayPurchase();
 //            getTotalPurchase();
 //            getMonthlyPurchase();
@@ -2611,6 +2775,29 @@ public class SMShopManagement extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField12ActionPerformed
 
+    private void tableInvUpdateProductMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableInvUpdateProductMouseClicked
+        int rowIndex = tableInvUpdateProduct.getSelectedRow();
+
+        String produntId = tableInvUpdateProduct.getModel().getValueAt(rowIndex, 0).toString();
+        String produntname = tableInvUpdateProduct.getModel().getValueAt(rowIndex, 1).toString();
+//        String produntQuentity = tableInvUpdateProdunt.getModel().getValueAt(rowIndex,2).toString();
+        String produntUnitPrice = tableInvUpdateProduct.getModel().getValueAt(rowIndex, 3).toString();
+        String productag = tableInvUpdateProduct.getModel().getValueAt(rowIndex, 4).toString();
+        String createDate = tableInvUpdateProduct.getModel().getValueAt(rowIndex, 5).toString();
+
+//        System.out.println(createDate);
+        txtinvUpdateProId.setText(produntId);
+        txtinvUpdateProName.setText(produntname);
+        txtinvUpdateUnitPrice.setText(produntUnitPrice);
+        comboinvUpdateCategory.setSelectedItem(productag);
+        jdateinvUpdateCreateDate.setDate(formatStringdateToUtilDate(createDate));
+    }//GEN-LAST:event_tableInvUpdateProductMouseClicked
+
+    private void txtProductTotalPriceMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtProductTotalPriceMouseClicked
+        float totalAmount= getbillTotalPrice(txtProductPurchaseUnitPrice, spanProductPurchaseQuentity);
+        txtProductTotalPrice.setText(totalAmount+"");
+    }//GEN-LAST:event_txtProductTotalPriceMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -2676,6 +2863,7 @@ public class SMShopManagement extends javax.swing.JFrame {
     private javax.swing.JButton btnillInfoReset;
     private javax.swing.JComboBox<String> comboCustomerDistrict;
     private javax.swing.JComboBox<String> comboPurchaseProductName;
+    private javax.swing.JComboBox<String> comboinvUpdateCategory;
     private javax.swing.JPanel customerList;
     private javax.swing.JPanel deliveryUpdate;
     private javax.swing.JPanel inventory;
@@ -2796,9 +2984,9 @@ public class SMShopManagement extends javax.swing.JFrame {
     private javax.swing.JSpinner jSpinner4;
     private javax.swing.JTabbedPane jTabbedPane2;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
     private javax.swing.JTable jTable3;
     private javax.swing.JTable jTable4;
+    private javax.swing.JTable jTablePurchaseProduct;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField11;
     private javax.swing.JTextField jTextField12;
@@ -2839,7 +3027,7 @@ public class SMShopManagement extends javax.swing.JFrame {
     private javax.swing.JLabel shippedlogo;
     private javax.swing.JLabel shippedlogo1;
     private javax.swing.JSpinner spanProductPurchaseQuentity;
-    private javax.swing.JTable tableInvUpdateProdunt;
+    private javax.swing.JTable tableInvUpdateProduct;
     private javax.swing.JLabel txtAPrice;
     private javax.swing.JPanel txtAPro;
     private javax.swing.JLabel txtAproname;
@@ -2853,7 +3041,6 @@ public class SMShopManagement extends javax.swing.JFrame {
     private javax.swing.JTextField txtinvUpdateProId;
     private javax.swing.JTextField txtinvUpdateProName;
     private javax.swing.JTextField txtinvUpdateUnitPrice;
-    private javax.swing.JTextField txtinvUpdatebuyPrice;
     private javax.swing.JTextField txtproduntname;
     private javax.swing.JTextField txtqty;
     private javax.swing.JTextField txtqty1;

@@ -176,7 +176,7 @@ public class SMEDashboard extends javax.swing.JFrame {
 
         DefaultTableModel producttableModel = new DefaultTableModel();
         producttableModel.setColumnIdentifiers(columnNames);
-        tableInvUpdateProdunt.setModel(producttableModel);
+        tableInvUpdateProduct.setModel(producttableModel);
 
         try {
             ps = dbCon.getCon().prepareStatement(sql);
@@ -207,9 +207,7 @@ public class SMEDashboard extends javax.swing.JFrame {
 
     public void getAllPurchaseProduct(javax.swing.JTable tableName) {
         String[] columnNames = {"PurchaseId", "Name", "Quentity", "Unit_price", "Total Price", "Purchase_date"};
-//        String[][] data=new String[1][columnNames.length];
-//        data[0][1]=ts
-//        DefaultTableModel model= new DefaultTableModel(data, columnNames);
+        
 
         DefaultTableModel purchasetableModel = new DefaultTableModel();
         purchasetableModel.setColumnIdentifiers(columnNames);
@@ -860,7 +858,7 @@ public class SMEDashboard extends javax.swing.JFrame {
         txtinvUpdatebuyPrice = new javax.swing.JTextField();
         jLabel13 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tableInvUpdateProdunt = new javax.swing.JTable();
+        tableInvUpdateProduct = new javax.swing.JTable();
         btnInvUpdateDelete = new javax.swing.JButton();
         btnInvUpdate = new javax.swing.JButton();
         btnInvUpdateReset = new javax.swing.JButton();
@@ -1557,7 +1555,7 @@ public class SMEDashboard extends javax.swing.JFrame {
         jLabel13.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel13.setText("Buying Price");
 
-        tableInvUpdateProdunt.setModel(new javax.swing.table.DefaultTableModel(
+        tableInvUpdateProduct.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -1568,12 +1566,12 @@ public class SMEDashboard extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        tableInvUpdateProdunt.addMouseListener(new java.awt.event.MouseAdapter() {
+        tableInvUpdateProduct.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tableInvUpdateProduntMouseClicked(evt);
+                tableInvUpdateProductMouseClicked(evt);
             }
         });
-        jScrollPane1.setViewportView(tableInvUpdateProdunt);
+        jScrollPane1.setViewportView(tableInvUpdateProduct);
 
         btnInvUpdateDelete.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnInvUpdateDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/SemiCON/delete.png"))); // NOI18N
@@ -2789,16 +2787,16 @@ public class SMEDashboard extends javax.swing.JFrame {
         setbtnCustomerReset();
     }//GEN-LAST:event_btnCustomerResetMouseClicked
 
-    private void tableInvUpdateProduntMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableInvUpdateProduntMouseClicked
+    private void tableInvUpdateProductMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableInvUpdateProductMouseClicked
         // TODO add your handling code here:
-        int rowIndex = tableInvUpdateProdunt.getSelectedRow();
+        int rowIndex = tableInvUpdateProduct.getSelectedRow();
 
-        String produntId = tableInvUpdateProdunt.getModel().getValueAt(rowIndex, 0).toString();
-        String produntname = tableInvUpdateProdunt.getModel().getValueAt(rowIndex, 1).toString();
+        String produntId = tableInvUpdateProduct.getModel().getValueAt(rowIndex, 0).toString();
+        String produntname = tableInvUpdateProduct.getModel().getValueAt(rowIndex, 1).toString();
 //        String produntQuentity = tableInvUpdateProdunt.getModel().getValueAt(rowIndex,2).toString();
-        String produntUnitPrice = tableInvUpdateProdunt.getModel().getValueAt(rowIndex, 3).toString();
-        String produntbuyPrice = tableInvUpdateProdunt.getModel().getValueAt(rowIndex, 4).toString();
-        String createDate = tableInvUpdateProdunt.getModel().getValueAt(rowIndex, 5).toString();
+        String produntUnitPrice = tableInvUpdateProduct.getModel().getValueAt(rowIndex, 3).toString();
+        String produntbuyPrice = tableInvUpdateProduct.getModel().getValueAt(rowIndex, 4).toString();
+        String createDate = tableInvUpdateProduct.getModel().getValueAt(rowIndex, 5).toString();
 
 //        System.out.println(createDate);
         txtinvUpdateProId.setText(produntId);
@@ -2806,7 +2804,7 @@ public class SMEDashboard extends javax.swing.JFrame {
         txtinvUpdateUnitPrice.setText(produntUnitPrice);
         txtinvUpdatebuyPrice.setText(produntbuyPrice);
         jdateinvUpdateCreateDate.setDate(formatStringdateToUtilDate(createDate));
-    }//GEN-LAST:event_tableInvUpdateProduntMouseClicked
+    }//GEN-LAST:event_tableInvUpdateProductMouseClicked
 
     private void btnInvUpdateMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnInvUpdateMouseClicked
         // TODO add your handling code here:
@@ -3512,7 +3510,7 @@ public class SMEDashboard extends javax.swing.JFrame {
     private javax.swing.JSpinner spanbillquentity;
     private javax.swing.JTable tableBillInfoProductDetails;
     private javax.swing.JTable tableCutomerProduntReport;
-    private javax.swing.JTable tableInvUpdateProdunt;
+    private javax.swing.JTable tableInvUpdateProduct;
     private javax.swing.JTabbedPane tpBillingInfo;
     private javax.swing.JTabbedPane tpInvPurchaseProduct;
     private javax.swing.JTabbedPane tpInvUpdateProduct;
