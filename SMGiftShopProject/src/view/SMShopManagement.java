@@ -83,6 +83,7 @@ public class SMShopManagement extends javax.swing.JFrame {
     }
     public void init(){
         getAllProducts();
+        getAllcustomers();
         setAllProductTag(comboinvUpdateCategory);
         setProductnametoPurchaseCombo(comboPurchaseProductName);
         getAllPurchaseProduct(jTablePurchaseProduct);
@@ -306,6 +307,34 @@ public class SMShopManagement extends javax.swing.JFrame {
 
     }
     
+    //show all customer data
+    private void getAllcustomers() {
+        String[] columna = {"idcustomers", "name", "cell", "district", "address", "created_date"};
+        DefaultTableModel model = new DefaultTableModel();
+        model.setColumnIdentifiers(columna);
+        jtableCustomerInfo.setModel(model);
+        sql = "Select * from customers";
+        try {
+            ps = dbCon.getCon().prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("idcustomers");
+                String name = rs.getString("name");
+                String cell = rs.getString("cell");
+                String district = rs.getString("district");
+                String address = rs.getString("address");
+                Date created_date = rs.getDate("created_date");
+                model.addRow(new Object[]{id, name, cell, district, address, created_date});
+            }
+            rs.close();
+            ps.close();
+            dbCon.getCon().close();
+        } catch (SQLException ex) {
+            Logger.getLogger(SMShopManagement.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+    
     //stock table data update
 
     public void addProductToStock() {
@@ -334,7 +363,7 @@ public class SMShopManagement extends javax.swing.JFrame {
             ps.executeUpdate();
             ps.close();
             dbCon.getCon().close();
-//            System.out.println(quentity);
+            System.out.println(quentity);
         } catch (SQLException ex) {
             Logger.getLogger(SMShopManagement.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -513,11 +542,11 @@ public class SMShopManagement extends javax.swing.JFrame {
         jLabel42 = new javax.swing.JLabel();
         comboCustomerDistrict = new javax.swing.JComboBox<>();
         btnCustomerSave = new javax.swing.JButton();
-        btnCustomerSave1 = new javax.swing.JButton();
+        btnCustomerUpdate = new javax.swing.JButton();
         btnCustomerReset = new javax.swing.JButton();
         btnCustomerNext = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTable3 = new javax.swing.JTable();
+        jtableCustomerInfo = new javax.swing.JTable();
         billing = new javax.swing.JPanel();
         jPanel7 = new javax.swing.JPanel();
         billingfrom = new javax.swing.JLabel();
@@ -1188,15 +1217,14 @@ public class SMShopManagement extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(62, 62, 62)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(jPanel2Layout.createSequentialGroup()
-                            .addComponent(jLabel28, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(36, 36, 36)
-                            .addComponent(txtinvUpdateUnitPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(jPanel2Layout.createSequentialGroup()
-                            .addComponent(jLabel31, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(41, 41, 41)
-                            .addComponent(jdateinvUpdateCreateDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel28, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(36, 36, 36)
+                        .addComponent(txtinvUpdateUnitPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel31, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(41, 41, 41)
+                        .addComponent(jdateinvUpdateCreateDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel27, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(36, 36, 36)
@@ -1476,6 +1504,7 @@ public class SMShopManagement extends javax.swing.JFrame {
         comboCustomerDistrict.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "-- Select division--", "Barisal", "Dhaka", "Chittagong", "Khulna", "Mymensingh", "Rajshahi", "Rangpur", "Sylhet" }));
 
         btnCustomerSave.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnCustomerSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/SM/icon/save.png"))); // NOI18N
         btnCustomerSave.setText("Save");
         btnCustomerSave.setPreferredSize(new java.awt.Dimension(73, 23));
         btnCustomerSave.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -1484,15 +1513,17 @@ public class SMShopManagement extends javax.swing.JFrame {
             }
         });
 
-        btnCustomerSave1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        btnCustomerSave1.setText("Update");
-        btnCustomerSave1.addMouseListener(new java.awt.event.MouseAdapter() {
+        btnCustomerUpdate.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnCustomerUpdate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/SM/icon/update.png"))); // NOI18N
+        btnCustomerUpdate.setText("Update");
+        btnCustomerUpdate.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnCustomerSave1MouseClicked(evt);
+                btnCustomerUpdateMouseClicked(evt);
             }
         });
 
         btnCustomerReset.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnCustomerReset.setIcon(new javax.swing.ImageIcon(getClass().getResource("/SM/icon/undo.png"))); // NOI18N
         btnCustomerReset.setText("Reset");
         btnCustomerReset.setMaximumSize(new java.awt.Dimension(61, 23));
         btnCustomerReset.setMinimumSize(new java.awt.Dimension(61, 23));
@@ -1511,7 +1542,7 @@ public class SMShopManagement extends javax.swing.JFrame {
             }
         });
 
-        jTable3.setModel(new javax.swing.table.DefaultTableModel(
+        jtableCustomerInfo.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -1522,7 +1553,7 @@ public class SMShopManagement extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane3.setViewportView(jTable3);
+        jScrollPane3.setViewportView(jtableCustomerInfo);
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
@@ -1534,7 +1565,7 @@ public class SMShopManagement extends javax.swing.JFrame {
                         .addGap(246, 246, 246)
                         .addComponent(btnCustomerSave, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(39, 39, 39)
-                        .addComponent(btnCustomerSave1, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnCustomerUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(36, 36, 36)
                         .addComponent(btnCustomerReset, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(37, 37, 37)
@@ -1620,7 +1651,7 @@ public class SMShopManagement extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnCustomerNext, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnCustomerSave1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnCustomerUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnCustomerSave, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnCustomerReset, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(36, 36, 36))
@@ -2532,7 +2563,7 @@ public class SMShopManagement extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(rootPane, "Data saved in products table");
                 getAllProducts();
 //                addProductToStock();
-//                setProductnametoPurchaseCombo(comboPurchaseProductName);
+                setProductnametoPurchaseCombo(comboPurchaseProductName);
             } catch (SQLException ex) {
                 Logger.getLogger(SMShopManagement.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -2695,7 +2726,7 @@ public class SMShopManagement extends javax.swing.JFrame {
             ps.close();
             dbCon.getCon().close();
             JOptionPane.showMessageDialog(rootPane, "Data saved in customers table");
-//            getAllcustomers();
+            getAllcustomers();
 
         } catch (SQLException ex) {
             Logger.getLogger(SMShopManagement.class.getName()).log(Level.SEVERE, null, ex);
@@ -2703,9 +2734,34 @@ public class SMShopManagement extends javax.swing.JFrame {
 
     }//GEN-LAST:event_btnCustomerSaveMouseClicked
 
-    private void btnCustomerSave1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCustomerSave1MouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnCustomerSave1MouseClicked
+    private void btnCustomerUpdateMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCustomerUpdateMouseClicked
+        String name = txtCustomerInfoName.getText().trim();
+        String cell = txtCustomerInfoCell.getText().trim();
+        String district = comboCustomerDistrict.getSelectedItem().toString();
+        String address = txtCustomerInfoAddress.getText().trim();
+        Date createdDate = convertutilltosql(jDateCustomerInfo.getDate());
+        int customerid= Integer.parseInt(txtCustomerInfoId.getText().trim());
+        sql = "update customers set name=?,cell=?,district=?,address=?,created_date=? where idcustomers=?";
+        
+        try {
+            ps=dbCon.getCon().prepareStatement(sql);
+            
+            ps.setString(1, name);
+            ps.setString(2, cell);
+            ps.setString(3, district);
+            ps.setString(4, address);
+            ps.setDate(5, createdDate);
+            ps.setInt(6, customerid);
+            ps.executeUpdate();
+            ps.close();
+            dbCon.getCon().close();
+            JOptionPane.showMessageDialog(rootPane, "Data updated in customers table");
+            getAllcustomers();
+        } catch (SQLException ex) {
+            Logger.getLogger(SMShopManagement.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }//GEN-LAST:event_btnCustomerUpdateMouseClicked
 
     private void btnCustomerResetMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCustomerResetMouseClicked
         // TODO add your handling code here:
@@ -2846,7 +2902,7 @@ public class SMShopManagement extends javax.swing.JFrame {
     private javax.swing.JButton btnCustomerNext;
     private javax.swing.JButton btnCustomerReset;
     private javax.swing.JButton btnCustomerSave;
-    private javax.swing.JButton btnCustomerSave1;
+    private javax.swing.JButton btnCustomerUpdate;
     private javax.swing.JLabel btnHome;
     private javax.swing.JButton btnInvPurchaseProductAdd;
     private javax.swing.JButton btnInvPurchaseProductReset;
@@ -2984,7 +3040,6 @@ public class SMShopManagement extends javax.swing.JFrame {
     private javax.swing.JSpinner jSpinner4;
     private javax.swing.JTabbedPane jTabbedPane2;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable3;
     private javax.swing.JTable jTable4;
     private javax.swing.JTable jTablePurchaseProduct;
     private javax.swing.JTextField jTextField1;
@@ -2996,6 +3051,7 @@ public class SMShopManagement extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField9;
     private com.toedter.calendar.JDateChooser jdatePurchaseProduct;
     private com.toedter.calendar.JDateChooser jdateinvUpdateCreateDate;
+    private javax.swing.JTable jtableCustomerInfo;
     private javax.swing.JLabel lblTodayDelivery;
     private javax.swing.JLabel lblTodayPurchase;
     private javax.swing.JLabel lblTodaySales;
