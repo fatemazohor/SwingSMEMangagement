@@ -994,12 +994,12 @@ public class SMEDashboard extends javax.swing.JFrame {
         jLabel43.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel43.setText("SM Shop Management");
 
-        txtDateClock.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
+        txtDateClock.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
         txtDateClock.setForeground(new java.awt.Color(255, 255, 255));
         txtDateClock.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         txtDateClock.setText("jLabel53");
 
-        txtTime.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
+        txtTime.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
         txtTime.setForeground(new java.awt.Color(255, 255, 255));
         txtTime.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         txtTime.setText("jLabel53");
@@ -2013,18 +2013,18 @@ public class SMEDashboard extends javax.swing.JFrame {
 
         jPanel9.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 300, 384, 86));
 
-        jLabel27.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel27.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel27.setForeground(new java.awt.Color(23, 102, 255));
         jLabel27.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel27.setText("Cart");
-        jPanel9.add(jLabel27, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 271, 205, 20));
+        jPanel9.add(jLabel27, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 271, 205, 30));
 
         jLabel28.setBackground(new java.awt.Color(255, 255, 255));
-        jLabel28.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel28.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel28.setForeground(new java.awt.Color(16, 171, 227));
         jLabel28.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel28.setText("Product List");
-        jPanel9.add(jLabel28, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 140, 196, -1));
+        jPanel9.add(jLabel28, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 140, 196, 30));
 
         btnBillPayment.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         btnBillPayment.setIcon(new javax.swing.ImageIcon(getClass().getResource("/SemiCON/payment.png"))); // NOI18N
@@ -2091,17 +2091,17 @@ public class SMEDashboard extends javax.swing.JFrame {
 
         jLabel36.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel36.setText("Customer ID");
-        jPanel9.add(jLabel36, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 90, 92, 29));
+        jPanel9.add(jLabel36, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 90, 80, 29));
 
         txtbillCustomerId.setEditable(false);
-        jPanel9.add(txtbillCustomerId, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 90, 160, 30));
+        jPanel9.add(txtbillCustomerId, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 90, 160, 30));
 
         txtbillDeliveryId.setEditable(false);
         jPanel9.add(txtbillDeliveryId, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 90, 160, 30));
 
         jLabel37.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel37.setText("Delivery Id");
-        jPanel9.add(jLabel37, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 90, 92, 29));
+        jPanel9.add(jLabel37, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 90, 70, 29));
 
         jLabel48.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel48.setText("Total Payment");
