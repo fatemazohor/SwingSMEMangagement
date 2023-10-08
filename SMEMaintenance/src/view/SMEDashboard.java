@@ -32,6 +32,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -61,7 +62,7 @@ public class SMEDashboard extends javax.swing.JFrame {
     private void init() {
         getAllProducts();
         setProductnametoPurchaseCombo(comboPurchaseProductName);
-
+        getAllPaymnet(jtableDeliveryReport);
         getAllPurchaseProduct(jTablePurchaseProduct);
         getAllProductsForSell();
         //Dashboard methods call.
@@ -77,11 +78,11 @@ public class SMEDashboard extends javax.swing.JFrame {
     }
 
     private void setTime() {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    while (true) {                        
-                        try {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (true) {
+                    try {
                         Thread.sleep(1000);
                     } catch (InterruptedException ex) {
                         Logger.getLogger(SMEDashboard.class.getName()).log(Level.SEVERE, null, ex);
@@ -91,11 +92,11 @@ public class SMEDashboard extends javax.swing.JFrame {
                     SimpleDateFormat df = new SimpleDateFormat("EEEE, dd-MM-yyyy");
                     String time = tf.format(date);
                     String dateT = df.format(date);
-                    txtTime.setText(time.split(" ")[0]+" "+time.split(" ")[1]);
+                    txtTime.setText(time.split(" ")[0] + " " + time.split(" ")[1]);
                     txtDateClock.setText(dateT);
-                    }
                 }
-            }).start();
+            }
+        }).start();
     }
 
     private void setDeliveryCode() {
@@ -203,11 +204,46 @@ public class SMEDashboard extends javax.swing.JFrame {
         }
 
     }
+
+    //show payment table data 
+    public void getAllPaymnet(javax.swing.JTable table) {
+        String[] columnNames = {"ID","Delivery code", "Payment", "Due", "Status", "Delivery_company", "Date"};
+
+        DefaultTableModel purchasetableModel = new DefaultTableModel();
+        purchasetableModel.setColumnIdentifiers(columnNames);
+
+        table.setModel(purchasetableModel);
+
+        sql = "SELECT p.payment_id, p.delivery_code,p.payment,p.due, d.delivery_status, d.delivery_company, d.delivery_date  FROM smemanagement.payment p inner join delivery_charge d on p.delivery_code = d.delivery_code;";
+        try {
+            ps = dbCon.getCon().prepareStatement(sql);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                int id = rs.getInt("payment_id");
+                String delivery_code = rs.getString("p.delivery_code");
+
+                float payment = rs.getFloat("p.payment");
+                float due = rs.getFloat("p.due");
+                String deliverystatus = rs.getString("d.delivery_status");
+                String deliveryCompany = rs.getString("d.delivery_company");
+                Date deliverydate = rs.getDate("d.delivery_date");
+
+                purchasetableModel.addRow(new Object[]{id,delivery_code, payment, due, deliverystatus, deliveryCompany, deliverydate});
+            }
+            rs.close();
+            ps.close();
+            dbCon.getCon().close();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(SMEDashboard.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
 //show purchases table data
 
     public void getAllPurchaseProduct(javax.swing.JTable tableName) {
         String[] columnNames = {"PurchaseId", "Name", "Quentity", "Unit_price", "Total Price", "Purchase_date"};
-        
 
         DefaultTableModel purchasetableModel = new DefaultTableModel();
         purchasetableModel.setColumnIdentifiers(columnNames);
@@ -403,6 +439,17 @@ public class SMEDashboard extends javax.swing.JFrame {
         txtCustomerInfoAddress.setText(null);
         comboCustomerDistrict.setSelectedIndex(0);
         jDateCustomerInfo.setDate(null);
+
+    }
+
+    private void setbtnDeliveryReportReset() {
+        txtDeliveryRepDId.setText(null);
+        txtDeliveryRepDCode.setText(null);
+        txtDeliveryRepPayment.setText(null);
+        txtDeliveryRepDue.setText(null);
+        txtDeliveryRepPaid.setText(null);
+        comboDeliveryRepStatus.setSelectedIndex(0);
+        jDateDeliveryRepDeliveryDate.setDate(null);
 
     }
 
@@ -602,7 +649,8 @@ public class SMEDashboard extends javax.swing.JFrame {
         jTableCart.setModel(cartdtm);
 
     }
-    public void printInvoice(){
+
+    public void printInvoice() {
 //            String fileName= "invoice"+txtpaymentdeliveyCode.getText().trim();
         try {
             OutputStream file = new FileOutputStream(new File("Testfile.pdf"));
@@ -613,7 +661,7 @@ public class SMEDashboard extends javax.swing.JFrame {
             irdTable.addCell(invoiceCreate.getIrdCell("Date"));
             irdTable.addCell(invoiceCreate.getIrdCell(txtpaymentdeliveyCode.getText()));
             irdTable.addCell(invoiceCreate.getIrdCell(formatSqlDate(sqltoday)));
-            
+
             PdfPTable irhTable = new PdfPTable(3);
 //            irhTable.setSpacingBefore(20.0f);
 //            irhTable.setSpacingAfter(10.0f);
@@ -625,37 +673,30 @@ public class SMEDashboard extends javax.swing.JFrame {
             PdfPCell invoiceTable = new PdfPCell(irdTable);
 
             irhTable.addCell(invoiceTable);
-            
-            
-            
+
             //Shop address.
             PdfPTable shopname = new PdfPTable(1);
             shopname.addCell(invoiceCreate.getshopNamecell("SM Gift Shop", PdfPCell.ALIGN_CENTER));
             shopname.addCell(invoiceCreate.getshopaddcell("Address: Shop No.85,New Market,Dhaka-1205"));
             shopname.addCell(invoiceCreate.getshopaddcell("Cell No: 0125325788, Email: galaxygiftshop@gmail.com"));
-           
-            
-            
-            
-            
-             // shop logo 
+
+            // shop logo 
             Image logo = Image.getInstance("assest/logo/demoSMlogo.png");
             logo.scaleAbsolute(130.0f, 130.0f);
             PdfPCell imgCell = new PdfPCell(logo);
             imgCell.setBorder(0);
-            
+
             //logo, shop name , address
             PdfPTable logoTable = new PdfPTable(2);
             logoTable.setWidthPercentage(100);
             logoTable.setWidths(new float[]{25f, 80f});
-   
+
             logoTable.addCell(imgCell);
             PdfPCell shopCell = new PdfPCell(shopname);
             shopCell.setPadding(10.0f);
             shopCell.setBorder(0);
             logoTable.addCell(shopCell);
-            
-            
+
             //Customer info 
             FontSelector fontSelector = new FontSelector();
             Font billToFont = FontFactory.getFont(FontFactory.TIMES_ROMAN, 13, Font.BOLD);
@@ -663,11 +704,11 @@ public class SMEDashboard extends javax.swing.JFrame {
             String billHeading = "Bill To";
             Phrase bill = fontSelector.process(billHeading);
             Paragraph billTo = new Paragraph(bill);
-             //customer info
+            //customer info
             billTo.setSpacingBefore(20.0f);
             Paragraph Customername = new Paragraph(txtCustomerInfoName.getText().trim());
             Customername.setIndentationLeft(20);
-            
+
             Paragraph contact = new Paragraph(txtCustomerInfoCell.getText().trim());
             contact.setIndentationLeft(20);
             Paragraph address = new Paragraph(txtCustomerInfoAddress.getText().trim());
@@ -678,26 +719,24 @@ public class SMEDashboard extends javax.swing.JFrame {
             billTable.setWidths(new float[]{1, 2, 5, 2, 1, 2});
             billTable.setSpacingBefore(30.0f);
 
-            billTable.addCell( invoiceCreate.getbillHeaderCell("Index"));
+            billTable.addCell(invoiceCreate.getbillHeaderCell("Index"));
             billTable.addCell(invoiceCreate.getbillHeaderCell("Item"));
             billTable.addCell(invoiceCreate.getbillHeaderCell("Description"));
             billTable.addCell(invoiceCreate.getbillHeaderCell("Unit Price"));
             billTable.addCell(invoiceCreate.getbillHeaderCell("Qty"));
             billTable.addCell(invoiceCreate.getbillHeaderCell("Amount"));
-            
+
             //count order item
-            
-        
-            DefaultTableModel model = (DefaultTableModel)jTableCart.getModel();
+            DefaultTableModel model = (DefaultTableModel) jTableCart.getModel();
 //            String proName = jTableCart.getModel().getValueAt(WIDTH, ICONIFIED);
             int rowcount = model.getRowCount();
             int index = 1;
             for (int i = 0; i < rowcount; i++) {
-               String proName = jTableCart.getModel().getValueAt(i, 0).toString(); 
-               String unitPrice = jTableCart.getModel().getValueAt(i, 1).toString(); 
-               String qty = jTableCart.getModel().getValueAt(i,2).toString(); 
-               String total = jTableCart.getModel().getValueAt(i, 4).toString(); 
-               
+                String proName = jTableCart.getModel().getValueAt(i, 0).toString();
+                String unitPrice = jTableCart.getModel().getValueAt(i, 1).toString();
+                String qty = jTableCart.getModel().getValueAt(i, 2).toString();
+                String total = jTableCart.getModel().getValueAt(i, 4).toString();
+
                 billTable.addCell(invoiceCreate.getbillRowCell(index + ""));
                 billTable.addCell(invoiceCreate.getbillRowCell("demo"));
                 billTable.addCell(invoiceCreate.getbillRowCell(proName));
@@ -706,7 +745,7 @@ public class SMEDashboard extends javax.swing.JFrame {
                 billTable.addCell(invoiceCreate.getbillRowCell(total));
                 index++;
             }
-            
+
             //validity
             PdfPTable validity = new PdfPTable(1);
             validity.setWidthPercentage(100);
@@ -718,7 +757,7 @@ public class SMEDashboard extends javax.swing.JFrame {
             PdfPCell summeryl = new PdfPCell(validity);
             summeryl.setColspan(3);
             summeryl.setPadding(1.0f);
-           
+
             billTable.addCell(summeryl);
 
             //account total, tax ,discount
@@ -740,15 +779,14 @@ public class SMEDashboard extends javax.swing.JFrame {
             summeryAcc.setColspan(3);
             summeryAcc.setPadding(1.0f);
             billTable.addCell(summeryAcc);
-            
+
             //description
             PdfPTable description = new PdfPTable(1);
             description.setWidthPercentage(100);
             description.addCell(invoiceCreate.getDescripCell(" "));
             description.addCell(invoiceCreate.getDescripCell("Goods once sold will not be taken back or exchanged || Subject to product justification || Product damage no one responsible || "
                     + " Service only at concarned authorized service centers"));
-            
-            
+
             doc.open();
             doc.add(logoTable);
 //            d.add(imge);
@@ -760,7 +798,7 @@ public class SMEDashboard extends javax.swing.JFrame {
             doc.add(billTable);
             doc.add(description);
             doc.close();
-            
+
             file.close();
             System.out.println("File generated");
             JOptionPane.showMessageDialog(rootPane, "invoice created"
@@ -772,7 +810,7 @@ public class SMEDashboard extends javax.swing.JFrame {
         } catch (DocumentException ex) {
             Logger.getLogger(SMEDashboard.class.getName()).log(Level.SEVERE, null, ex);
         }
-    
+
     }
 
     /**
@@ -799,8 +837,7 @@ public class SMEDashboard extends javax.swing.JFrame {
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
-        jButton7 = new javax.swing.JButton();
+        btnDeliveryReport = new javax.swing.JButton();
         menu = new javax.swing.JTabbedPane();
         tpdashboard = new javax.swing.JTabbedPane();
         jPanel3 = new javax.swing.JPanel();
@@ -976,9 +1013,30 @@ public class SMEDashboard extends javax.swing.JFrame {
         jScrollPane10 = new javax.swing.JScrollPane();
         tableCutomerProduntReport = new javax.swing.JTable();
         comboCustomerProduct = new javax.swing.JComboBox<>();
-        tpLast = new javax.swing.JTabbedPane();
+        deliveryReport = new javax.swing.JTabbedPane();
         jPanel5 = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
+        jScrollPane11 = new javax.swing.JScrollPane();
+        jtableDeliveryReport = new javax.swing.JTable();
+        jLabel54 = new javax.swing.JLabel();
+        txtDeliveryRepDCode = new javax.swing.JTextField();
+        jLabel55 = new javax.swing.JLabel();
+        txtDeliveryRepDue = new javax.swing.JTextField();
+        jLabel56 = new javax.swing.JLabel();
+        txtDeliveryRepPaid = new javax.swing.JTextField();
+        jLabel57 = new javax.swing.JLabel();
+        comboDeliveryRepStatus = new javax.swing.JComboBox<>();
+        jLabel58 = new javax.swing.JLabel();
+        txtDeliveryRepPayment = new javax.swing.JTextField();
+        btnDeliveryRepUpdate = new javax.swing.JButton();
+        btnDeliveryRepReset = new javax.swing.JButton();
+        jLabel59 = new javax.swing.JLabel();
+        jDateDeliveryRepDeliveryDate = new com.toedter.calendar.JDateChooser();
+        jLabel60 = new javax.swing.JLabel();
+        txtDeliveryRepDId = new javax.swing.JTextField();
+        tpLast1 = new javax.swing.JTabbedPane();
+        jPanel13 = new javax.swing.JPanel();
+        jLabel53 = new javax.swing.JLabel();
 
         jScrollPane7.setViewportView(jTree1);
 
@@ -1086,21 +1144,17 @@ public class SMEDashboard extends javax.swing.JFrame {
             }
         });
 
-        jButton6.setBackground(new java.awt.Color(23, 105, 255));
-        jButton6.setForeground(new java.awt.Color(255, 255, 255));
-        jButton6.setText("jButton1");
-        jButton6.setBorder(null);
-
-        jButton7.setBackground(new java.awt.Color(23, 105, 255));
-        jButton7.setForeground(new java.awt.Color(255, 255, 255));
-        jButton7.setText("jButton1");
-        jButton7.setBorder(null);
+        btnDeliveryReport.setText("Delivery Report");
+        btnDeliveryReport.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnDeliveryReportMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jButton6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -1109,9 +1163,9 @@ public class SMEDashboard extends javax.swing.JFrame {
                     .addComponent(btnorderSales, javax.swing.GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE)
                     .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE)
                     .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE)
-                    .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE))
+                    .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE)
+                    .addComponent(btnDeliveryReport, javax.swing.GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE))
                 .addContainerGap(19, Short.MAX_VALUE))
-            .addComponent(jButton7, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1129,10 +1183,8 @@ public class SMEDashboard extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0)
-                .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(43, Short.MAX_VALUE))
+                .addComponent(btnDeliveryReport, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(83, Short.MAX_VALUE))
         );
 
         getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 90, 160, 490));
@@ -2558,28 +2610,215 @@ public class SMEDashboard extends javax.swing.JFrame {
 
         menu.addTab("tab9", customerProduct);
 
-        jLabel7.setText("Last page");
+        jPanel5.setBackground(new java.awt.Color(255, 255, 255));
+
+        jLabel7.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel7.setText("Delivery Report");
+
+        jtableDeliveryReport.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jtableDeliveryReport.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jtableDeliveryReportMouseClicked(evt);
+            }
+        });
+        jScrollPane11.setViewportView(jtableDeliveryReport);
+
+        jLabel54.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel54.setText("Delivery Code");
+
+        txtDeliveryRepDCode.setEditable(false);
+        txtDeliveryRepDCode.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+
+        jLabel55.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel55.setText("Due");
+
+        txtDeliveryRepDue.setEditable(false);
+        txtDeliveryRepDue.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+
+        jLabel56.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel56.setText("Paid");
+
+        txtDeliveryRepPaid.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+
+        jLabel57.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel57.setText("Delivery Status");
+
+        comboDeliveryRepStatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "--Select--", "Order created", "Order Complete", " " }));
+
+        jLabel58.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel58.setText("Payment");
+
+        txtDeliveryRepPayment.setEditable(false);
+        txtDeliveryRepPayment.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+
+        btnDeliveryRepUpdate.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnDeliveryRepUpdate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/SemiCON/update.png"))); // NOI18N
+        btnDeliveryRepUpdate.setText("Update");
+        btnDeliveryRepUpdate.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnDeliveryRepUpdateMouseClicked(evt);
+            }
+        });
+
+        btnDeliveryRepReset.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnDeliveryRepReset.setIcon(new javax.swing.ImageIcon(getClass().getResource("/SemiCON/undo.png"))); // NOI18N
+        btnDeliveryRepReset.setText("Reset");
+        btnDeliveryRepReset.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnDeliveryRepResetMouseClicked(evt);
+            }
+        });
+
+        jLabel59.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel59.setText("Delivery Date");
+
+        jLabel60.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel60.setText("Id");
+
+        txtDeliveryRepDId.setEditable(false);
+        txtDeliveryRepDId.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGap(217, 217, 217)
-                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(377, Short.MAX_VALUE))
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addGap(217, 217, 217)
+                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addGap(21, 21, 21)
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane11, javax.swing.GroupLayout.PREFERRED_SIZE, 745, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addGroup(jPanel5Layout.createSequentialGroup()
+                                    .addGap(192, 192, 192)
+                                    .addComponent(btnDeliveryRepReset, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel5Layout.createSequentialGroup()
+                                    .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+                                            .addGap(124, 124, 124)
+                                            .addComponent(btnDeliveryRepUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGroup(jPanel5Layout.createSequentialGroup()
+                                            .addGap(9, 9, 9)
+                                            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                                .addGroup(jPanel5Layout.createSequentialGroup()
+                                                    .addComponent(jLabel60, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                    .addGap(32, 32, 32)
+                                                    .addComponent(txtDeliveryRepDId, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addGroup(jPanel5Layout.createSequentialGroup()
+                                                        .addComponent(jLabel54, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addGap(32, 32, 32)
+                                                        .addComponent(txtDeliveryRepDCode, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                    .addGroup(jPanel5Layout.createSequentialGroup()
+                                                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                            .addComponent(jLabel58, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                            .addComponent(jLabel55, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                            .addComponent(jLabel56, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                        .addGap(32, 32, 32)
+                                                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                            .addComponent(txtDeliveryRepPayment, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                            .addComponent(txtDeliveryRepDue, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                            .addComponent(txtDeliveryRepPaid, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                            .addGap(35, 35, 35)
+                                            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addComponent(jLabel59, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(jLabel57, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                    .addGap(18, 18, 18)
+                                    .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(comboDeliveryRepStatus, 0, 158, Short.MAX_VALUE)
+                                        .addComponent(jDateDeliveryRepDeliveryDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))))
+                .addContainerGap(34, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addGap(64, 64, 64)
                 .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(25, 25, 25)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel60, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtDeliveryRepDId, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel57, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(comboDeliveryRepStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(10, 10, 10)
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel59, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jDateDeliveryRepDeliveryDate, javax.swing.GroupLayout.DEFAULT_SIZE, 29, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addGap(1, 1, 1)
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel54, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtDeliveryRepDCode, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel5Layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(txtDeliveryRepPayment, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel58, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel55, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(29, 29, 29))
+                            .addGroup(jPanel5Layout.createSequentialGroup()
+                                .addGap(44, 44, 44)
+                                .addComponent(txtDeliveryRepDue, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel56, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtDeliveryRepPaid, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnDeliveryRepUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnDeliveryRepReset, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane11, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(36, 36, 36))
+        );
+
+        deliveryReport.addTab("tab1", jPanel5);
+
+        menu.addTab("tab3", deliveryReport);
+
+        jLabel53.setText("Last page");
+
+        javax.swing.GroupLayout jPanel13Layout = new javax.swing.GroupLayout(jPanel13);
+        jPanel13.setLayout(jPanel13Layout);
+        jPanel13Layout.setHorizontalGroup(
+            jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel13Layout.createSequentialGroup()
+                .addGap(217, 217, 217)
+                .addComponent(jLabel53, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(377, Short.MAX_VALUE))
+        );
+        jPanel13Layout.setVerticalGroup(
+            jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel13Layout.createSequentialGroup()
+                .addGap(64, 64, 64)
+                .addComponent(jLabel53, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(420, Short.MAX_VALUE))
         );
 
-        tpLast.addTab("tab1", jPanel5);
+        tpLast1.addTab("tab1", jPanel13);
 
-        menu.addTab("tab3", tpLast);
+        menu.addTab("tab3", tpLast1);
 
         getContentPane().add(menu, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 0, 810, 580));
 
@@ -2969,7 +3208,7 @@ public class SMEDashboard extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButton1MouseClicked
     float totalPriceNext = 0.00f;
-    
+
     private void btnbillinfoAddToCartMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnbillinfoAddToCartMouseClicked
         // TODO add your handling code here:
 //        String[] columns = {"Product Name", "Unit Price", "Quantity", "Discount", "Total"};
@@ -3200,22 +3439,22 @@ public class SMEDashboard extends javax.swing.JFrame {
         // TODO add your handling code here:
         int comboIndex = comboCustomerProduct.getSelectedIndex();
         if (radioCustomerReport.isSelected()) {
-            String[] customerColumn = {"CustomerId","Product Name","Order"};
+            String[] customerColumn = {"CustomerId", "Product Name", "Order"};
             DefaultTableModel cusModel = new DefaultTableModel();
             cusModel.setColumnIdentifiers(customerColumn);
             tableCutomerProduntReport.setModel(cusModel);
             if (comboIndex == 1) {
-                sql="select customer_id,product_name,count(idsales) from sales group by customer_id,product_name;";
+                sql = "select customer_id,product_name,count(idsales) from sales group by customer_id,product_name;";
                 try {
-                    ps=dbCon.getCon().prepareStatement(sql);
-                    rs=ps.executeQuery();
-                    while (rs.next()) {                        
+                    ps = dbCon.getCon().prepareStatement(sql);
+                    rs = ps.executeQuery();
+                    while (rs.next()) {
                         int id = rs.getInt(1);
                         String pName = rs.getString(2);
                         float countId = rs.getFloat(3);
-                        
-                        cusModel.addRow(new Object[]{id,pName,countId});
-                                
+
+                        cusModel.addRow(new Object[]{id, pName, countId});
+
                     }
                     rs.close();
                     ps.close();
@@ -3223,19 +3462,19 @@ public class SMEDashboard extends javax.swing.JFrame {
                 } catch (SQLException ex) {
                     Logger.getLogger(SMEDashboard.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                
+
             } else if (comboIndex == 2) {
-                    sql="select customer_id,product_name, sum(actual_price) from sales group by customer_id,product_name";
+                sql = "select customer_id,product_name, sum(actual_price) from sales group by customer_id,product_name";
                 try {
-                    ps=dbCon.getCon().prepareStatement(sql);
-                    rs=ps.executeQuery();
-                    while (rs.next()) {                        
+                    ps = dbCon.getCon().prepareStatement(sql);
+                    rs = ps.executeQuery();
+                    while (rs.next()) {
                         int id = rs.getInt(1);
                         String pName = rs.getString(2);
                         float countId = rs.getFloat(3);
-                        
-                        cusModel.addRow(new Object[]{id,pName,countId});
-                                
+
+                        cusModel.addRow(new Object[]{id, pName, countId});
+
                     }
                     rs.close();
                     ps.close();
@@ -3246,24 +3485,24 @@ public class SMEDashboard extends javax.swing.JFrame {
             } else {
                 JOptionPane.showMessageDialog(rootPane, "Select a option to see report.");
             }
-        } else if(radioProductReport.isSelected()){
-            String[] produntColumn = {"ProduntId ","Unit Price","Amount"};
+        } else if (radioProductReport.isSelected()) {
+            String[] produntColumn = {"ProduntId ", "Unit Price", "Amount"};
             DefaultTableModel proModel = new DefaultTableModel();
             proModel.setColumnIdentifiers(produntColumn);
             tableCutomerProduntReport.setModel(proModel);
             if (comboIndex == 1) {
-                sql="select product_name,unit_price,count(idsales) from sales group by product_name,unit_price";
+                sql = "select product_name,unit_price,count(idsales) from sales group by product_name,unit_price";
                 try {
-                    ps=dbCon.getCon().prepareStatement(sql);
-                    rs=ps.executeQuery();
-                    while (rs.next()) {                        
+                    ps = dbCon.getCon().prepareStatement(sql);
+                    rs = ps.executeQuery();
+                    while (rs.next()) {
 //                        int id = rs.getInt(1);
                         String pName = rs.getString(1);
-                        float unitPrice= rs.getFloat(2);
-                        float amount= rs.getFloat(3);
-                        
-                        proModel.addRow(new Object[]{pName,unitPrice,amount});
-                                
+                        float unitPrice = rs.getFloat(2);
+                        float amount = rs.getFloat(3);
+
+                        proModel.addRow(new Object[]{pName, unitPrice, amount});
+
                     }
                     rs.close();
                     ps.close();
@@ -3272,18 +3511,18 @@ public class SMEDashboard extends javax.swing.JFrame {
                     Logger.getLogger(SMEDashboard.class.getName()).log(Level.SEVERE, null, ex);
                 }
             } else if (comboIndex == 2) {
-                    sql="select product_name,unit_price, sum(actual_price) from sales group by product_name,unit_price;";
+                sql = "select product_name,unit_price, sum(actual_price) from sales group by product_name,unit_price;";
                 try {
-                    ps=dbCon.getCon().prepareStatement(sql);
-                    rs=ps.executeQuery();
-                    while (rs.next()) {                        
+                    ps = dbCon.getCon().prepareStatement(sql);
+                    rs = ps.executeQuery();
+                    while (rs.next()) {
 //                        int id = rs.getInt(1);
                         String pName = rs.getString(1);
-                        float unitPrice= rs.getFloat(2);
-                        float amount= rs.getFloat(3);
-                        
-                        proModel.addRow(new Object[]{pName,unitPrice,amount});
-                                
+                        float unitPrice = rs.getFloat(2);
+                        float amount = rs.getFloat(3);
+
+                        proModel.addRow(new Object[]{pName, unitPrice, amount});
+
                     }
                     rs.close();
                     ps.close();
@@ -3328,6 +3567,59 @@ public class SMEDashboard extends javax.swing.JFrame {
         printInvoice();
     }//GEN-LAST:event_jButton2MouseClicked
 
+    private void btnDeliveryReportMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnDeliveryReportMouseClicked
+        menu.setSelectedIndex(9);
+    }//GEN-LAST:event_btnDeliveryReportMouseClicked
+
+    private void btnDeliveryRepResetMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnDeliveryRepResetMouseClicked
+        setbtnDeliveryReportReset();
+    }//GEN-LAST:event_btnDeliveryRepResetMouseClicked
+
+    private void jtableDeliveryReportMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtableDeliveryReportMouseClicked
+        int row = jtableDeliveryReport.getSelectedRow();
+
+        String id = jtableDeliveryReport.getModel().getValueAt(row, 0).toString();
+        String delivery_code = jtableDeliveryReport.getModel().getValueAt(row, 1).toString();
+        String payment = jtableDeliveryReport.getModel().getValueAt(row, 2).toString();
+        String due = jtableDeliveryReport.getModel().getValueAt(row, 3).toString();
+        String deliverystatus = jtableDeliveryReport.getModel().getValueAt(row, 4).toString();
+        java.util.Date deliverydate = formatStringdateToUtilDate(jtableDeliveryReport.getModel().getValueAt(row, 6).toString());
+        txtDeliveryRepDId.setText(id);
+        txtDeliveryRepDCode.setText(delivery_code);
+        txtDeliveryRepPayment.setText(payment);
+        txtDeliveryRepDue.setText(due);
+//        txtDeliveryRepPaid.setText(null);
+        comboDeliveryRepStatus.setSelectedItem(deliverystatus);
+        jDateDeliveryRepDeliveryDate.setDate(deliverydate);
+
+    }//GEN-LAST:event_jtableDeliveryReportMouseClicked
+
+    private void btnDeliveryRepUpdateMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnDeliveryRepUpdateMouseClicked
+        int id = Integer.parseInt(txtDeliveryRepDId.getText());
+        String delivery_code = txtDeliveryRepDCode.getText();
+        float payment = Float.parseFloat(txtDeliveryRepPayment.getText());
+        float due = Float.parseFloat(txtDeliveryRepDue.getText());
+        float newpaid = Float.parseFloat(txtDeliveryRepPaid.getText());
+        String deliverystatus = comboDeliveryRepStatus.getSelectedItem().toString();
+        Date deliverydate = convertutilltosql(jDateDeliveryRepDeliveryDate.getDate());
+
+        sql = "update payment set paid=paid+? ,due=due-? where payment_id=?";
+        try {
+            ps = dbCon.getCon().prepareStatement(sql);
+
+            ps.setFloat(1, newpaid);
+            ps.setFloat(2, newpaid);
+            ps.setInt(3, id);
+            ps.close();
+            dbCon.getCon().close();
+
+            JOptionPane.showMessageDialog(rootPane, "Payment updated");
+            getAllPaymnet(jtableDeliveryReport);
+        } catch (SQLException ex) {
+            Logger.getLogger(SMEDashboard.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnDeliveryRepUpdateMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -3371,6 +3663,9 @@ public class SMEDashboard extends javax.swing.JFrame {
     private javax.swing.JButton btnCustomerReset;
     private javax.swing.JButton btnCustomerSave;
     private javax.swing.JButton btnCustomerSave1;
+    private javax.swing.JButton btnDeliveryRepReset;
+    private javax.swing.JButton btnDeliveryRepUpdate;
+    private javax.swing.JButton btnDeliveryReport;
     private javax.swing.JButton btnInvPurchaseProductAdd;
     private javax.swing.JButton btnInvPurchaseProductReset;
     private javax.swing.JButton btnInvUpdate;
@@ -3392,18 +3687,19 @@ public class SMEDashboard extends javax.swing.JFrame {
     private javax.swing.ButtonGroup buttonGroupReport;
     private javax.swing.JComboBox<String> comboCustomerDistrict;
     private javax.swing.JComboBox<String> comboCustomerProduct;
+    private javax.swing.JComboBox<String> comboDeliveryRepStatus;
     private javax.swing.JComboBox<String> comboPaymentOption;
     private javax.swing.JComboBox<String> comboPurchaseProductName;
     private javax.swing.JComboBox<String> combopaymentDeliverycompany;
     private javax.swing.JTabbedPane customerProduct;
+    private javax.swing.JTabbedPane deliveryReport;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
     private com.toedter.calendar.JDateChooser jDateCustomerInfo;
+    private com.toedter.calendar.JDateChooser jDateDeliveryRepDeliveryDate;
     private com.toedter.calendar.JDateChooser jDateReportFromDate;
     private com.toedter.calendar.JDateChooser jDateReportFromDate1;
     private com.toedter.calendar.JDateChooser jDateReportToDate;
@@ -3458,7 +3754,15 @@ public class SMEDashboard extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel50;
     private javax.swing.JLabel jLabel51;
     private javax.swing.JLabel jLabel52;
+    private javax.swing.JLabel jLabel53;
+    private javax.swing.JLabel jLabel54;
+    private javax.swing.JLabel jLabel55;
+    private javax.swing.JLabel jLabel56;
+    private javax.swing.JLabel jLabel57;
+    private javax.swing.JLabel jLabel58;
+    private javax.swing.JLabel jLabel59;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel60;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
@@ -3466,6 +3770,7 @@ public class SMEDashboard extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;
     private javax.swing.JPanel jPanel12;
+    private javax.swing.JPanel jPanel13;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
@@ -3482,6 +3787,7 @@ public class SMEDashboard extends javax.swing.JFrame {
     private javax.swing.JPanel jPanelTotalSales;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane10;
+    private javax.swing.JScrollPane jScrollPane11;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
@@ -3498,6 +3804,7 @@ public class SMEDashboard extends javax.swing.JFrame {
     private com.toedter.calendar.JDateChooser jdatePurchaseProduct;
     private com.toedter.calendar.JDateChooser jdateinvUpdateCreateDate;
     private javax.swing.JTable jtableCustomerInfo;
+    private javax.swing.JTable jtableDeliveryReport;
     private javax.swing.JLabel lvlDashboard;
     private javax.swing.JTabbedPane menu;
     private javax.swing.JRadioButton radioCustomerReport;
@@ -3515,7 +3822,7 @@ public class SMEDashboard extends javax.swing.JFrame {
     private javax.swing.JTabbedPane tpInvPurchaseProduct;
     private javax.swing.JTabbedPane tpInvUpdateProduct;
     private javax.swing.JTabbedPane tpInventory;
-    private javax.swing.JTabbedPane tpLast;
+    private javax.swing.JTabbedPane tpLast1;
     private javax.swing.JTabbedPane tpOrder;
     private javax.swing.JTabbedPane tpPayment;
     private javax.swing.JTabbedPane tpdashboard;
@@ -3524,6 +3831,11 @@ public class SMEDashboard extends javax.swing.JFrame {
     private javax.swing.JTextField txtCustomerInfoId;
     private javax.swing.JTextField txtCustomerInfoName;
     private javax.swing.JLabel txtDateClock;
+    private javax.swing.JTextField txtDeliveryRepDCode;
+    private javax.swing.JTextField txtDeliveryRepDId;
+    private javax.swing.JTextField txtDeliveryRepDue;
+    private javax.swing.JTextField txtDeliveryRepPaid;
+    private javax.swing.JTextField txtDeliveryRepPayment;
     private javax.swing.JTextField txtMonthlyPurchase;
     private javax.swing.JTextField txtMonthlyPurchaseDigit;
     private javax.swing.JTextField txtMonthlySalesDigit;
