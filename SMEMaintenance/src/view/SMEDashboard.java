@@ -207,29 +207,29 @@ public class SMEDashboard extends javax.swing.JFrame {
 
     //show payment table data 
     public void getAllPaymnet(javax.swing.JTable table) {
-        String[] columnNames = {"ID","Delivery code", "Payment", "Due", "Status", "Delivery_company", "Date"};
+        String[] columnNames = {"ID","Delivery code", "Payment", "Due", "Status"};
 
         DefaultTableModel purchasetableModel = new DefaultTableModel();
         purchasetableModel.setColumnIdentifiers(columnNames);
 
         table.setModel(purchasetableModel);
 
-        sql = "SELECT p.payment_id, p.delivery_code,p.payment,p.due, d.delivery_status, d.delivery_company, d.delivery_date  FROM smemanagement.payment p inner join delivery_charge d on p.delivery_code = d.delivery_code;";
+        sql = "SELECT *  FROM smemanagement.payment ";
         try {
             ps = dbCon.getCon().prepareStatement(sql);
             rs = ps.executeQuery();
 
             while (rs.next()) {
                 int id = rs.getInt("payment_id");
-                String delivery_code = rs.getString("p.delivery_code");
+                String delivery_code = rs.getString("delivery_code");
 
-                float payment = rs.getFloat("p.payment");
-                float due = rs.getFloat("p.due");
-                String deliverystatus = rs.getString("d.delivery_status");
-                String deliveryCompany = rs.getString("d.delivery_company");
-                Date deliverydate = rs.getDate("d.delivery_date");
+                float payment = rs.getFloat("payment");
+                float due = rs.getFloat("due");
+                String deliverystatus = rs.getString("delivery_status");
+//                String deliveryCompany = rs.getString("d.delivery_company");
+//                Date deliverydate = rs.getDate("d.delivery_date");
 
-                purchasetableModel.addRow(new Object[]{id,delivery_code, payment, due, deliverystatus, deliveryCompany, deliverydate});
+                purchasetableModel.addRow(new Object[]{id,delivery_code, payment, due, deliverystatus});
             }
             rs.close();
             ps.close();
@@ -2429,14 +2429,14 @@ public class SMEDashboard extends javax.swing.JFrame {
         jPanel11Layout.setHorizontalGroup(
             jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel11Layout.createSequentialGroup()
+                .addGap(19, 19, 19)
+                .addComponent(jLabel32, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+            .addGroup(jPanel11Layout.createSequentialGroup()
                 .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel11Layout.createSequentialGroup()
-                        .addGap(19, 19, 19)
-                        .addComponent(jLabel32, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPanel11Layout.createSequentialGroup()
                         .addGap(32, 32, 32)
-                        .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 743, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 15, Short.MAX_VALUE))
+                        .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 743, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel11Layout.createSequentialGroup()
                         .addGap(41, 41, 41)
                         .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
@@ -2453,14 +2453,13 @@ public class SMEDashboard extends javax.swing.JFrame {
                                 .addGap(49, 49, 49)
                                 .addComponent(jLabel34, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(38, 38, 38)
-                                .addComponent(jDateReportToDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGap(8, 8, 8))
+                                .addComponent(jDateReportToDate, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel11Layout.createSequentialGroup()
                                 .addGap(37, 37, 37)
                                 .addComponent(radioReportstock)
                                 .addGap(61, 61, 61)
                                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap())
+                .addContainerGap(25, Short.MAX_VALUE))
         );
         jPanel11Layout.setVerticalGroup(
             jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2654,7 +2653,7 @@ public class SMEDashboard extends javax.swing.JFrame {
         jLabel57.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel57.setText("Delivery Status");
 
-        comboDeliveryRepStatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "--Select--", "Order created", "Order Complete", " " }));
+        comboDeliveryRepStatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "--Select--", "Order Confirmed", "Order Complete", " " }));
 
         jLabel58.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel58.setText("Payment");
@@ -2775,8 +2774,7 @@ public class SMEDashboard extends javax.swing.JFrame {
                                     .addComponent(txtDeliveryRepPayment, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel58, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel55, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(29, 29, 29))
+                                .addComponent(jLabel55, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel5Layout.createSequentialGroup()
                                 .addGap(44, 44, 44)
                                 .addComponent(txtDeliveryRepDue, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -3569,6 +3567,7 @@ public class SMEDashboard extends javax.swing.JFrame {
 
     private void btnDeliveryReportMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnDeliveryReportMouseClicked
         menu.setSelectedIndex(9);
+        getAllPaymnet(jtableDeliveryReport);
     }//GEN-LAST:event_btnDeliveryReportMouseClicked
 
     private void btnDeliveryRepResetMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnDeliveryRepResetMouseClicked
@@ -3583,14 +3582,14 @@ public class SMEDashboard extends javax.swing.JFrame {
         String payment = jtableDeliveryReport.getModel().getValueAt(row, 2).toString();
         String due = jtableDeliveryReport.getModel().getValueAt(row, 3).toString();
         String deliverystatus = jtableDeliveryReport.getModel().getValueAt(row, 4).toString();
-        java.util.Date deliverydate = formatStringdateToUtilDate(jtableDeliveryReport.getModel().getValueAt(row, 6).toString());
+//        java.util.Date deliverydate = formatStringdateToUtilDate(jtableDeliveryReport.getModel().getValueAt(row, 6).toString());
         txtDeliveryRepDId.setText(id);
         txtDeliveryRepDCode.setText(delivery_code);
         txtDeliveryRepPayment.setText(payment);
         txtDeliveryRepDue.setText(due);
 //        txtDeliveryRepPaid.setText(null);
         comboDeliveryRepStatus.setSelectedItem(deliverystatus);
-        jDateDeliveryRepDeliveryDate.setDate(deliverydate);
+//        jDateDeliveryRepDeliveryDate.setDate(deliverydate);
 
     }//GEN-LAST:event_jtableDeliveryReportMouseClicked
 
@@ -3599,16 +3598,16 @@ public class SMEDashboard extends javax.swing.JFrame {
         String delivery_code = txtDeliveryRepDCode.getText();
         float payment = Float.parseFloat(txtDeliveryRepPayment.getText());
         float due = Float.parseFloat(txtDeliveryRepDue.getText());
-        float newpaid = Float.parseFloat(txtDeliveryRepPaid.getText());
+        float newpaid = Float.parseFloat(txtDeliveryRepPaid.getText().trim());
         String deliverystatus = comboDeliveryRepStatus.getSelectedItem().toString();
         Date deliverydate = convertutilltosql(jDateDeliveryRepDeliveryDate.getDate());
 
-        sql = "update payment set paid=paid+? ,due=due-? where payment_id=?";
+        sql = "update smemanagement.payment  set paid=paid+? ,due=? where payment_id=?";
         try {
             ps = dbCon.getCon().prepareStatement(sql);
 
             ps.setFloat(1, newpaid);
-            ps.setFloat(2, newpaid);
+            ps.setFloat(2, 0);
             ps.setInt(3, id);
             ps.close();
             dbCon.getCon().close();
@@ -3631,7 +3630,7 @@ public class SMEDashboard extends javax.swing.JFrame {
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
+                if ("Windows".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
