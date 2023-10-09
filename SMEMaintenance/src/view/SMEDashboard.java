@@ -660,7 +660,7 @@ public class SMEDashboard extends javax.swing.JFrame {
             PdfPTable irdTable = new PdfPTable(2);
             irdTable.addCell(invoiceCreate.getIrdCell("Invoice"));
             irdTable.addCell(invoiceCreate.getIrdCell("Date"));
-            irdTable.addCell(invoiceCreate.getIrdCell(txtpaymentdeliveyCode.getText()));
+            irdTable.addCell(invoiceCreate.getIrdCell(txtpaymentdeliveyCode.getText().trim()));
             irdTable.addCell(invoiceCreate.getIrdCell(formatSqlDate(sqltoday)));
 
             PdfPTable irhTable = new PdfPTable(3);
@@ -707,8 +707,8 @@ public class SMEDashboard extends javax.swing.JFrame {
             Paragraph billTo = new Paragraph(bill);
             //customer info
             billTo.setSpacingBefore(20.0f);
-            Paragraph Customername = new Paragraph(txtCustomerInfoName.getText().trim());
-            Customername.setIndentationLeft(20);
+            Paragraph customername = new Paragraph(txtCustomerInfoName.getText().trim());
+            customername.setIndentationLeft(20);
 
             Paragraph contact = new Paragraph(txtCustomerInfoCell.getText().trim());
             contact.setIndentationLeft(20);
@@ -793,7 +793,7 @@ public class SMEDashboard extends javax.swing.JFrame {
 //            d.add(imge);
             doc.add(irhTable);
             doc.add(billTo);
-            doc.add(Customername);
+            doc.add(customername);
             doc.add(contact);
             doc.add(address);
             doc.add(billTable);
