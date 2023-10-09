@@ -4,7 +4,7 @@ USE `smemanagement`;
 --
 -- Host: localhost    Database: smemanagement
 -- ------------------------------------------------------
--- Server version	8.0.34
+-- Server version	8.0.31
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -58,7 +58,7 @@ CREATE TABLE `customers` (
   `address` varchar(45) DEFAULT NULL,
   `created_date` date DEFAULT NULL,
   PRIMARY KEY (`idcustomers`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -67,7 +67,7 @@ CREATE TABLE `customers` (
 
 LOCK TABLES `customers` WRITE;
 /*!40000 ALTER TABLE `customers` DISABLE KEYS */;
-INSERT INTO `customers` VALUES (1,'Ahmed','012536','Dhaka','Kakrail','2023-09-25'),(2,'Oni','0125698574','Chittagong','Hali Town','2023-10-03'),(3,'Fatema Tuz Zohora','0123456','Dhaka','Dhanmondi','2023-10-06');
+INSERT INTO `customers` VALUES (1,'Ahmed','012536','Dhaka','Kakrail','2023-09-25'),(2,'Oni','0125698574','Chittagong','Hali Town','2023-10-03'),(3,'Fatema Tuz Zohora','0123456','Dhaka','Dhanmondi','2023-10-06'),(4,'MD Al Amin Haque','0147258','Mymensingh','Town Hall','2023-10-09');
 /*!40000 ALTER TABLE `customers` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -114,8 +114,9 @@ CREATE TABLE `delivery_charge` (
   `delivery_date` date DEFAULT NULL,
   `delivery_address` varchar(45) DEFAULT NULL,
   `delivery_company` varchar(45) DEFAULT NULL,
+  `delivery_status` varchar(45) DEFAULT 'Order created',
   PRIMARY KEY (`delivery_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -124,7 +125,7 @@ CREATE TABLE `delivery_charge` (
 
 LOCK TABLES `delivery_charge` WRITE;
 /*!40000 ALTER TABLE `delivery_charge` DISABLE KEYS */;
-INSERT INTO `delivery_charge` VALUES (1,'2','de0410cId2r8',30,'2023-10-04','2023-10-07','haha','Item 3'),(2,'1','de0410cId1r54',30,'2023-10-04','2023-10-07','Kakrail','Item 4'),(3,'2','de0410cId2r56',30,'2023-10-04','2023-10-07','Kakrail','Item 2'),(4,'1','de0410cId1r3',30,'2023-10-04','2023-10-07','Dhaka','Item 3'),(5,'1','de0410cId1r7',30,'2023-10-04','2023-10-04','ooo','Item 4'),(6,'1','de0410cId1r2',30,'2023-10-04','2023-10-07','uuuuu','Item 3'),(7,'2','de0410cId2r1',30,'2023-10-04','2023-10-07','ppppp','Item 3'),(8,'3','de0610cId3r14',60,'2023-10-06','2023-10-09','Dhamondi','Delivery Person 01');
+INSERT INTO `delivery_charge` VALUES (1,'2','de0410cId2r8',30,'2023-10-04','2023-10-07','haha','Item 3','Order created'),(2,'1','de0410cId1r54',30,'2023-10-04','2023-10-07','Kakrail','Item 4','Order created'),(3,'2','de0410cId2r56',30,'2023-10-04','2023-10-07','Kakrail','Item 2','Order created'),(4,'1','de0410cId1r3',30,'2023-10-04','2023-10-07','Dhaka','Item 3','Order created'),(5,'1','de0410cId1r7',30,'2023-10-04','2023-10-04','ooo','Item 4','Order created'),(6,'1','de0410cId1r2',30,'2023-10-04','2023-10-07','uuuuu','Item 3','Order created'),(7,'2','de0410cId2r1',30,'2023-10-04','2023-10-07','ppppp','Item 3','Order created'),(8,'3','de0610cId3r14',60,'2023-10-06','2023-10-09','Dhamondi','Delivery Person 01','Order created'),(9,'3','de0710cId3r3',60,'2023-10-07','2023-10-11','Dhanmondi','Delivery Person 01','Order created'),(10,'1','de0710cId1r86',60,'2023-10-07','2023-10-10','Kakrail','Delivery Person 01','Order created'),(11,'3','de0910cId3r60',60,'2023-10-09','2023-10-12','Dhaka','Delivery Person 03','Order created'),(12,NULL,'de0910cId3r12',NULL,NULL,NULL,NULL,NULL,'Order created'),(13,'3','de0910cId3r69',90,'2023-10-09','2023-10-12','Dhaka','Delivery Person 02','Order created'),(14,'4','de0910cId4r73',90,'2023-10-09','2023-10-12','Dhaka','Delivery Person 02','Order created');
 /*!40000 ALTER TABLE `delivery_charge` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -141,7 +142,7 @@ CREATE TABLE `demo_table` (
   `age` int DEFAULT NULL,
   `batch_id` int DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -150,7 +151,7 @@ CREATE TABLE `demo_table` (
 
 LOCK TABLES `demo_table` WRITE;
 /*!40000 ALTER TABLE `demo_table` DISABLE KEYS */;
-INSERT INTO `demo_table` VALUES (1,'Rakib',25,NULL),(2,'Akib',25,NULL),(3,'Rakib',25,NULL),(4,'Rakib',25,NULL);
+INSERT INTO `demo_table` VALUES (1,'Rakib',25,NULL),(2,'Akib',25,NULL),(3,'Rakib',25,NULL),(4,'Rakib',25,NULL),(5,'Rakib',25,NULL),(6,'Rakib',25,NULL),(7,'Rakib',25,NULL);
 /*!40000 ALTER TABLE `demo_table` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -192,8 +193,11 @@ CREATE TABLE `payment` (
   `paid` float DEFAULT NULL,
   `due` float DEFAULT NULL,
   `payment_option` varchar(45) DEFAULT NULL,
-  PRIMARY KEY (`payment_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `delivery_status` varchar(45) DEFAULT 'Order Confirmed',
+  `delivery_date` date DEFAULT '2023-10-01',
+  PRIMARY KEY (`payment_id`),
+  UNIQUE KEY `delivery_code_UNIQUE` (`delivery_code`)
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -202,7 +206,7 @@ CREATE TABLE `payment` (
 
 LOCK TABLES `payment` WRITE;
 /*!40000 ALTER TABLE `payment` DISABLE KEYS */;
-INSERT INTO `payment` VALUES (1,NULL,30,30,0,NULL),(2,NULL,40,40,0,NULL),(3,NULL,40,40,0,NULL),(4,NULL,40,40,0,NULL),(5,NULL,40,40,0,NULL),(6,NULL,40,40,0,NULL),(7,'de0410cId2r8',60,60,0,NULL),(8,'de0410cId1r54',40,40,0,'--Select Payment method--'),(9,'de0410cId1r3',40,40,0,'Pay Online'),(10,'de0410cId1r7',40,40,0,'Pay Online'),(11,'de0410cId1r2',40,40,0,'Pay Online'),(12,'de0410cId2r1',40,40,0,'Pay Online'),(13,'de0610cId3r14',560,200,360,'Pay Online');
+INSERT INTO `payment` VALUES (1,NULL,30,30,0,NULL,'Order Confirmed','2023-10-01'),(2,NULL,40,40,0,NULL,'Order Confirmed','2023-10-01'),(3,NULL,40,40,0,NULL,'Order Confirmed','2023-10-01'),(4,NULL,40,40,0,NULL,'Order Confirmed','2023-10-01'),(5,NULL,40,40,0,NULL,'Order Confirmed','2023-10-01'),(6,NULL,40,40,0,NULL,'Order Confirmed','2023-10-01'),(7,'de0410cId2r8',60,60,0,NULL,'Order Confirmed','2023-10-01'),(8,'de0410cId1r54',40,40,0,'--Select Payment method--','Order Confirmed','2023-10-01'),(9,'de0410cId1r3',40,40,0,'Pay Online','Order Confirmed','2023-10-01'),(10,'de0410cId1r7',40,40,0,'Pay Online','Order Confirmed','2023-10-01'),(11,'de0410cId1r2',40,40,0,'Pay Online','Order Confirmed','2023-10-01'),(12,'de0410cId2r1',40,40,0,'Pay Online','Order Confirmed','2023-10-01'),(13,'de0610cId3r14',560,560,0,'Pay Online','Order Confirmed','2023-10-01'),(14,'de0710cId3r3',190,330,-140,'Cash on Delivery','Order Complete','2023-10-01'),(15,'de0710cId1r86',220,220,0,'Cash on Delivery','Order Complete','2023-10-10'),(16,'de0910cId3r60',130,130,0,'Cash on Delivery','Order Confirmed','2023-10-01'),(17,'de0910cId3r69',140,0,140,'Cash on Delivery','Order Confirmed','2023-10-01'),(18,'de0910cId4r73',150,150,0,'Cash on Delivery','Order Complete','2023-10-12');
 /*!40000 ALTER TABLE `payment` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -219,7 +223,7 @@ CREATE TABLE `product_stock` (
   `quantity` float DEFAULT NULL,
   `product_id` int DEFAULT NULL,
   PRIMARY KEY (`idproduct_stock`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -228,7 +232,7 @@ CREATE TABLE `product_stock` (
 
 LOCK TABLES `product_stock` WRITE;
 /*!40000 ALTER TABLE `product_stock` DISABLE KEYS */;
-INSERT INTO `product_stock` VALUES (1,'demo1',9,NULL),(2,'demo2',12,NULL),(3,'demo3',0,NULL),(4,'funcopop1',8,NULL),(5,'demo33',0,NULL);
+INSERT INTO `product_stock` VALUES (1,'demo1',9,NULL),(2,'demo2',18,NULL),(3,'demo3',4,NULL),(4,'funcopop1',0,NULL),(5,'demo33',0,NULL),(6,'demo4',9,NULL);
 /*!40000 ALTER TABLE `product_stock` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -270,7 +274,7 @@ CREATE TABLE `products` (
   `purchase_price` float DEFAULT NULL,
   `entry_date` date DEFAULT NULL,
   PRIMARY KEY (`idproducts`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -279,7 +283,7 @@ CREATE TABLE `products` (
 
 LOCK TABLES `products` WRITE;
 /*!40000 ALTER TABLE `products` DISABLE KEYS */;
-INSERT INTO `products` VALUES (1,'demo1',NULL,10,5,'2023-09-23'),(2,'demo2',NULL,10,3,'2023-09-23'),(3,'demo3',NULL,20,2,'2023-09-23'),(4,'funcopop1',NULL,120,50,'2023-09-23'),(5,'demo33',NULL,13,2,'2023-09-27');
+INSERT INTO `products` VALUES (1,'demo1',NULL,10,5,'2023-09-23'),(2,'demo2',NULL,10,13,'2023-09-23'),(3,'demo3',NULL,20,2,'2023-09-23'),(4,'funcopop1',NULL,120,50,'2023-09-23'),(5,'demo33',NULL,13,2,'2023-09-27'),(6,'demo4',NULL,50,10,'2023-10-09');
 /*!40000 ALTER TABLE `products` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -298,7 +302,7 @@ CREATE TABLE `purchases` (
   `total_price` float DEFAULT NULL,
   `purchase_date` date DEFAULT NULL,
   PRIMARY KEY (`idpurchases`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -307,7 +311,7 @@ CREATE TABLE `purchases` (
 
 LOCK TABLES `purchases` WRITE;
 /*!40000 ALTER TABLE `purchases` DISABLE KEYS */;
-INSERT INTO `purchases` VALUES (1,'demo1',2,10,20,'2023-09-23'),(2,'demo2',3,10,30,'2023-09-23'),(3,'demo3',5,10,50,'2023-09-23'),(4,'funcopop1',10,120,1200,'2023-09-23'),(5,'demo2',50,10,500,'2023-09-24'),(6,'demo2',1,10,10,'2023-09-24'),(7,'funcopop1',2,120,240,'2023-09-25'),(8,'demo1',5,10,50,'2023-09-25'),(9,'demo3',5,10,50,'2023-10-02'),(10,'demo1',10,10,100,'2023-10-04'),(11,'funcopop1',10,120,1200,'2023-10-04'),(12,'funcopop1',3,120,360,'2023-10-04');
+INSERT INTO `purchases` VALUES (1,'demo1',2,10,20,'2023-09-23'),(2,'demo2',3,10,30,'2023-09-23'),(3,'demo3',5,10,50,'2023-09-23'),(4,'funcopop1',10,120,1200,'2023-09-23'),(5,'demo2',50,10,500,'2023-09-24'),(6,'demo2',1,10,10,'2023-09-24'),(7,'funcopop1',2,120,240,'2023-09-25'),(8,'demo1',5,10,50,'2023-09-25'),(9,'demo3',5,10,50,'2023-10-02'),(10,'demo1',10,10,100,'2023-10-04'),(11,'funcopop1',10,120,1200,'2023-10-04'),(12,'funcopop1',3,120,360,'2023-10-04'),(13,'demo3',10,10,100,'2023-10-07'),(14,'demo2',10,10,100,'2023-10-09'),(15,'demo4',10,10,100,'2023-10-09');
 /*!40000 ALTER TABLE `purchases` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -330,7 +334,7 @@ CREATE TABLE `sales` (
   `payment_id` int DEFAULT NULL,
   `delivery_code` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`idsales`)
-) ENGINE=InnoDB AUTO_INCREMENT=61 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=74 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -339,7 +343,7 @@ CREATE TABLE `sales` (
 
 LOCK TABLES `sales` WRITE;
 /*!40000 ALTER TABLE `sales` DISABLE KEYS */;
-INSERT INTO `sales` VALUES (1,'demo1',1,20,0,'2023-09-23',NULL,NULL,NULL,NULL),(2,'demo1',1,10,0,'2023-09-23',10,NULL,NULL,NULL),(3,'demo2',1,10,0,'2023-09-23',10,NULL,NULL,NULL),(4,'demo2',2,20,0,'2023-09-24',10,NULL,NULL,NULL),(5,'funcopop1',1,120,0,'2023-09-25',120,NULL,NULL,NULL),(6,'funcopop1',2,240,0,'2023-09-25',120,NULL,NULL,NULL),(7,'funcopop1',1,120,0,'2023-10-02',120,NULL,NULL,NULL),(8,'demo3',1,20,0,'2023-10-02',20,NULL,NULL,NULL),(9,'funcopop1',1,120,0,'2023-10-02',120,NULL,NULL,NULL),(10,'demo3',1,20,0,'2023-10-02',20,NULL,NULL,NULL),(11,'demo3',1,20,0,'2023-10-02',20,NULL,NULL,NULL),(12,'demo3',1,20,0,'2023-10-02',20,NULL,NULL,NULL),(13,'demo3',1,20,0,'2023-10-02',20,NULL,NULL,NULL),(14,'demo1',1,0,10,NULL,10,NULL,NULL,NULL),(15,'demo2',1,0,10,NULL,10,NULL,NULL,NULL),(16,'funcopop1',1,0,120,NULL,120,NULL,NULL,NULL),(17,'demo3',1,0,20,'2023-10-02',20,NULL,NULL,NULL),(18,'demo1',1,0,10,'2023-10-02',10,NULL,NULL,NULL),(19,'demo2',1,0,10,'2023-10-02',10,NULL,NULL,NULL),(20,'demo3',1,0,20,NULL,20,NULL,NULL,NULL),(21,'funcopop1',1,0,120,NULL,120,NULL,NULL,NULL),(22,'demo2',1,0,10,'2023-10-02',10,NULL,NULL,NULL),(23,'demo2',2,0,20,'2023-10-01',10,NULL,NULL,NULL),(24,'demo1',1,0,10,'2023-10-02',10,NULL,NULL,NULL),(25,'demo1',1,0,10,'2023-10-02',10,NULL,NULL,NULL),(26,'demo3',1,0,20,'2023-10-02',20,NULL,NULL,NULL),(27,'demo2',1,0,10,'2023-10-02',10,NULL,NULL,NULL),(28,'demo3',1,0,20,'2023-10-01',20,NULL,NULL,NULL),(29,'demo2',1,0,10,'2023-10-01',10,NULL,NULL,NULL),(30,'demo2',1,0,10,'2023-10-02',10,NULL,NULL,NULL),(31,'demo2',1,0,10,'2023-10-01',10,NULL,NULL,NULL),(32,'demo2',1,0,10,'2023-10-02',10,NULL,NULL,NULL),(33,'funcopop1',1,0,10,'2023-10-01',120,NULL,NULL,NULL),(34,'demo1',1,0,10,'2023-10-02',10,NULL,NULL,NULL),(35,'demo2',1,0,10,'2023-10-02',10,NULL,NULL,NULL),(36,'demo2',2,0,20,'2023-10-02',10,NULL,NULL,NULL),(37,'demo2',1,0,10,'2023-10-02',10,NULL,NULL,NULL),(38,'demo2',2,0,20,'2023-10-02',10,NULL,NULL,NULL),(39,'demo2',1,0,10,'2023-10-02',10,NULL,NULL,NULL),(40,'demo2',2,0,20,'2023-10-02',10,NULL,NULL,NULL),(41,'demo2',1,0,10,'2023-10-02',10,NULL,NULL,NULL),(42,'demo2',3,0,30,'2023-10-02',10,NULL,NULL,NULL),(43,'demo2',2,0,20,'2023-10-03',10,1,NULL,'1'),(44,'demo1',1,0,10,'2023-10-03',10,1,NULL,'1'),(45,'demo2',1,0,10,'2023-10-03',10,2,NULL,'de0310cId2r71'),(46,'demo2',1,0,10,'2023-10-03',10,1,NULL,'de0310cId1r77'),(47,'demo2',1,0,10,'2023-10-03',10,1,NULL,'de0310cId1r52'),(48,'demo2',1,0,10,'2023-10-03',10,1,NULL,'de0310cId1r5'),(49,'demo1',1,0,10,'2023-10-04',10,2,NULL,'de0410cId2r8'),(50,'demo2',2,0,20,'2023-10-04',10,2,NULL,'de0410cId2r8'),(51,'demo1',1,0,10,'2023-10-04',10,1,NULL,'de0410cId1r54'),(52,'demo1',1,0,10,'2023-10-04',10,2,NULL,'de0410cId2r56'),(53,'demo2',1,0,10,'2023-10-04',10,2,NULL,'de0410cId2r56'),(54,'demo2',1,0,10,'2023-10-04',10,1,NULL,'de0410cId1r3'),(55,'demo2',1,0,10,'2023-10-04',10,1,NULL,'de0410cId1r7'),(56,'demo2',1,10,0,'2023-10-04',10,1,NULL,'de0410cId1r2'),(57,'demo2',1,10,0,'2023-10-04',10,2,NULL,'de0410cId2r1'),(58,'funcopop1',2,240,0,'2023-10-06',120,3,NULL,'de0610cId3r14'),(59,'demo2',2,20,0,'2023-10-06',10,3,NULL,'de0610cId3r14'),(60,'funcopop1',2,240,0,'2023-10-06',120,3,NULL,'de0610cId3r14');
+INSERT INTO `sales` VALUES (1,'demo1',1,20,0,'2023-09-23',NULL,NULL,NULL,NULL),(2,'demo1',1,10,0,'2023-09-23',10,NULL,NULL,NULL),(3,'demo2',1,10,0,'2023-09-23',10,NULL,NULL,NULL),(4,'demo2',2,20,0,'2023-09-24',10,NULL,NULL,NULL),(5,'funcopop1',1,120,0,'2023-09-25',120,NULL,NULL,NULL),(6,'funcopop1',2,240,0,'2023-09-25',120,NULL,NULL,NULL),(7,'funcopop1',1,120,0,'2023-10-02',120,NULL,NULL,NULL),(8,'demo3',1,20,0,'2023-10-02',20,NULL,NULL,NULL),(9,'funcopop1',1,120,0,'2023-10-02',120,NULL,NULL,NULL),(10,'demo3',1,20,0,'2023-10-02',20,NULL,NULL,NULL),(11,'demo3',1,20,0,'2023-10-02',20,NULL,NULL,NULL),(12,'demo3',1,20,0,'2023-10-02',20,NULL,NULL,NULL),(13,'demo3',1,20,0,'2023-10-02',20,NULL,NULL,NULL),(14,'demo1',1,0,10,NULL,10,NULL,NULL,NULL),(15,'demo2',1,0,10,NULL,10,NULL,NULL,NULL),(16,'funcopop1',1,0,120,NULL,120,NULL,NULL,NULL),(17,'demo3',1,0,20,'2023-10-02',20,NULL,NULL,NULL),(18,'demo1',1,0,10,'2023-10-02',10,NULL,NULL,NULL),(19,'demo2',1,0,10,'2023-10-02',10,NULL,NULL,NULL),(20,'demo3',1,0,20,NULL,20,NULL,NULL,NULL),(21,'funcopop1',1,0,120,NULL,120,NULL,NULL,NULL),(22,'demo2',1,0,10,'2023-10-02',10,NULL,NULL,NULL),(23,'demo2',2,0,20,'2023-10-01',10,NULL,NULL,NULL),(24,'demo1',1,0,10,'2023-10-02',10,NULL,NULL,NULL),(25,'demo1',1,0,10,'2023-10-02',10,NULL,NULL,NULL),(26,'demo3',1,0,20,'2023-10-02',20,NULL,NULL,NULL),(27,'demo2',1,0,10,'2023-10-02',10,NULL,NULL,NULL),(28,'demo3',1,0,20,'2023-10-01',20,NULL,NULL,NULL),(29,'demo2',1,0,10,'2023-10-01',10,NULL,NULL,NULL),(30,'demo2',1,0,10,'2023-10-02',10,NULL,NULL,NULL),(31,'demo2',1,0,10,'2023-10-01',10,NULL,NULL,NULL),(32,'demo2',1,0,10,'2023-10-02',10,NULL,NULL,NULL),(33,'funcopop1',1,0,10,'2023-10-01',120,NULL,NULL,NULL),(34,'demo1',1,0,10,'2023-10-02',10,NULL,NULL,NULL),(35,'demo2',1,0,10,'2023-10-02',10,NULL,NULL,NULL),(36,'demo2',2,0,20,'2023-10-02',10,NULL,NULL,NULL),(37,'demo2',1,0,10,'2023-10-02',10,NULL,NULL,NULL),(38,'demo2',2,0,20,'2023-10-02',10,NULL,NULL,NULL),(39,'demo2',1,0,10,'2023-10-02',10,NULL,NULL,NULL),(40,'demo2',2,0,20,'2023-10-02',10,NULL,NULL,NULL),(41,'demo2',1,0,10,'2023-10-02',10,NULL,NULL,NULL),(42,'demo2',3,0,30,'2023-10-02',10,NULL,NULL,NULL),(43,'demo2',2,0,20,'2023-10-03',10,1,NULL,'1'),(44,'demo1',1,0,10,'2023-10-03',10,1,NULL,'1'),(45,'demo2',1,0,10,'2023-10-03',10,2,NULL,'de0310cId2r71'),(46,'demo2',1,0,10,'2023-10-03',10,1,NULL,'de0310cId1r77'),(47,'demo2',1,0,10,'2023-10-03',10,1,NULL,'de0310cId1r52'),(48,'demo2',1,0,10,'2023-10-03',10,1,NULL,'de0310cId1r5'),(49,'demo1',1,0,10,'2023-10-04',10,2,NULL,'de0410cId2r8'),(50,'demo2',2,0,20,'2023-10-04',10,2,NULL,'de0410cId2r8'),(51,'demo1',1,0,10,'2023-10-04',10,1,NULL,'de0410cId1r54'),(52,'demo1',1,0,10,'2023-10-04',10,2,NULL,'de0410cId2r56'),(53,'demo2',1,0,10,'2023-10-04',10,2,NULL,'de0410cId2r56'),(54,'demo2',1,0,10,'2023-10-04',10,1,NULL,'de0410cId1r3'),(55,'demo2',1,0,10,'2023-10-04',10,1,NULL,'de0410cId1r7'),(56,'demo2',1,10,0,'2023-10-04',10,1,NULL,'de0410cId1r2'),(57,'demo2',1,10,0,'2023-10-04',10,2,NULL,'de0410cId2r1'),(58,'funcopop1',2,240,0,'2023-10-06',120,3,NULL,'de0610cId3r14'),(59,'demo2',2,20,0,'2023-10-06',10,3,NULL,'de0610cId3r14'),(60,'funcopop1',2,240,0,'2023-10-06',120,3,NULL,'de0610cId3r14'),(61,'demo2',1,10,0,'2023-10-07',10,3,NULL,'de0710cId3r3'),(62,'funcopop1',1,120,0,'2023-10-07',120,3,NULL,'de0710cId3r3'),(63,'demo3',1,20,0,'2023-10-07',20,1,NULL,'de0710cId1r86'),(64,'funcopop1',1,120,0,'2023-10-07',120,1,NULL,'de0710cId1r86'),(65,'demo1',1,10,0,'2023-10-07',10,1,NULL,'de0710cId1r86'),(66,'demo2',1,10,0,'2023-10-07',10,1,NULL,'de0710cId1r86'),(67,'demo4',1,50,0,'2023-10-09',50,3,NULL,'de0910cId3r60'),(68,'demo3',1,20,0,'2023-10-09',20,3,NULL,'de0910cId3r60'),(69,'demo4',3,150,0,'2023-10-09',50,3,NULL,'de0910cId3r12'),(70,'funcopop1',3,360,0,'2023-10-09',120,3,NULL,'de0910cId3r12'),(71,'demo4',1,50,0,'2023-10-09',50,3,NULL,'de0910cId3r69'),(72,'demo1',2,20,0,'2023-10-10',10,4,NULL,'de0910cId4r73'),(73,'demo3',2,40,0,'2023-10-10',20,4,NULL,'de0910cId4r73');
 /*!40000 ALTER TABLE `sales` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -378,4 +382,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-10-06 23:53:53
+-- Dump completed on 2023-10-09 13:49:46
