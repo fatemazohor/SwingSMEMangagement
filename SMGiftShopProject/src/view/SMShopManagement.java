@@ -404,14 +404,14 @@ public class SMShopManagement extends javax.swing.JFrame {
     
     //show payment table data 
     public void getAllPaymnet(javax.swing.JTable table) {
-        String[] columnNames = {"ID","Delivery code", "Payment", "Due", "Status"};
+        String[] columnNames = {"ID","Delivery code", "Payment", "Due", "Status","Date"};
 
         DefaultTableModel purchasetableModel = new DefaultTableModel();
         purchasetableModel.setColumnIdentifiers(columnNames);
 
         table.setModel(purchasetableModel);
 
-        sql = "SELECT *  FROM smemanagement.payment ";
+        sql = "SELECT *  FROM payment";
         try {
             ps = dbCon.getCon().prepareStatement(sql);
             rs = ps.executeQuery();
@@ -423,10 +423,10 @@ public class SMShopManagement extends javax.swing.JFrame {
                 float payment = rs.getFloat("payment");
                 float due = rs.getFloat("due");
                 String deliverystatus = rs.getString("delivery_status");
-//                String deliveryCompany = rs.getString("d.delivery_company");
-//                Date deliverydate = rs.getDate("d.delivery_date");
+//                String deliveryPerson = rs.getString("delivery_person");
+                Date deliverydate = rs.getDate("delivery_date");
 
-                purchasetableModel.addRow(new Object[]{id,delivery_code, payment, due, deliverystatus});
+                purchasetableModel.addRow(new Object[]{id,delivery_code, payment, due, deliverystatus,deliverydate});
             }
             rs.close();
             ps.close();
@@ -471,13 +471,14 @@ public class SMShopManagement extends javax.swing.JFrame {
         }
     }
 
-    public void subtractProductFromStock() {
-        float quantity = Float.parseFloat(spanbillquentity.getValue().toString());
+   public void subtractProductFromStock(String proName,float quantity) {
+//         quantity = Float.parseFloat(spanbillquentity.getValue().toString());
+//         proName = txtbillProductName.getText();
         sql = "update products set quentity=quentity-? where name=?";
         try {
             ps = dbCon.getCon().prepareStatement(sql);
             ps.setFloat(1, quantity);
-            ps.setString(2, txtbillProductName.getText());
+            ps.setString(2, proName);
             ps.executeUpdate();
             ps.close();
             dbCon.getCon().close();
@@ -985,6 +986,7 @@ public class SMShopManagement extends javax.swing.JFrame {
         btnInvUpdate = new javax.swing.JButton();
         btnInvUpdateDelete = new javax.swing.JButton();
         comboinvUpdateCategory = new javax.swing.JComboBox<>();
+        jLabel82 = new javax.swing.JLabel();
         purchaseProduct = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
@@ -1004,6 +1006,7 @@ public class SMShopManagement extends javax.swing.JFrame {
         btnInvPurchaseProductReset = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTablePurchaseProduct = new javax.swing.JTable();
+        jLabel83 = new javax.swing.JLabel();
         order = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
@@ -1027,6 +1030,7 @@ public class SMShopManagement extends javax.swing.JFrame {
         btnCustomerNext = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
         jtableCustomerInfo = new javax.swing.JTable();
+        jLabel84 = new javax.swing.JLabel();
         billing = new javax.swing.JPanel();
         jPanel7 = new javax.swing.JPanel();
         billingfrom = new javax.swing.JLabel();
@@ -1095,6 +1099,7 @@ public class SMShopManagement extends javax.swing.JFrame {
         jScrollPane8 = new javax.swing.JScrollPane();
         jTableReport = new javax.swing.JTable();
         jButton4 = new javax.swing.JButton();
+        jLabel85 = new javax.swing.JLabel();
         customerList = new javax.swing.JPanel();
         jPanel10 = new javax.swing.JPanel();
         jLabel23 = new javax.swing.JLabel();
@@ -1107,6 +1112,7 @@ public class SMShopManagement extends javax.swing.JFrame {
         radioCustomerReport = new javax.swing.JRadioButton();
         jScrollPane10 = new javax.swing.JScrollPane();
         tableCustomerReport = new javax.swing.JTable();
+        jLabel86 = new javax.swing.JLabel();
         ProductList = new javax.swing.JPanel();
         jPanel11 = new javax.swing.JPanel();
         jLabel24 = new javax.swing.JLabel();
@@ -1119,6 +1125,7 @@ public class SMShopManagement extends javax.swing.JFrame {
         comboProductList = new javax.swing.JComboBox<>();
         radioProductReport = new javax.swing.JRadioButton();
         btnProductReport = new javax.swing.JButton();
+        jLabel87 = new javax.swing.JLabel();
         deliveryUpdate = new javax.swing.JPanel();
         jPanel12 = new javax.swing.JPanel();
         jLabel25 = new javax.swing.JLabel();
@@ -1220,7 +1227,7 @@ public class SMShopManagement extends javax.swing.JFrame {
         btnDelivery.setFont(new java.awt.Font("PMingLiU-ExtB", 1, 20)); // NOI18N
         btnDelivery.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         btnDelivery.setText("Delivery ");
-        btnDelivery.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 78, 80), 2));
+        btnDelivery.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(245, 159, 51), 2));
         btnDelivery.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnDeliveryMouseClicked(evt);
@@ -1439,13 +1446,15 @@ public class SMShopManagement extends javax.swing.JFrame {
         jLabel3.setText("Total Profit");
         jPanel4.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 270, 160, 30));
 
-        lbltodaySalesDigit.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        lbltodaySalesDigit.setFont(new java.awt.Font("Times New Roman", 1, 24)); // NOI18N
+        lbltodaySalesDigit.setForeground(new java.awt.Color(255, 255, 255));
         lbltodaySalesDigit.setText("Total Profit");
-        jPanel4.add(lbltodaySalesDigit, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 230, 150, 30));
+        jPanel4.add(lbltodaySalesDigit, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 230, 140, 30));
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setText("Total Profit");
-        jPanel4.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 190, 80, 30));
+        jPanel4.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 190, 110, 30));
 
         lblTodaySales.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
         jPanel4.add(lblTodaySales, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 120, 310, 190));
@@ -1458,13 +1467,15 @@ public class SMShopManagement extends javax.swing.JFrame {
         jLabel6.setText("Total Profit");
         jPanel4.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 270, 160, 30));
 
-        lbltodayPurchaseDigit.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        lbltodayPurchaseDigit.setFont(new java.awt.Font("Times New Roman", 1, 24)); // NOI18N
+        lbltodayPurchaseDigit.setForeground(new java.awt.Color(255, 255, 255));
         lbltodayPurchaseDigit.setText("Total Profit");
-        jPanel4.add(lbltodayPurchaseDigit, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 230, 150, 30));
+        jPanel4.add(lbltodayPurchaseDigit, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 230, 120, 30));
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(255, 255, 255));
         jLabel8.setText("Today Purchase");
-        jPanel4.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 190, 130, 30));
+        jPanel4.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 190, 110, 30));
 
         lblTodayPurchase.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
         jPanel4.add(lblTodayPurchase, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 120, 310, 190));
@@ -1477,13 +1488,15 @@ public class SMShopManagement extends javax.swing.JFrame {
         jLabel10.setText("Total Profit");
         jPanel4.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 270, 160, 30));
 
-        lbltodayDelivery.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        lbltodayDelivery.setFont(new java.awt.Font("Times New Roman", 1, 24)); // NOI18N
+        lbltodayDelivery.setForeground(new java.awt.Color(255, 255, 255));
         lbltodayDelivery.setText("Total Profit");
-        jPanel4.add(lbltodayDelivery, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 230, 130, 30));
+        jPanel4.add(lbltodayDelivery, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 230, 140, 30));
 
         jLabel12.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel12.setForeground(new java.awt.Color(255, 255, 255));
         jLabel12.setText("Today Delivery");
-        jPanel4.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 190, 150, 30));
+        jPanel4.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 190, 110, 30));
 
         lblTodayDelivery.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
         jPanel4.add(lblTodayDelivery, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 120, 310, 190));
@@ -1492,9 +1505,10 @@ public class SMShopManagement extends javax.swing.JFrame {
         jLabel13.setText("Total Profit");
         jPanel4.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 530, 160, 30));
 
-        lbltotalSalesdigit.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        lbltotalSalesdigit.setFont(new java.awt.Font("Times New Roman", 1, 24)); // NOI18N
+        lbltotalSalesdigit.setForeground(new java.awt.Color(255, 255, 255));
         lbltotalSalesdigit.setText("Total Profit");
-        jPanel4.add(lbltotalSalesdigit, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 490, 80, 30));
+        jPanel4.add(lbltotalSalesdigit, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 490, 150, 30));
 
         saleslogo1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         saleslogo1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/SM/icon/money.png"))); // NOI18N
@@ -1505,8 +1519,9 @@ public class SMShopManagement extends javax.swing.JFrame {
         jPanel4.add(purchaseLogo1, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 400, 60, 40));
 
         jLabel15.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel15.setForeground(new java.awt.Color(255, 255, 255));
         jLabel15.setText("Total Profit");
-        jPanel4.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 450, 80, 30));
+        jPanel4.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 450, 110, 30));
 
         lblTotalSales.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true));
         jPanel4.add(lblTotalSales, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 380, 310, 190));
@@ -1515,11 +1530,13 @@ public class SMShopManagement extends javax.swing.JFrame {
         jLabel16.setText("Total Profit");
         jPanel4.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 530, 160, 30));
 
-        lbltotalPurchaseDigit.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        lbltotalPurchaseDigit.setFont(new java.awt.Font("Times New Roman", 1, 24)); // NOI18N
+        lbltotalPurchaseDigit.setForeground(new java.awt.Color(255, 255, 255));
         lbltotalPurchaseDigit.setText("Total Profit");
-        jPanel4.add(lbltotalPurchaseDigit, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 490, 80, 30));
+        jPanel4.add(lbltotalPurchaseDigit, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 490, 140, 30));
 
         jLabel18.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel18.setForeground(new java.awt.Color(255, 255, 255));
         jLabel18.setText("Total Purchase");
         jPanel4.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 450, 110, 30));
 
@@ -1534,9 +1551,9 @@ public class SMShopManagement extends javax.swing.JFrame {
         jLabel19.setText("Total Profit");
         jPanel4.add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 530, 160, 30));
 
-        jLabel20.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel20.setFont(new java.awt.Font("Times New Roman", 1, 24)); // NOI18N
         jLabel20.setText("Total Profit");
-        jPanel4.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 490, 80, 30));
+        jPanel4.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 490, 160, 30));
 
         jLabel21.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel21.setText("Total Delivery");
@@ -1668,6 +1685,9 @@ public class SMShopManagement extends javax.swing.JFrame {
         jLabel31.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel31.setText("Created Date");
 
+        jScrollPane1.setBackground(new java.awt.Color(255, 255, 255));
+        jScrollPane1.setBorder(null);
+
         tableInvUpdateProduct.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -1679,6 +1699,9 @@ public class SMShopManagement extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tableInvUpdateProduct.setGridColor(new java.awt.Color(255, 255, 255));
+        tableInvUpdateProduct.setRowHeight(25);
+        tableInvUpdateProduct.setSelectionBackground(new java.awt.Color(255, 78, 80));
         tableInvUpdateProduct.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tableInvUpdateProductMouseClicked(evt);
@@ -1730,6 +1753,11 @@ public class SMShopManagement extends javax.swing.JFrame {
 
         comboinvUpdateCategory.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
+        jLabel82.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel82.setForeground(new java.awt.Color(255, 78, 80));
+        jLabel82.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel82.setText("Product List");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -1775,13 +1803,19 @@ public class SMShopManagement extends javax.swing.JFrame {
                         .addGap(50, 50, 50)
                         .addComponent(btnInvUpdateDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel82, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(269, 269, 269))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(116, 116, 116)
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(69, 69, 69)
+                .addGap(21, 21, 21)
+                .addComponent(jLabel82, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -1877,6 +1911,9 @@ public class SMShopManagement extends javax.swing.JFrame {
             }
         });
 
+        jScrollPane2.setBackground(new java.awt.Color(255, 255, 255));
+        jScrollPane2.setBorder(null);
+
         jTablePurchaseProduct.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -1888,7 +1925,15 @@ public class SMShopManagement extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        jTablePurchaseProduct.setGridColor(new java.awt.Color(255, 255, 255));
+        jTablePurchaseProduct.setRowHeight(25);
+        jTablePurchaseProduct.setSelectionBackground(new java.awt.Color(255, 78, 80));
         jScrollPane2.setViewportView(jTablePurchaseProduct);
+
+        jLabel83.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel83.setForeground(new java.awt.Color(255, 78, 80));
+        jLabel83.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel83.setText("Purchase List");
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -1921,8 +1966,14 @@ public class SMShopManagement extends javax.swing.JFrame {
                             .addComponent(txtProductPurchaseUnitPrice, javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(comboPurchaseProductName, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(txtProductPurchaseProductId, javax.swing.GroupLayout.Alignment.LEADING))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 201, Short.MAX_VALUE)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel5Layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 201, Short.MAX_VALUE)
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel5Layout.createSequentialGroup()
+                                .addGap(271, 271, 271)
+                                .addComponent(jLabel83, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE)))))
                 .addGap(148, 148, 148))
         );
         jPanel5Layout.setVerticalGroup(
@@ -1930,13 +1981,14 @@ public class SMShopManagement extends javax.swing.JFrame {
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addGap(102, 102, 102)
                 .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(42, 42, 42)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(34, 34, 34)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtProductPurchaseProductId, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel36, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel83, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtProductPurchaseProductId, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel36, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jLabel35, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(comboPurchaseProductName, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -1956,7 +2008,7 @@ public class SMShopManagement extends javax.swing.JFrame {
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jLabel30, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jdatePurchaseProduct, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(70, 70, 70)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(btnInvPurchaseProductReset, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -2062,6 +2114,9 @@ public class SMShopManagement extends javax.swing.JFrame {
             }
         });
 
+        jScrollPane3.setBackground(new java.awt.Color(255, 255, 255));
+        jScrollPane3.setBorder(null);
+
         jtableCustomerInfo.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -2073,27 +2128,20 @@ public class SMShopManagement extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        jtableCustomerInfo.setGridColor(new java.awt.Color(255, 255, 255));
+        jtableCustomerInfo.setRowHeight(25);
+        jtableCustomerInfo.setSelectionBackground(new java.awt.Color(255, 78, 80));
         jScrollPane3.setViewportView(jtableCustomerInfo);
+
+        jLabel84.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel84.setForeground(new java.awt.Color(255, 78, 80));
+        jLabel84.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel84.setText("Customer List");
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel6Layout.createSequentialGroup()
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel6Layout.createSequentialGroup()
-                        .addGap(246, 246, 246)
-                        .addComponent(btnCustomerSave, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(39, 39, 39)
-                        .addComponent(btnCustomerUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(36, 36, 36)
-                        .addComponent(btnCustomerReset, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(37, 37, 37)
-                        .addComponent(btnCustomerNext, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel6Layout.createSequentialGroup()
-                        .addGap(33, 33, 33)
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 1134, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
@@ -2123,11 +2171,32 @@ public class SMShopManagement extends javax.swing.JFrame {
                                     .addComponent(comboCustomerDistrict, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 399, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(30, 30, 30)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel40, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(31, 31, 31)
-                .addComponent(jDateCustomerInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(153, 153, 153))
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addComponent(jDateCustomerInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(153, 153, 153))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
+                        .addComponent(jLabel40, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(417, 417, 417)))
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addGap(246, 246, 246)
+                        .addComponent(btnCustomerSave, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(39, 39, 39)
+                        .addComponent(btnCustomerUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(36, 36, 36)
+                        .addComponent(btnCustomerReset, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(37, 37, 37)
+                        .addComponent(btnCustomerNext, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addGap(33, 33, 33)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 1134, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addGap(453, 453, 453)
+                        .addComponent(jLabel84, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2153,22 +2222,25 @@ public class SMShopManagement extends javax.swing.JFrame {
                                 .addComponent(txtCustomerInfoCell, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(txtCustomerInfoName, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel6Layout.createSequentialGroup()
-                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel40, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jDateCustomerInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jLabel42, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(comboCustomerDistrict, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel42, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(comboCustomerDistrict, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel41, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addGroup(jPanel6Layout.createSequentialGroup()
+                                    .addComponent(jLabel40, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jDateCustomerInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jScrollPane4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btncustomerSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(27, 27, 27)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
+                .addGap(35, 35, 35)
+                .addComponent(jLabel84, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnCustomerNext, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnCustomerUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -2314,6 +2386,7 @@ public class SMShopManagement extends javax.swing.JFrame {
         });
 
         jButton3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/SM/icon/printer.png"))); // NOI18N
         jButton3.setText("Print");
         jButton3.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -2352,17 +2425,16 @@ public class SMShopManagement extends javax.swing.JFrame {
                                 .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addGroup(jPanel13Layout.createSequentialGroup()
                                         .addComponent(jLabel64, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(txtbillTotalPaymentNext))
+                                        .addGap(0, 0, Short.MAX_VALUE))
                                     .addGroup(jPanel13Layout.createSequentialGroup()
                                         .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(jLabel62, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
                                             .addComponent(jLabel63, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGap(24, 24, 24)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                            .addComponent(txtpaymentPaid)
-                                            .addComponent(txtpaymentDue, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                                .addGap(37, 37, 37)
+                                            .addComponent(txtpaymentPaid, javax.swing.GroupLayout.DEFAULT_SIZE, 92, Short.MAX_VALUE)
+                                            .addComponent(txtpaymentDue))
+                                        .addGap(45, 45, 45)))
                                 .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                         .addComponent(jLabel65, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -2373,16 +2445,20 @@ public class SMShopManagement extends javax.swing.JFrame {
                                     .addComponent(jDatepaymentdeliveyDate, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(combopaymentDeliverycompany, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(comboPaymentOption, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addGroup(jPanel13Layout.createSequentialGroup()
-                                .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel67, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel61, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtpaymentTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtpaymentDeliveryCharge, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                    .addComponent(comboPaymentOption, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(txtbillTotalPaymentNext, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel13Layout.createSequentialGroup()
+                                    .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(jLabel67, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jLabel61, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(jPanel13Layout.createSequentialGroup()
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                            .addComponent(txtpaymentDeliveryCharge, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel13Layout.createSequentialGroup()
+                                            .addGap(10, 10, 10)
+                                            .addComponent(txtpaymentTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)))))))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel13Layout.createSequentialGroup()
                         .addGap(18, 18, 18)
                         .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2436,9 +2512,9 @@ public class SMShopManagement extends javax.swing.JFrame {
                             .addComponent(txtpaymentTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel61, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 0, 0)
-                        .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtpaymentPaid, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel62, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel62, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtpaymentPaid, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel63, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtpaymentDue, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -2496,19 +2572,8 @@ public class SMShopManagement extends javax.swing.JFrame {
         jLabel55.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel55.setText("Qty");
 
-        spanbillquentity.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                spanbillquentityMouseClicked(evt);
-            }
-        });
-
         txtbillunitPrice.setEditable(false);
         txtbillunitPrice.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        txtbillunitPrice.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                txtbillunitPriceFocusLost(evt);
-            }
-        });
 
         txtbillProductName.setEditable(false);
 
@@ -2534,11 +2599,6 @@ public class SMShopManagement extends javax.swing.JFrame {
 
         txtbillDiscount.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         txtbillDiscount.setText("0");
-        txtbillDiscount.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                txtbillDiscountFocusLost(evt);
-            }
-        });
 
         txtbillTotalPrice.setEditable(false);
         txtbillTotalPrice.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
@@ -2757,6 +2817,7 @@ public class SMShopManagement extends javax.swing.JFrame {
             }
         });
 
+        jScrollPane8.setBackground(new java.awt.Color(255, 255, 255));
         jScrollPane8.setBorder(null);
 
         jTableReport.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
@@ -2773,7 +2834,7 @@ public class SMShopManagement extends javax.swing.JFrame {
         ));
         jTableReport.setGridColor(new java.awt.Color(255, 255, 255));
         jTableReport.setRowHeight(25);
-        jTableReport.setSelectionBackground(new java.awt.Color(255, 120, 65));
+        jTableReport.setSelectionBackground(new java.awt.Color(255, 78, 80));
         jScrollPane8.setViewportView(jTableReport);
 
         jButton4.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -2788,6 +2849,11 @@ public class SMShopManagement extends javax.swing.JFrame {
                 jButton4ActionPerformed(evt);
             }
         });
+
+        jLabel85.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel85.setForeground(new java.awt.Color(255, 78, 80));
+        jLabel85.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel85.setText("Report");
 
         javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
         jPanel9.setLayout(jPanel9Layout);
@@ -2819,6 +2885,10 @@ public class SMShopManagement extends javax.swing.JFrame {
                                 .addComponent(jDateReportToDate, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 1055, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(61, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel9Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jLabel85, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(461, 461, 461))
         );
         jPanel9Layout.setVerticalGroup(
             jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2842,8 +2912,10 @@ public class SMShopManagement extends javax.swing.JFrame {
                         .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(51, 51, 51)
-                .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 299, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(92, 92, 92)
+                .addComponent(jLabel85, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(34, 34, 34)
+                .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(32, Short.MAX_VALUE))
         );
 
@@ -2888,6 +2960,9 @@ public class SMShopManagement extends javax.swing.JFrame {
             }
         });
 
+        jScrollPane10.setBackground(new java.awt.Color(255, 255, 255));
+        jScrollPane10.setBorder(null);
+
         tableCustomerReport.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -2899,7 +2974,15 @@ public class SMShopManagement extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tableCustomerReport.setGridColor(new java.awt.Color(255, 255, 255));
+        tableCustomerReport.setRowHeight(25);
+        tableCustomerReport.setSelectionBackground(new java.awt.Color(255, 78, 80));
         jScrollPane10.setViewportView(tableCustomerReport);
+
+        jLabel86.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel86.setForeground(new java.awt.Color(255, 78, 80));
+        jLabel86.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel86.setText("Report");
 
         javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
         jPanel10.setLayout(jPanel10Layout);
@@ -2929,7 +3012,10 @@ public class SMShopManagement extends javax.swing.JFrame {
                             .addComponent(jLabel23, javax.swing.GroupLayout.PREFERRED_SIZE, 399, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel10Layout.createSequentialGroup()
                         .addGap(53, 53, 53)
-                        .addComponent(jScrollPane10, javax.swing.GroupLayout.PREFERRED_SIZE, 1016, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jScrollPane10, javax.swing.GroupLayout.PREFERRED_SIZE, 1016, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel10Layout.createSequentialGroup()
+                        .addGap(450, 450, 450)
+                        .addComponent(jLabel86, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(116, Short.MAX_VALUE))
         );
         jPanel10Layout.setVerticalGroup(
@@ -2949,9 +3035,11 @@ public class SMShopManagement extends javax.swing.JFrame {
                         .addComponent(radioCustomerReport)
                         .addComponent(btnCustomerReport, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(comboCustomerProduct, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(63, 63, 63)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 86, Short.MAX_VALUE)
+                .addComponent(jLabel86, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(jScrollPane10, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(113, Short.MAX_VALUE))
+                .addGap(35, 35, 35))
         );
 
         javax.swing.GroupLayout customerListLayout = new javax.swing.GroupLayout(customerList);
@@ -2973,6 +3061,9 @@ public class SMShopManagement extends javax.swing.JFrame {
         jLabel24.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel24.setText("Product List");
 
+        jScrollPane11.setBackground(new java.awt.Color(255, 255, 255));
+        jScrollPane11.setBorder(null);
+
         tableProductReport.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -2984,6 +3075,9 @@ public class SMShopManagement extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tableProductReport.setGridColor(new java.awt.Color(255, 255, 255));
+        tableProductReport.setRowHeight(25);
+        tableProductReport.setSelectionBackground(new java.awt.Color(255, 78, 80));
         jScrollPane11.setViewportView(tableProductReport);
 
         jLabel73.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -3008,6 +3102,11 @@ public class SMShopManagement extends javax.swing.JFrame {
             }
         });
 
+        jLabel87.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel87.setForeground(new java.awt.Color(255, 78, 80));
+        jLabel87.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel87.setText("Report");
+
         javax.swing.GroupLayout jPanel11Layout = new javax.swing.GroupLayout(jPanel11);
         jPanel11.setLayout(jPanel11Layout);
         jPanel11Layout.setHorizontalGroup(
@@ -3021,25 +3120,28 @@ public class SMShopManagement extends javax.swing.JFrame {
                         .addGap(71, 71, 71)
                         .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel11Layout.createSequentialGroup()
-                                .addComponent(jLabel73, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jDateProReportFromDate2, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(radioProductReport))
-                        .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel11Layout.createSequentialGroup()
-                                .addGap(49, 49, 49)
-                                .addComponent(jLabel74, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(38, 38, 38)
-                                .addComponent(jDateProReportToDate, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel11Layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(comboProductList, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(161, 161, 161)
-                                .addComponent(btnProductReport, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel11Layout.createSequentialGroup()
+                                        .addComponent(jLabel73, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jDateProReportFromDate2, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(radioProductReport))
+                                .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel11Layout.createSequentialGroup()
+                                        .addGap(49, 49, 49)
+                                        .addComponent(jLabel74, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(38, 38, 38)
+                                        .addComponent(jDateProReportToDate, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel11Layout.createSequentialGroup()
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(comboProductList, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(161, 161, 161)
+                                        .addComponent(btnProductReport, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(jScrollPane11, javax.swing.GroupLayout.PREFERRED_SIZE, 963, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel11Layout.createSequentialGroup()
-                        .addGap(46, 46, 46)
-                        .addComponent(jScrollPane11, javax.swing.GroupLayout.PREFERRED_SIZE, 963, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(176, Short.MAX_VALUE))
+                        .addGap(457, 457, 457)
+                        .addComponent(jLabel87, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(151, Short.MAX_VALUE))
         );
         jPanel11Layout.setVerticalGroup(
             jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -3057,9 +3159,11 @@ public class SMShopManagement extends javax.swing.JFrame {
                     .addComponent(radioProductReport)
                     .addComponent(comboProductList, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnProductReport, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(42, 42, 42)
-                .addComponent(jScrollPane11, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(57, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 68, Short.MAX_VALUE)
+                .addComponent(jLabel87, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(30, 30, 30)
+                .addComponent(jScrollPane11, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(79, 79, 79))
         );
 
         javax.swing.GroupLayout ProductListLayout = new javax.swing.GroupLayout(ProductList);
@@ -3149,7 +3253,8 @@ public class SMShopManagement extends javax.swing.JFrame {
             }
         ));
         jtableDeliveryReport.setGridColor(new java.awt.Color(255, 255, 255));
-        jtableDeliveryReport.setSelectionBackground(new java.awt.Color(255, 188, 190));
+        jtableDeliveryReport.setRowHeight(25);
+        jtableDeliveryReport.setSelectionBackground(new java.awt.Color(255, 78, 80));
         jtableDeliveryReport.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jtableDeliveryReportMouseClicked(evt);
@@ -3315,6 +3420,8 @@ public class SMShopManagement extends javax.swing.JFrame {
         btnCustomer4.setBorder(BorderFactory.createLineBorder(new Color(252, 143, 58), 2));
         btnProduct.setForeground(Color.BLACK);
         btnProduct.setBorder(BorderFactory.createLineBorder(new Color(251, 159, 53), 2));
+        btnDelivery.setForeground(Color.BLACK);
+        btnDelivery.setBorder(BorderFactory.createLineBorder(new Color(245,159,51), 2));
     }//GEN-LAST:event_btnInventoryMouseClicked
 
     private void btnHomeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnHomeMouseClicked
@@ -3331,6 +3438,8 @@ public class SMShopManagement extends javax.swing.JFrame {
         btnCustomer4.setBorder(BorderFactory.createLineBorder(new Color(252, 143, 58), 2));
         btnProduct.setForeground(Color.BLACK);
         btnProduct.setBorder(BorderFactory.createLineBorder(new Color(251, 159, 53), 2));
+        btnDelivery.setForeground(Color.BLACK);
+        btnDelivery.setBorder(BorderFactory.createLineBorder(new Color(245,159,51), 2));
     }//GEN-LAST:event_btnHomeMouseClicked
 
     private void btnOrderMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnOrderMouseClicked
@@ -3347,6 +3456,8 @@ public class SMShopManagement extends javax.swing.JFrame {
         btnCustomer4.setBorder(BorderFactory.createLineBorder(new Color(252, 143, 58), 2));
         btnProduct.setForeground(Color.BLACK);
         btnProduct.setBorder(BorderFactory.createLineBorder(new Color(251, 159, 53), 2));
+        btnDelivery.setForeground(Color.BLACK);
+        btnDelivery.setBorder(BorderFactory.createLineBorder(new Color(245,159,51), 2));
     }//GEN-LAST:event_btnOrderMouseClicked
 
     private void btnSalesRepMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSalesRepMouseClicked
@@ -3363,6 +3474,8 @@ public class SMShopManagement extends javax.swing.JFrame {
         btnCustomer4.setBorder(BorderFactory.createLineBorder(new Color(252, 143, 58), 2));
         btnProduct.setForeground(Color.BLACK);
         btnProduct.setBorder(BorderFactory.createLineBorder(new Color(251, 159, 53), 2));
+        btnDelivery.setForeground(Color.BLACK);
+        btnDelivery.setBorder(BorderFactory.createLineBorder(new Color(245,159,51), 2));
     }//GEN-LAST:event_btnSalesRepMouseClicked
 
     private void btnCustomer4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCustomer4MouseClicked
@@ -3379,6 +3492,8 @@ public class SMShopManagement extends javax.swing.JFrame {
         btnCustomer4.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
         btnProduct.setForeground(Color.BLACK);
         btnProduct.setBorder(BorderFactory.createLineBorder(new Color(251, 159, 53), 2));
+        btnDelivery.setForeground(Color.BLACK);
+        btnDelivery.setBorder(BorderFactory.createLineBorder(new Color(245,159,51), 2));
     }//GEN-LAST:event_btnCustomer4MouseClicked
 
     private void btnProductMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnProductMouseClicked
@@ -3395,6 +3510,8 @@ public class SMShopManagement extends javax.swing.JFrame {
         btnCustomer4.setBorder(BorderFactory.createLineBorder(new Color(252, 143, 58), 2));
         btnProduct.setForeground(Color.WHITE);
         btnProduct.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
+        btnDelivery.setForeground(Color.BLACK);
+        btnDelivery.setBorder(BorderFactory.createLineBorder(new Color(245,159,51), 2));
     }//GEN-LAST:event_btnProductMouseClicked
 
     private void btnAddUpdateMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAddUpdateMouseClicked
@@ -3518,9 +3635,9 @@ public class SMShopManagement extends javax.swing.JFrame {
             updateProductToStock();
             setProductnametoPurchaseCombo(comboPurchaseProductName);
             getAllPurchaseProduct(jTablePurchaseProduct);
-//            getTodayPurchase();
-//            getTotalPurchase();
-//            getMonthlyPurchase();
+            getTodayPurchase();
+            getTotalPurchase();
+            getMonthlyPurchase();
 
         } catch (SQLException ex) {
             Logger.getLogger(SMShopManagement.class.getName()).log(Level.SEVERE, null, ex);
@@ -3712,7 +3829,7 @@ public class SMShopManagement extends javax.swing.JFrame {
 
     private void txtProductTotalPriceMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtProductTotalPriceMouseClicked
         float totalAmount = getbillTotalPrice(txtProductPurchaseUnitPrice, spanProductPurchaseQuentity);
-//        txtProductTotalPrice.setText(totalAmount+"");
+        txtProductTotalPrice.setText(totalAmount+"");
     }//GEN-LAST:event_txtProductTotalPriceMouseClicked
 
     private void tableBillInfoProductDetailsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableBillInfoProductDetailsMouseClicked
@@ -3724,47 +3841,6 @@ public class SMShopManagement extends javax.swing.JFrame {
         txtbillunitPrice.setText(tableBillInfoProductDetails.getModel().getValueAt(rowIndex, 3).toString());
 
     }//GEN-LAST:event_tableBillInfoProductDetailsMouseClicked
-
-    private void spanbillquentityMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_spanbillquentityMouseClicked
-        // TODO add your handling code here:
-        //        int jsQuentity = Integer.parseInt(txtbillquentity.getValue().toString());
-        //        try {
-        //            if (txtbillunitPrice.getText().trim().isEmpty()) {
-        //                txtbillunitPrice.requestFocus();
-        //            } else if (jsQuentity == 0) {
-        //                JOptionPane.showMessageDialog(rootPane, "Quentity can not be Zero");
-        //                txtbillquentity.requestFocus();
-        //            } else {
-        ////                JOptionPane.showMessageDialog(rootPane, "Quentity can not be Zero");
-        ////                txtbillquentity.requestFocus();
-        //            }
-        //        } catch (Exception e) {
-        //            JOptionPane.showMessageDialog(rootPane, "An Error ocured" + e.getMessage()
-        //            );
-        //        }
-    }//GEN-LAST:event_spanbillquentityMouseClicked
-
-    private void txtbillunitPriceFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtbillunitPriceFocusLost
-        // TODO add your handling code here:
-//
-//        try {
-////            if (!(txtbillunitPrice.getText().trim().isEmpty())) {
-//
-//            } else {
-//                JOptionPane.showMessageDialog(rootPane, "Unit price can not be empty");
-////                txtbillunitPrice.requestFocus();
-//            }
-//        } catch (Exception e) {
-//            JOptionPane.showMessageDialog(rootPane, "An Error ocured" + e.getMessage()
-//            );
-//        }
-    }//GEN-LAST:event_txtbillunitPriceFocusLost
-
-    private void txtbillDiscountFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtbillDiscountFocusLost
-        // TODO add your handling code here:
-//        float finalPrice = getbillAutualPrice();
-//        txtbillFinalPrice.setText(finalPrice + "");
-    }//GEN-LAST:event_txtbillDiscountFocusLost
 
     private void txtbillTotalPriceMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtbillTotalPriceMouseClicked
         // TODO add your handling code here:
@@ -3814,6 +3890,10 @@ public class SMShopManagement extends javax.swing.JFrame {
 
     private void btnBillSaveMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnBillSaveMouseClicked
         // TODO add your handling code here:
+        if (txtbillCustomerId.getText().isEmpty() && txtbillDeliveryId.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(panShopName, "Select Customer Information.");
+        } else {
+        
         int rowCount = jTableCart.getRowCount();
         System.out.println(rowCount);
         for (int i = 0; i < rowCount; i++) {
@@ -3851,17 +3931,20 @@ public class SMShopManagement extends javax.swing.JFrame {
                 ps.executeUpdate();
                 ps.close();
                 dbCon.getCon().close();
-                subtractProductFromStock();
-//
-//                getTodaySales();
-//                getTotalSales();
-//                getMonthlySales();
+                subtractProductFromStock(productN,sellQ );
+                getAllProductsForSell();
+                getTodaySales();
+                getTotalSales();
+                getMonthlySales();
             } catch (SQLException ex) {
                 Logger.getLogger(SMShopManagement.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         JOptionPane.showMessageDialog(rootPane, "Data saved in sales table");
+        
         setDeliveryCode();
+        
+        }
         //        DefaultTableModel tableModel = (DefaultTableModel) jTableCart.getModel();
         //        while (tableModel.getRowCount() > 0) {
         //            tableModel.removeRow(0);
@@ -4132,13 +4215,14 @@ public class SMShopManagement extends javax.swing.JFrame {
         String deliverystatus = comboDeliveryRepStatus.getSelectedItem().toString();
         Date deliverydate = convertutilltosql(jDateDeliveryRepDeliveryDate.getDate());
 
-        sql = "update payment set paid=paid+? ,due=? where payment_id=?";
+        sql = "update payment set paid=paid+? ,due=due-? where payment_id=?";
         try {
             ps = dbCon.getCon().prepareStatement(sql);
 
             ps.setFloat(1, newpaid);
-            ps.setFloat(2, 0);
+            ps.setFloat(2, newpaid);
             ps.setInt(3, id);
+            ps.executeUpdate();
             ps.close();
             dbCon.getCon().close();
 
@@ -4157,18 +4241,33 @@ public class SMShopManagement extends javax.swing.JFrame {
         String payment = jtableDeliveryReport.getModel().getValueAt(row, 2).toString();
         String due = jtableDeliveryReport.getModel().getValueAt(row, 3).toString();
         String deliverystatus = jtableDeliveryReport.getModel().getValueAt(row, 4).toString();
-        //        java.util.Date deliverydate = formatStringdateToUtilDate(jtableDeliveryReport.getModel().getValueAt(row, 6).toString());
+        java.util.Date deliverydate = formatStringdateToUtilDate(jtableDeliveryReport.getModel().getValueAt(row, 5).toString());
         txtDeliveryRepDId.setText(id);
         txtDeliveryRepDCode.setText(delivery_code);
         txtDeliveryRepPayment.setText(payment);
         txtDeliveryRepDue.setText(due);
         //        txtDeliveryRepPaid.setText(null);
         comboDeliveryRepStatus.setSelectedItem(deliverystatus);
-        //        jDateDeliveryRepDeliveryDate.setDate(deliverydate);
+        jDateDeliveryRepDeliveryDate.setDate(deliverydate);
     }//GEN-LAST:event_jtableDeliveryReportMouseClicked
 
     private void btnDeliveryMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnDeliveryMouseClicked
-       mainMenu.setSelectedIndex(10);
+       getAllPaymnet(jtableDeliveryReport);
+        mainMenu.setSelectedIndex(10);
+       btnHome.setForeground(Color.BLACK);
+        btnHome.setBorder(BorderFactory.createLineBorder(new Color(254, 78, 80), 2));
+        btnInventory.setForeground(Color.BLACK);
+        btnInventory.setBorder(BorderFactory.createLineBorder(new Color(254, 102, 72), 2));
+        btnOrder.setForeground(Color.BLACK);
+        btnOrder.setBorder(BorderFactory.createLineBorder(new Color(253, 121, 65), 2));
+        btnSalesRep.setForeground(Color.BLACK);
+        btnSalesRep.setBorder(BorderFactory.createLineBorder(new Color(252, 131, 62), 2));
+        btnCustomer4.setForeground(Color.BLACK);
+        btnCustomer4.setBorder(BorderFactory.createLineBorder(new Color(252, 143, 58), 2));
+       btnProduct.setForeground(Color.BLACK);
+        btnProduct.setBorder(BorderFactory.createLineBorder(new Color(251, 159, 53), 2));
+        btnDelivery.setForeground(Color.WHITE);
+        btnDelivery.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
                
     }//GEN-LAST:event_btnDeliveryMouseClicked
 
@@ -4350,6 +4449,12 @@ public class SMShopManagement extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel80;
     private javax.swing.JLabel jLabel81;
+    private javax.swing.JLabel jLabel82;
+    private javax.swing.JLabel jLabel83;
+    private javax.swing.JLabel jLabel84;
+    private javax.swing.JLabel jLabel85;
+    private javax.swing.JLabel jLabel86;
+    private javax.swing.JLabel jLabel87;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;

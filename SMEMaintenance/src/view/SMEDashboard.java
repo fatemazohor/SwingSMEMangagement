@@ -333,13 +333,14 @@ public class SMEDashboard extends javax.swing.JFrame {
         }
     }
 
-    public void subtractProductFromStock() {
-        float quantity = Float.parseFloat(spanbillquentity.getValue().toString());
+    public void subtractProductFromStock(String proName,float quantity) {
+//         quantity = Float.parseFloat(spanbillquentity.getValue().toString());
+//         proName = txtbillProductName.getText();
         sql = "update product_stock set quantity=quantity-? where product_name=?";
         try {
             ps = dbCon.getCon().prepareStatement(sql);
             ps.setFloat(1, quantity);
-            ps.setString(2, txtbillProductName.getText());
+            ps.setString(2, proName);
             ps.executeUpdate();
             ps.close();
             dbCon.getCon().close();
@@ -3165,7 +3166,7 @@ public class SMEDashboard extends javax.swing.JFrame {
                 ps.executeUpdate();
                 ps.close();
                 dbCon.getCon().close();
-                subtractProductFromStock();
+                
 
                 getTodaySales();
                 getTotalSales();
@@ -3173,6 +3174,7 @@ public class SMEDashboard extends javax.swing.JFrame {
             } catch (SQLException ex) {
                 Logger.getLogger(SMEDashboard.class.getName()).log(Level.SEVERE, null, ex);
             }
+            subtractProductFromStock(productN,sellQ);
         }
         JOptionPane.showMessageDialog(rootPane, "Data saved in smemanagement.sales table");
         setDeliveryCode();
