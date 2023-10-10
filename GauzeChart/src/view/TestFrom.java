@@ -5,10 +5,7 @@
  */
 package view;
 
-/**
- *
- * @author joty_
- */
+
 public class TestFrom extends javax.swing.JFrame {
 
     /**
@@ -16,7 +13,7 @@ public class TestFrom extends javax.swing.JFrame {
      */
     public TestFrom() {
         initComponents();
-        gauzeCreate1.setValue(80);
+       
     }
 
     /**
@@ -30,10 +27,19 @@ public class TestFrom extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         gauzeCreate1 = new gauzechart.GauzeCreate();
+        jSlider1 = new javax.swing.JSlider();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+
+        gauzeCreate1.setValue(50);
+
+        jSlider1.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jSlider1StateChanged(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -43,13 +49,19 @@ public class TestFrom extends javax.swing.JFrame {
                 .addGap(269, 269, 269)
                 .addComponent(gauzeCreate1, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(554, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(201, 201, 201))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(143, 143, 143)
                 .addComponent(gauzeCreate1, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(176, Short.MAX_VALUE))
+                .addGap(70, 70, 70)
+                .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(80, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -67,6 +79,10 @@ public class TestFrom extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jSlider1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSlider1StateChanged
+       gauzeCreate1.setValue(jSlider1.getValue());
+    }//GEN-LAST:event_jSlider1StateChanged
 
     /**
      * @param args the command line arguments
@@ -106,5 +122,6 @@ public class TestFrom extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private gauzechart.GauzeCreate gauzeCreate1;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JSlider jSlider1;
     // End of variables declaration//GEN-END:variables
 }

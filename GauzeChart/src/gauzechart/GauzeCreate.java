@@ -85,9 +85,9 @@ public class GauzeCreate extends JComponent {
         int y = (height - size) / 2;
         int centerX = width / 2;
         int centerY = height / 2;
-        g2.setColor(new Color(200, 200, 200));
-        g2.setStroke(new BasicStroke(gauzeSize, BasicStroke.CAP_ROUND, BasicStroke.JOIN_MITER));
         int angleStart = -35;
+        g2.setColor(new Color(200, 200, 200));
+        g2.setStroke(new BasicStroke(gauzeSize, BasicStroke.CAP_ROUND, BasicStroke.JOIN_MITER));     
         Shape s = new Arc2D.Double(x, y, size, size, angleStart, 250, Arc2D.OPEN);
         g2.draw(s);
         double angle = getAngleOfValue();
@@ -110,7 +110,7 @@ public class GauzeCreate extends JComponent {
     }
 
     private int getValueFixed() {
-        return value > maximum ? value : maximum;
+        return value > maximum ? maximum : value;
 
     }
 
