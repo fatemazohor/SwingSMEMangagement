@@ -23,8 +23,8 @@ public class SMEMaintenance {
         float sumAmount = 0;
         float sumCount = 0;
         System.out.println(month);
-        System.out.println(getlastMonthSales());
-        System.out.println(getlastMonthpurchase());
+        System.out.println(getlastMonthSales(1));
+        System.out.println(getlastMonthpurchase(1));
 //        try {
 //            PreparedStatement ps = db.getCon().prepareStatement(sql);
 //
@@ -87,12 +87,12 @@ public class SMEMaintenance {
         return newMonth;
     }
     //lastMonth total sales month as variable
-    public static float getlastMonthSales() {
+    public static float getlastMonthSales(int num) {
         DbCon db = new DbCon();
         String sql = "SELECT sum(actual_price),sum(purchase_quentity) FROM sales where sales_date Like?";
         float sumAmount = 0;
         float sumCount = 0;
-        java.sql.Date newMonth = getLastMonth(1);
+        java.sql.Date newMonth = getLastMonth(num);
         String month = newMonth.toString().substring(0, 8) + "%";
         try {
             PreparedStatement ps = db.getCon().prepareStatement(sql);
@@ -116,12 +116,12 @@ public class SMEMaintenance {
         
     }
     //lastMonth total purchase month as variable
-    public static float getlastMonthpurchase() {
+    public static float getlastMonthpurchase(int num) {
         DbCon db = new DbCon();
         String sql = "SELECT sum(total_price),sum(quentity) FROM purchases where purchase_date Like?";
         float sumAmount = 0;
         float sumCount = 0;
-        java.sql.Date newMonth = getLastMonth(1);
+        java.sql.Date newMonth = getLastMonth(num);
         String month = newMonth.toString().substring(0, 8) + "%";
         try {
             PreparedStatement ps = db.getCon().prepareStatement(sql);
