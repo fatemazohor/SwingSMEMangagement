@@ -8,6 +8,7 @@
 ![ Order2 page](https://github.com/fatemazohor/SwingSMEMangagement/blob/main/Screenshot/order2.png)
 ![ Sales page](https://github.com/fatemazohor/SwingSMEMangagement/blob/main/Screenshot/cart2.png)
 ![ Sales page](https://github.com/fatemazohor/SwingSMEMangagement/blob/main/Screenshot/cart3.png)
+ 
 ![ Order Details page](https://github.com/fatemazohor/SwingSMEMangagement/blob/main/Screenshot/orderDetails.png)
 ![ Order Details page](https://github.com/fatemazohor/SwingSMEMangagement/blob/main/Screenshot/orderDetails2.png)
 ![ Sales Report page](https://github.com/fatemazohor/SwingSMEMangagement/blob/main/Screenshot/salesReport.png)
@@ -16,4 +17,6 @@
 ![ delivery page](https://github.com/fatemazohor/SwingSMEMangagement/blob/main/Screenshot/delivery.png)
 ![ delivery page](https://github.com/fatemazohor/SwingSMEMangagement/blob/main/Screenshot/delivery2.png)
 ![ delivery page](https://github.com/fatemazohor/SwingSMEMangagement/blob/main/Screenshot/delivery3.png)
+![ Invoice page](https://github.com/fatemazohor/SwingSMEMangagement/blob/main/Screenshot/invoice-de2210cId14r95.png)
 
+![ qrcode page](https://github.com/fatemazohor/SwingSMEMangagement/blob/main/Screenshot/qrcode.png)
