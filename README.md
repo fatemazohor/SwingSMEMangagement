@@ -1,2 +1,3 @@
 # SwingSMEMangagement
-(https://github.com/fatemazohor/SwingSMEMangagement/blob/main/Screenshot/home.png)
+
+![SwingSMEMangagement Home page](https://github.com/fatemazohor/SwingSMEMangagement/blob/main/Screenshot/home.png)
