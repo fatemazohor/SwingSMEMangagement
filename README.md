@@ -32,6 +32,7 @@ Introducing our Java Swing-based Point of Sale (POS) system, a robust desktop ap
   
 :pushpin: Login page for Admin:
 Implement secure user authentication and authorization mechanisms to control access to sensitive features and data, ensuring data integrity and confidentiality.
+
 ![ Login page](https://github.com/fatemazohor/SwingSMEMangagement/blob/main/Screenshot/login.png)
 
 :pushpin: Dashboard page for Admin:
