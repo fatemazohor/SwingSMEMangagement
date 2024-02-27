@@ -32,6 +32,7 @@ For a comprehensive picture of the business process, the order, sales, and reven
 - :  MySQL Workbench
 - :  Apache NetBeans
 - :  Java JDK 17+
+  
 :pushpin: Login page for Admin:
 ![ Login page](https://github.com/fatemazohor/SwingSMEMangagement/blob/main/Screenshot/login.png)
 :pushpin: Dashboard page for Admin:
