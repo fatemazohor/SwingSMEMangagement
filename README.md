@@ -19,7 +19,7 @@ For a comprehensive picture of the business process, the order, sales, and reven
 
 ## Technologies used:-
 ### Front-End Development:
--  [<img src="Screenshot/Java.png">](https://www.java.com/en/download/help/whatis_java.html)Java Swing
+-  [<img src="Screenshot/Java.png" width="200" height="200">](https://www.java.com/en/download/help/whatis_java.html)Java Swing
 - Css
 - Javascript
 - BootStrap
