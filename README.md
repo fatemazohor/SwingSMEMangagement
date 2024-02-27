@@ -22,7 +22,7 @@ For a comprehensive picture of the business process, the order, sales, and reven
 -  [<img src="Screenshot/Swing.png" width="80" height="80">](https://docs.oracle.com/javase/tutorial/uiswing/) Java Swing
 - Css
 - Javascript
-- BootStrap
+- [<img src="Screenshot/angular.svg" width="80" height="80">](https://www.java.com/en/download/help/whatis_java.html) BootStrap
 ### Back-End Development
 -  [<img src="Screenshot/Swing.png" width="80" height="80">](https://docs.oracle.com/javase/tutorial/uiswing/) Java Swing
 -  [<img src="Screenshot/mysql.png" width="80" height="80">](https://dev.mysql.com/doc/refman/8.0/en/what-is-mysql.html) MySQL
