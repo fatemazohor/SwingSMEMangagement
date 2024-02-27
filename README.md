@@ -32,24 +32,40 @@ For a comprehensive picture of the business process, the order, sales, and reven
 - :  MySQL Workbench
 - :  Apache NetBeans
 - :  Java JDK 17+
-
+:pushpin: Login page for Admin:
 ![ Login page](https://github.com/fatemazohor/SwingSMEMangagement/blob/main/Screenshot/login.png)
+:pushpin: Dashboard page for Admin:
 ![ Home page](https://github.com/fatemazohor/SwingSMEMangagement/blob/main/Screenshot/home.png)
+:pushpin: Product Add/Update page for Admin:
 ![ Add Product page](https://github.com/fatemazohor/SwingSMEMangagement/blob/main/Screenshot/add.png)
+:pushpin: Purchase Product page for Admin:
 ![ Purchase Product page](https://github.com/fatemazohor/SwingSMEMangagement/blob/main/Screenshot/purchase2.png)
+:pushpin: Register or search old Customer page for Admin:
 ![ Order page](https://github.com/fatemazohor/SwingSMEMangagement/blob/main/Screenshot/order.png)
-![ Order2 page](https://github.com/fatemazohor/SwingSMEMangagement/blob/main/Screenshot/order2.png)
-![ Sales page](https://github.com/fatemazohor/SwingSMEMangagement/blob/main/Screenshot/cart2.png)
-![ Sales page](https://github.com/fatemazohor/SwingSMEMangagement/blob/main/Screenshot/cart3.png)
- 
-![ Order Details page](https://github.com/fatemazohor/SwingSMEMangagement/blob/main/Screenshot/orderDetails.png)
-![ Order Details page](https://github.com/fatemazohor/SwingSMEMangagement/blob/main/Screenshot/orderDetails2.png)
-![ Sales Report page](https://github.com/fatemazohor/SwingSMEMangagement/blob/main/Screenshot/salesReport.png)
-![ customer List page](https://github.com/fatemazohor/SwingSMEMangagement/blob/main/Screenshot/customerList2.png)
-![ product Sales page](https://github.com/fatemazohor/SwingSMEMangagement/blob/main/Screenshot/productSales2.png)
-![ delivery page](https://github.com/fatemazohor/SwingSMEMangagement/blob/main/Screenshot/delivery.png)
-![ delivery page](https://github.com/fatemazohor/SwingSMEMangagement/blob/main/Screenshot/delivery2.png)
-![ delivery page](https://github.com/fatemazohor/SwingSMEMangagement/blob/main/Screenshot/delivery3.png)
-![ Invoice page](https://github.com/fatemazohor/SwingSMEMangagement/blob/main/Screenshot/invoice-de2210cId14r95.png)
 
+![ Order2 page](https://github.com/fatemazohor/SwingSMEMangagement/blob/main/Screenshot/order2.png)
+:pushpin: Login page for Admin:
+![ Sales page](https://github.com/fatemazohor/SwingSMEMangagement/blob/main/Screenshot/cart2.png)
+:pushpin: Login page for Admin:
+![ Sales page](https://github.com/fatemazohor/SwingSMEMangagement/blob/main/Screenshot/cart3.png)
+
+ :pushpin: Login page for Admin:
+![ Order Details page](https://github.com/fatemazohor/SwingSMEMangagement/blob/main/Screenshot/orderDetails.png)
+:pushpin: Login page for Admin:
+![ Order Details page](https://github.com/fatemazohor/SwingSMEMangagement/blob/main/Screenshot/orderDetails2.png)
+:pushpin: Login page for Admin:
+![ Sales Report page](https://github.com/fatemazohor/SwingSMEMangagement/blob/main/Screenshot/salesReport.png)
+:pushpin: Login page for Admin:
+![ customer List page](https://github.com/fatemazohor/SwingSMEMangagement/blob/main/Screenshot/customerList2.png)
+:pushpin: Login page for Admin:
+![ product Sales page](https://github.com/fatemazohor/SwingSMEMangagement/blob/main/Screenshot/productSales2.png)
+:pushpin: Login page for Admin:
+![ delivery page](https://github.com/fatemazohor/SwingSMEMangagement/blob/main/Screenshot/delivery.png)
+:pushpin: Login page for Admin:
+![ delivery page](https://github.com/fatemazohor/SwingSMEMangagement/blob/main/Screenshot/delivery2.png)
+:pushpin: Login page for Admin:
+![ delivery page](https://github.com/fatemazohor/SwingSMEMangagement/blob/main/Screenshot/delivery3.png)
+:pushpin: Login page for Admin:
+![ Invoice page](https://github.com/fatemazohor/SwingSMEMangagement/blob/main/Screenshot/invoice-de2210cId14r95.png)
+:pushpin: Login page for Admin:
 ![ qrcode page](https://github.com/fatemazohor/SwingSMEMangagement/blob/main/Screenshot/qrcode.png)
